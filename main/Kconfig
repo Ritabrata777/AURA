@@ -1,0 +1,21 @@
+menu "Health Device Configuration"
+
+    config MQTT_BROKER_URI
+        string "MQTT Broker URI"
+        default "mqtt://192.168.1.35:1883"
+        help
+            URI of the MQTT broker (e.g. mqtt://192.168.1.35:1883).
+
+    config WIFI_SSID
+        string "WiFi SSID"
+        default ""
+        help
+            WiFi network name. Leave empty to use NVS-stored credentials.
+
+    config WIFI_PASSWORD
+        string "WiFi Password"
+        default ""
+        help
+            WiFi password. Leave empty to use NVS-stored credentials.
+
+endmenu

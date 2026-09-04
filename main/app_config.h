@@ -1,0 +1,28 @@
+#pragma once
+
+#include "driver/gpio.h"
+
+// ─── Firmware / Protocol ─────────────────────────────────────────
+#define APP_FIRMWARE_VERSION "0.1.0"
+#define APP_PROTOCOL_VERSION 1
+#define APP_LED_GPIO GPIO_NUM_2
+#define APP_STATUS_PERIOD_MS 1000
+
+// ─── I2C Bus (shared by OLED, MAX30102, MLX90614) ───────────────
+#define APP_I2C_MASTER_NUM    I2C_NUM_0
+#define APP_I2C_SDA_IO        GPIO_NUM_21
+#define APP_I2C_SCL_IO        GPIO_NUM_22
+#define APP_I2C_FREQ_HZ       400000
+
+// ─── MQTT Broker ─────────────────────────────────────────────────
+#ifndef CONFIG_MQTT_BROKER_URI
+#define CONFIG_MQTT_BROKER_URI "mqtt://192.168.1.35:1883"
+#endif
+
+// ─── Wi-Fi (fallback when NVS is empty) ──────────────────────────
+#ifndef CONFIG_WIFI_SSID
+#define CONFIG_WIFI_SSID ""
+#endif
+#ifndef CONFIG_WIFI_PASSWORD
+#define CONFIG_WIFI_PASSWORD ""
+#endif

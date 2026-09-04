@@ -1,0 +1,7 @@
+"-specs=C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader/specs/picolibc.specs"
+-Wno-frame-address
+-mlongcalls
+-fno-builtin-memcpy
+-fno-builtin-memset
+-fno-builtin-bzero
+-fno-rtti

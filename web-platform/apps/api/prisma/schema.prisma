@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum RelationshipState {
+  PENDING
+  ACCEPTED
+  REJECTED
+  REVOKED
+}
+
+enum MeasurementType {
+  HEART_RATE
+  SPO2
+  TEMPERATURE
+}
+
+enum MeasurementQuality {
+  VALID
+  INVALID
+  UNAVAILABLE
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  passwordHash    String
+  role            UserRole
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  patient         Patient?
+  doctor          Doctor?
+  auditLogs       AuditLog[]
+  appointmentsAsPatient Appointment[] @relation("patientAppointments")
+  appointmentsAsDoctor  Appointment[] @relation("doctorAppointments")
+}
+
+model Patient {
+  id          String           @id @default(uuid())
+  userId      String           @unique
+  user        User             @relation(fields: [userId], references: [id])
+  devices     PatientDevice[]
+  doctors     DoctorPatient[]  @relation("patientRelationships")
+  measurements Measurement[]
+  ecgSessions EcgSession[]
+  createdAt   DateTime         @default(now())
+}
+
+model Doctor {
+  id          String          @id @default(uuid())
+  userId      String          @unique
+  user        User            @relation(fields: [userId], references: [id])
+  patients    DoctorPatient[] @relation("doctorRelationships")
+  createdAt   DateTime        @default(now())
+}
+
+model Device {
+  id           String          @id @default(uuid())
+  hardwareId   String          @unique
+  pairingCode  String          @unique
+  credentialHash String
+  lastSeenAt   DateTime?
+  createdAt    DateTime        @default(now())
+  patientLinks PatientDevice[]
+  measurements Measurement[]
+  ecgSessions  EcgSession[]
+}
+
+model PatientDevice {
+  patientId  String
+  deviceId   String
+  pairedAt   DateTime @default(now())
+  patient    Patient  @relation(fields: [patientId], references: [id])
+  device     Device   @relation(fields: [deviceId], references: [id])
+  @@id([patientId, deviceId])
+}
+
+model DoctorPatient {
+  doctorId   String
+  patientId  String
+  state      RelationshipState @default(PENDING)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  doctor     Doctor  @relation("doctorRelationships", fields: [doctorId], references: [id])
+  patient    Patient @relation("patientRelationships", fields: [patientId], references: [id])
+  @@id([doctorId, patientId])
+}
+
+model Measurement {
+  id              String            @id @default(uuid())
+  patientId       String
+  deviceId        String
+  type            MeasurementType
+  value           Float
+  unit            String
+  quality         MeasurementQuality
+  sessionId       String
+  measuredAt      DateTime
+  createdAt       DateTime          @default(now())
+  patient         Patient           @relation(fields: [patientId], references: [id])
+  device          Device            @relation(fields: [deviceId], references: [id])
+  @@index([patientId, measuredAt])
+  @@index([patientId, type, measuredAt])
+}
+
+model EcgSession {
+  id          String      @id @default(uuid())
+  patientId   String
+  deviceId    String
+  sampleRate  Int
+  startedAt   DateTime
+  endedAt     DateTime?
+  createdAt   DateTime    @default(now())
+  patient     Patient     @relation(fields: [patientId], references: [id])
+  device      Device      @relation(fields: [deviceId], references: [id])
+  chunks      EcgChunk[]
+  @@index([patientId, startedAt])
+}
+
+model EcgChunk {
+  id          String     @id @default(uuid())
+  sessionId   String
+  sequence    Int
+  timestamp   DateTime
+  samples     Json
+  createdAt   DateTime   @default(now())
+  session     EcgSession @relation(fields: [sessionId], references: [id])
+  @@unique([sessionId, sequence])
+  @@index([sessionId, sequence])
+}
+
+model Appointment {
+  id        String   @id @default(uuid())
+  patientId String
+  doctorId  String
+  startsAt  DateTime
+  endsAt    DateTime
+  streamCallId String?
+  status    String   @default("SCHEDULED")
+  createdAt DateTime @default(now())
+  patient   User     @relation("patientAppointments", fields: [patientId], references: [id])
+  doctor    User     @relation("doctorAppointments", fields: [doctorId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  resource  String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  @@index([resource, createdAt])
+  @@index([userId, createdAt])
+}
