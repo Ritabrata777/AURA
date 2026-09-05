@@ -3,7 +3,9 @@
   "private": true,
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build -w @health-platform/protocol && npm run build --workspace=@health-platform/api --workspace=@health-platform/web",
+    "dev:api": "npm run start:dev -w @health-platform/api",
+    "dev:web": "npm run dev -w @health-platform/web",
     "test": "npm run test --workspaces"
   }
 }

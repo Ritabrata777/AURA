@@ -2,6 +2,6 @@ idf_component_register(SRCS "device_comm.c" "buttons.c" "oled_ssd1306.c" "mlx906
                             "device_identity.c"
                             "device_status_task.c"
                             "wifi_manager.c"
-                            "mqtt_client.c"
+                            "app_mqtt.c"
                     INCLUDE_DIRS "."
-                    REQUIRES esp_wifi esp_netif nvs_flash mqtt cjson)
+                    REQUIRES esp_wifi esp_netif nvs_flash espressif__mqtt espressif__cjson esp_driver_gpio driver esp_adc esp_event esp_timer esp_ringbuf)

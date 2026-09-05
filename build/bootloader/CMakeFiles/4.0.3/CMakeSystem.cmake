@@ -3,7 +3,7 @@ set(CMAKE_HOST_SYSTEM_NAME "Windows")
 set(CMAKE_HOST_SYSTEM_VERSION "10.0.26200")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "AMD64")
 
-include("C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader/toolchain/toolchain-esp32.cmake")
+include("C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader/toolchain/toolchain-esp32.cmake")
 
 set(CMAKE_SYSTEM "Generic")
 set(CMAKE_SYSTEM_NAME "Generic")

@@ -55,15 +55,19 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
             
             case WIFI_EVENT_AP_STACONNECTED: {
                 wifi_event_ap_staconnected_t *ap_event = (wifi_event_ap_staconnected_t *)event_data;
-                ESP_LOGI(TAG, "Provisioning client connected: MAC=" MACSTR " AID=%d",
-                         MAC2STR(ap_event->mac), ap_event->aid);
+                ESP_LOGI(TAG, "Provisioning client connected: MAC=%02x:%02x:%02x:%02x:%02x:%02x AID=%d",
+                         ap_event->mac[0], ap_event->mac[1], ap_event->mac[2],
+                         ap_event->mac[3], ap_event->mac[4], ap_event->mac[5],
+                         ap_event->aid);
                 break;
             }
             
             case WIFI_EVENT_AP_STADISCONNECTED: {
                 wifi_event_ap_stadisconnected_t *ap_event = (wifi_event_ap_stadisconnected_t *)event_data;
-                ESP_LOGI(TAG, "Provisioning client disconnected: MAC=" MACSTR " AID=%d",
-                         MAC2STR(ap_event->mac), ap_event->aid);
+                ESP_LOGI(TAG, "Provisioning client disconnected: MAC=%02x:%02x:%02x:%02x:%02x:%02x AID=%d",
+                         ap_event->mac[0], ap_event->mac[1], ap_event->mac[2],
+                         ap_event->mac[3], ap_event->mac[4], ap_event->mac[5],
+                         ap_event->aid);
                 break;
             }
             

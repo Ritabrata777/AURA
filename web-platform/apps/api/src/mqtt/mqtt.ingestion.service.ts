@@ -37,11 +37,10 @@ export class MqttIngestionService implements OnModuleInit, OnModuleDestroy {
     });
 
     this.client.on("message", (topic, payload) => this.handleMessage(topic, payload.toString()));
-    this.client.on("error", () => {
-      this.logger.warn(`MQTT broker unavailable at ${url} — skipping. Install Docker and run "docker compose up -d" to enable.`);
-      this.client?.removeAllListeners();
-      this.client?.end(true);
-      this.client = undefined;
+    this.client.on("error", (err) => {
+      this.logger.warn(
+        `MQTT broker unavailable at ${url} — device ingestion disabled (${err.message}). Start Docker and run "docker compose up -d" to enable.`,
+      );
     });
     this.client.on("close", () => {
       if (this.client) {

@@ -10,18 +10,18 @@ if(NOT EXISTS "C:/esp/v6.1/esp-idf/components/bootloader/subproject")
   file(MAKE_DIRECTORY "C:/esp/v6.1/esp-idf/components/bootloader/subproject")
 endif()
 file(MAKE_DIRECTORY
-  "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader"
-  "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix"
-  "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix/tmp"
-  "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix/src/bootloader-stamp"
-  "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix/src"
-  "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix/src/bootloader-stamp"
+  "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader"
+  "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix"
+  "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix/tmp"
+  "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix/src/bootloader-stamp"
+  "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix/src"
+  "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

@@ -1,8 +1,0 @@
-Command: cmake -G Ninja -B C:\Users\LENOVO\Desktop\New folder (3)\esp32-health-device\build -DPYTHON_DEPS_CHECKED=1 -DPYTHON=C:\Users\LENOVO\.espressif\python_env\idf6.1_py3.11_env\Scripts\python.exe -DESP_PLATFORM=1 -DCCACHE_ENABLE=False C:\Users\LENOVO\Desktop\New folder (3)\esp32-health-device
--- Minimal build - OFF
--- git describe returned 'fatal: bad revision 'HEAD''
--- Could not use 'git describe' to determine PROJECT_VER.
--- Building ESP-IDF components for target esp32
-NOTE: Processing 1 dependencies:
-NOTE: [1/1] idf (6.1.0)
--- Configuring incomplete, errors occurred!

@@ -1,5 +1,14 @@
 import { Injectable, NotFoundException, ConflictException } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+
+type DoctorPatientWithPatient = Prisma.DoctorPatientGetPayload<{
+  include: { patient: { include: { user: { select: { email: true } } } } };
+}>;
+
+type DoctorPatientWithDoctor = Prisma.DoctorPatientGetPayload<{
+  include: { doctor: { include: { user: { select: { email: true } } } } };
+}>;
 
 @Injectable()
 export class DoctorsService {
@@ -116,7 +125,7 @@ export class DoctorsService {
       },
     });
 
-    return relationships.map((r) => ({
+    return relationships.map((r: DoctorPatientWithPatient) => ({
       patientId: r.patientId,
       email: r.patient.user.email,
       state: r.state,
@@ -146,7 +155,7 @@ export class DoctorsService {
       },
     });
 
-    return relationships.map((r) => ({
+    return relationships.map((r: DoctorPatientWithDoctor) => ({
       doctorId: r.doctorId,
       email: r.doctor.user.email,
       state: r.state,

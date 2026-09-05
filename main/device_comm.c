@@ -7,7 +7,7 @@
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "esp_sntp.h"
-#include "mqtt_client.h"
+#include "app_mqtt.h"
 #include "device_identity.h"
 #include "protocol_types.h"
 #include "app_config.h"
@@ -62,7 +62,7 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
     (void)arg;
     
     switch (event) {
-        case MQTT_EVENT_CONNECTED: {
+        case APP_MQTT_EVENT_CONNECTED: {
             ESP_LOGI(TAG, "MQTT connected, subscribing to commands");
             char topic[MQTT_MAX_TOPIC_LENGTH];
             snprintf(topic, sizeof(topic), "devices/%s/commands", s_device_id);
@@ -70,7 +70,7 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
             break;
         }
         
-        case MQTT_EVENT_DATA: {
+        case APP_MQTT_EVENT_DATA: {
             mqtt_event_data_t *mqtt_data = (mqtt_event_data_t *)data;
             
             if (strstr(mqtt_data->topic, "commands") != NULL) {

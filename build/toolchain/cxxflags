@@ -3,5 +3,5 @@
 -fno-builtin-memcpy
 -fno-builtin-memset
 -fno-builtin-bzero
-"-specs=C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/specs/picolibc.specs"
+"-specs=C:/Users/ASUS/OneDrive/Desktop/esp/build/specs/picolibc.specs"
 -fno-rtti

@@ -2,7 +2,7 @@
 #include "device_identity.h"
 #include "device_status_task.h"
 #include "wifi_manager.h"
-#include "mqtt_client.h"
+#include "app_mqtt.h"
 #include "ecg_ad8232.h"
 #include "max30102.h"
 #include "mlx90614.h"
@@ -172,7 +172,7 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
     (void)arg; (void)data;
     
     switch (event) {
-        case MQTT_EVENT_CONNECTED:
+        case APP_MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT connected — starting sensors and status reporting");
             device_comm_start_periodic_status();
             
@@ -182,7 +182,7 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
             mlx90614_start_continuous(temperature_callback, NULL);
             break;
             
-        case MQTT_EVENT_DISCONNECTED:
+        case APP_MQTT_EVENT_DISCONNECTED:
             ESP_LOGW(TAG, "MQTT disconnected");
             device_comm_stop_periodic_status();
             break;
