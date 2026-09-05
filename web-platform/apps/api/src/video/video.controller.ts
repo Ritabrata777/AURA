@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Request, Query } from "@nestjs/common";
-import { VideoService } from "./video.service";
+import { Controller, Get, Post, Body, Param, UseGuards, ForbiddenException, ParseUUIDPipe } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
+import { IsInt, IsISO8601, IsUUID, Max, Min } from "class-validator";
+import { VideoService } from "./video.service";
+import { AuthenticatedUser } from "../auth/auth.service";
+import { CurrentUser } from "../auth/current-user.decorator";
 
+// Undecorated DTOs are stripped and rejected by the global whitelist pipe, so
+// these decorators are what make the endpoint reachable at all.
 class CreateConsultationDto {
-  patientId: string;
-  startsAt: string;
-  durationMinutes: number;
+  @IsUUID()
+  patientId!: string;
+
+  @IsISO8601()
+  startsAt!: string;
+
+  @IsInt()
+  @Min(5)
+  @Max(240)
+  durationMinutes!: number;
 }
 
 @Controller("video")
@@ -14,31 +26,34 @@ export class VideoController {
 
   @Post("consultations")
   @UseGuards(AuthGuard("jwt"))
-  async createConsultation(@Request() req: any, @Body() body: CreateConsultationDto) {
-    const doctorId = req.user.doctor?.id;
-    
-    if (!doctorId) {
-      throw new Error("Only doctors can create consultations");
+  async createConsultation(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() body: CreateConsultationDto,
+  ) {
+    if (!user.doctor) {
+      throw new ForbiddenException("Only doctors can create consultations");
     }
 
     const startsAt = new Date(body.startsAt);
     const endsAt = new Date(startsAt.getTime() + body.durationMinutes * 60000);
 
-    return this.videoService.createConsultationCall(doctorId, body.patientId, startsAt, endsAt);
+    return this.videoService.createConsultationCall(
+      user.doctor.id,
+      body.patientId,
+      startsAt,
+      endsAt,
+    );
   }
 
   @Get("consultations/active")
   @UseGuards(AuthGuard("jwt"))
-  async getActiveConsultation(@Request() req: any) {
-    const patientId = req.user.patient?.id;
-    
-    if (patientId) {
-      return this.videoService.getActiveConsultation(patientId);
+  async getActiveConsultation(@CurrentUser() user: AuthenticatedUser) {
+    if (user.patient) {
+      return this.videoService.getActiveConsultation(user.patient.id);
     }
 
-    const doctorId = req.user.doctor?.id;
-    if (doctorId) {
-      return this.videoService.getDoctorActiveConsultation(doctorId);
+    if (user.doctor) {
+      return this.videoService.getDoctorActiveConsultation(user.doctor.id);
     }
 
     return null;
@@ -46,10 +61,19 @@ export class VideoController {
 
   @Get("consultations/:callId/token")
   @UseGuards(AuthGuard("jwt"))
-  async getConsultationToken(@Request() req: any, @Param("callId") callId: string) {
-    const userId = req.user.id;
-    const role = req.user.patient ? "patient" : "doctor";
+  async getConsultationToken(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param("callId", new ParseUUIDPipe()) callId: string,
+  ) {
+    const role: "patient" | "doctor" = user.patient ? "patient" : "doctor";
 
-    return this.videoService.getConsultationToken(userId, callId, role as "patient" | "doctor");
+    if (!user.patient && !user.doctor) {
+      throw new ForbiddenException("Account has neither a doctor nor a patient profile");
+    }
+
+    // A call token is a key to a live video room containing another person's
+    // consultation. It must only be issued to a participant of that call.
+    return this.videoService.getConsultationToken(user.id, callId, role);
   }
 }
+

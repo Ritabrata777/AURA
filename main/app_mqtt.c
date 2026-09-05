@@ -63,18 +63,39 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base,
             break;
             
         case MQTT_EVENT_DATA:
-            ESP_LOGD(TAG, "MQTT data received, topic=%.*s, msg_id=%d", 
+            ESP_LOGD(TAG, "MQTT data received, topic=%.*s, msg_id=%d",
                      event->topic_len, event->topic, event->msg_id);
             if (s_event_callback) {
-                mqtt_event_data_t data = {
-                    .data_len = event->data_len,
-                    .msg_id = event->msg_id
-                };
-                strncpy(data.topic, event->topic, 
-                        (event->topic_len < MQTT_MAX_TOPIC_LENGTH - 1) ? 
-                        event->topic_len : MQTT_MAX_TOPIC_LENGTH - 1);
-                data.data = event->data;
+                mqtt_event_data_t data = {0};
+                data.data_len = event->data_len;
+                data.msg_id = event->msg_id;
+
+                // Copy topic and guarantee NUL termination (topic is not
+                // guaranteed to be NUL-terminated by the MQTT client).
+                size_t copy_len = (event->topic_len < MQTT_MAX_TOPIC_LENGTH - 1)
+                                  ? event->topic_len : MQTT_MAX_TOPIC_LENGTH - 1;
+                memcpy(data.topic, event->topic, copy_len);
+                data.topic[copy_len] = '\0';
+
+                // The payload from esp_mqtt is not NUL-terminated either. Copy
+                // it into a NUL-terminated, owned buffer so callers can safely
+                // pass it to cJSON_Parse / strstr.
+                if (event->data_len > 0) {
+                    data.data = malloc((size_t)event->data_len + 1);
+                    if (data.data != NULL) {
+                        memcpy(data.data, event->data, event->data_len);
+                        data.data[event->data_len] = '\0';
+                    }
+                } else {
+                    data.data = NULL;
+                }
+
                 s_event_callback(APP_MQTT_EVENT_DATA, &data, s_callback_arg);
+
+                // free() the copy the callback borrowed.
+                if (data.data != NULL) {
+                    free(data.data);
+                }
             }
             break;
             

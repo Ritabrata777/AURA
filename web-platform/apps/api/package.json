@@ -38,7 +38,8 @@
   "scripts": {
     "start:dev": "nest start --watch",
     "build": "nest build",
-    "test": "jest",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsc --noEmit -p tsconfig.json",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev"
   }

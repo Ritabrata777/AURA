@@ -11,6 +11,7 @@ enum UserRole {
   PATIENT
   DOCTOR
   ADMIN
+  INDIVIDUAL_USER
 }
 
 enum RelationshipState {
@@ -41,6 +42,7 @@ model User {
   updatedAt       DateTime         @updatedAt
   patient         Patient?
   doctor          Doctor?
+  individualUser  IndividualUser?
   auditLogs       AuditLog[]
   appointmentsAsPatient Appointment[] @relation("patientAppointments")
   appointmentsAsDoctor  Appointment[] @relation("doctorAppointments")
@@ -54,6 +56,7 @@ model Patient {
   doctors     DoctorPatient[]  @relation("patientRelationships")
   measurements Measurement[]
   ecgSessions EcgSession[]
+  prescriptions Prescription[]
   createdAt   DateTime         @default(now())
 }
 
@@ -62,7 +65,73 @@ model Doctor {
   userId      String          @unique
   user        User            @relation(fields: [userId], references: [id])
   patients    DoctorPatient[] @relation("doctorRelationships")
+  prescriptions Prescription[]
   createdAt   DateTime        @default(now())
+}
+
+// Personal wellness users — not clinical patients.
+// They own devices and measurements but have no doctor relationships,
+// no prescriptions, and no appointments.
+model IndividualUser {
+  id          String                  @id @default(uuid())
+  userId      String                  @unique
+  user        User                    @relation(fields: [userId], references: [id])
+  devices     IndividualUserDevice[]
+  measurements IndividualMeasurement[]
+  ecgSessions  IndividualEcgSession[]
+  createdAt   DateTime                @default(now())
+}
+
+model IndividualUserDevice {
+  individualUserId String
+  deviceId         String
+  pairedAt         DateTime       @default(now())
+  individualUser   IndividualUser @relation(fields: [individualUserId], references: [id])
+  device           Device         @relation(fields: [deviceId], references: [id])
+  @@id([individualUserId, deviceId])
+}
+
+model IndividualMeasurement {
+  id               String             @id @default(uuid())
+  individualUserId String
+  deviceId         String
+  type             MeasurementType
+  value            Float
+  unit             String
+  quality          MeasurementQuality
+  sessionId        String
+  measuredAt       DateTime
+  createdAt        DateTime           @default(now())
+  individualUser   IndividualUser     @relation(fields: [individualUserId], references: [id])
+  device           Device             @relation(fields: [deviceId], references: [id])
+  @@index([individualUserId, measuredAt])
+  @@index([individualUserId, type, measuredAt])
+}
+
+model IndividualEcgSession {
+  id               String               @id @default(uuid())
+  individualUserId String
+  deviceId         String
+  sampleRate       Int
+  startedAt        DateTime
+  endedAt          DateTime?
+  createdAt        DateTime             @default(now())
+  individualUser   IndividualUser       @relation(fields: [individualUserId], references: [id])
+  device           Device               @relation(fields: [deviceId], references: [id])
+  chunks           IndividualEcgChunk[]
+  @@index([individualUserId, startedAt])
+}
+
+model IndividualEcgChunk {
+  id          String               @id @default(uuid())
+  sessionId   String
+  sequence    Int
+  timestamp   DateTime
+  samples     Json
+  createdAt   DateTime             @default(now())
+  session     IndividualEcgSession @relation(fields: [sessionId], references: [id])
+  @@unique([sessionId, sequence])
+  @@index([sessionId, sequence])
 }
 
 model Device {
@@ -73,8 +142,11 @@ model Device {
   lastSeenAt   DateTime?
   createdAt    DateTime        @default(now())
   patientLinks PatientDevice[]
+  individualUserLinks IndividualUserDevice[]
   measurements Measurement[]
   ecgSessions  EcgSession[]
+  individualMeasurements IndividualMeasurement[]
+  individualEcgSessions  IndividualEcgSession[]
 }
 
 model PatientDevice {
@@ -163,4 +235,41 @@ model AuditLog {
   user      User?    @relation(fields: [userId], references: [id])
   @@index([resource, createdAt])
   @@index([userId, createdAt])
+}
+
+enum PrescriptionStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model Prescription {
+  id            String                  @id @default(uuid())
+  patientId     String
+  doctorId      String
+  diagnosis     String
+  notes         String?
+  status        PrescriptionStatus      @default(ACTIVE)
+  createdById   String
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  patient       Patient                 @relation(fields: [patientId], references: [id])
+  doctor        Doctor                  @relation(fields: [doctorId], references: [id])
+  medications   PrescriptionMedication[]
+  @@index([patientId, createdAt])
+  @@index([doctorId, patientId])
+}
+
+model PrescriptionMedication {
+  id             String         @id @default(uuid())
+  prescriptionId String
+  drug           String
+  dose           String
+  frequency      String
+  duration       String?
+  route          String?
+  instructions   String?
+  createdAt      DateTime       @default(now())
+  prescription   Prescription  @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  @@index([prescriptionId])
 }

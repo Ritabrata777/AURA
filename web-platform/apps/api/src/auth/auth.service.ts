@@ -1,12 +1,22 @@
-import { Injectable, UnauthorizedException, ConflictException, NotFoundException } from "@nestjs/common";
+import { Injectable, UnauthorizedException, ConflictException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+import { Doctor, IndividualUser, Patient, UserRole } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 
 export interface JwtPayload {
   sub: string;
   email: string;
   role: string;
+}
+
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  role: UserRole;
+  patient: Patient | null;
+  doctor: Doctor | null;
+  individualUser: IndividualUser | null;
 }
 
 export interface AuthResult {
@@ -17,6 +27,7 @@ export interface AuthResult {
     role: string;
     patientId?: string;
     doctorId?: string;
+    individualUserId?: string;
   };
 }
 
@@ -27,9 +38,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(email: string, password: string, role: "PATIENT" | "DOCTOR"): Promise<AuthResult> {
+  async register(
+    email: string,
+    password: string,
+    role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER",
+  ): Promise<AuthResult> {
+    const normalizedEmail = AuthService.normalizeEmail(email);
+
     const existingUser = await this.prisma.user.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
     });
 
     if (existingUser) {
@@ -40,27 +57,34 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
-        email,
+        email: normalizedEmail,
         passwordHash,
         role,
         patient: role === "PATIENT" ? { create: {} } : undefined,
         doctor: role === "DOCTOR" ? { create: {} } : undefined,
+        individualUser: role === "INDIVIDUAL_USER" ? { create: {} } : undefined,
       },
       include: {
         patient: true,
         doctor: true,
+        individualUser: true,
       },
     });
 
     return this.generateAuthResult(user);
   }
 
+  static normalizeEmail(email: string): string {
+    return email.trim().toLowerCase();
+  }
+
   async login(email: string, password: string): Promise<AuthResult> {
     const user = await this.prisma.user.findUnique({
-      where: { email },
+      where: { email: AuthService.normalizeEmail(email) },
       include: {
         patient: true,
         doctor: true,
+        individualUser: true,
       },
     });
 
@@ -91,36 +115,42 @@ export class AuthService {
         role: user.role,
         patientId: user.patient?.id,
         doctorId: user.doctor?.id,
+        individualUserId: user.individualUser?.id,
       },
     };
   }
 
-  async validateJwt(token: string): Promise<{ id: string; email: string; role: string; patient?: any; doctor?: any } | null> {
+  async validateJwt(token: string): Promise<AuthenticatedUser | null> {
     try {
       const payload = this.jwtService.verify<JwtPayload>(token);
-      
-      const user = await this.prisma.user.findUnique({
-        where: { id: payload.sub },
-        include: {
-          patient: true,
-          doctor: true,
-        },
-      });
-
-      if (!user) {
-        return null;
-      }
-
-      return {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        patient: user.patient,
-        doctor: user.doctor,
-      };
+      return await this.getAuthenticatedUser(payload.sub);
     } catch {
       return null;
     }
+  }
+
+  async getAuthenticatedUser(userId: string): Promise<AuthenticatedUser | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        patient: true,
+        doctor: true,
+        individualUser: true,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      patient: user.patient,
+      doctor: user.doctor,
+      individualUser: user.individualUser,
+    };
   }
 
   async getUserById(userId: string) {
@@ -129,14 +159,15 @@ export class AuthService {
       include: {
         patient: {
           include: {
-            devices: {
-              include: {
-                device: true,
-              },
-            },
+            devices: { include: { device: true } },
           },
         },
         doctor: true,
+        individualUser: {
+          include: {
+            devices: { include: { device: true } },
+          },
+        },
       },
     });
   }

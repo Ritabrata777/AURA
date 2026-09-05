@@ -15,6 +15,8 @@ static const char *TAG = "max30102";
 
 #define MAX30102_INT_PIN GPIO_NUM_34
 #define MAX30102_FIFO_SAMPLES 16
+// Give up on the sensor after this many back-to-back I2C failures (~1 s).
+#define MAX30102_MAX_CONSECUTIVE_ERRORS 50
 
 #define MAX30102_REG_INT_STATUS1 0x00
 #define MAX30102_REG_INT_STATUS2 0x01
@@ -43,6 +45,10 @@ static const char *TAG = "max30102";
 #define HR_BUFFER_SIZE 150    // ~3 seconds at 50 Hz effective rate
 #define HR_MIN_PEAK_INTERVAL 15  // Min 15 samples between peaks (~40bpm floor)
 #define HR_THRESHOLD_RATIO 0.6f
+// Beyond this many samples without a peak (~4 s) the last rate is stale.
+#define HR_STALE_AFTER_SAMPLES 200
+// Peak-to-peak floor below which the trace is sensor noise, not a pulse.
+#define HR_MIN_AMPLITUDE 1000
 
 typedef struct {
     spo2_state_t state;
@@ -55,6 +61,7 @@ typedef struct {
     uint32_t ir_buffer[HR_BUFFER_SIZE];
     size_t ir_buf_idx;
     uint32_t last_peak_idx;
+    bool buffer_ready;
     // SpO2 R-value accumulation
     float sum_red_ac;
     float sum_red_dc;
@@ -97,18 +104,33 @@ static void process_sample_for_hr(uint32_t ir_value, max30102_metrics_t *metrics
 {
     s_driver.ir_buffer[s_driver.ir_buf_idx % HR_BUFFER_SIZE] = ir_value;
     s_driver.ir_buf_idx++;
-    
+
     if (s_driver.ir_buf_idx < HR_BUFFER_SIZE) {
-        return; // Not enough data yet
+        metrics->hr_valid = false;
+        return; // Not enough data yet — buffer still filling
     }
-    
+    s_driver.buffer_ready = true;
+
+    // A rate computed from a beat several seconds ago is not a live reading.
+    // Without this, hr_valid latched true after the first peak and the device
+    // kept republishing a frozen number once the finger was removed.
+    if (s_driver.ir_buf_idx - s_driver.last_peak_idx > HR_STALE_AFTER_SAMPLES) {
+        metrics->hr_valid = false;
+    }
+
     // Find max in recent window
     uint32_t max_val = 0, min_val = UINT32_MAX;
     for (int i = 0; i < HR_BUFFER_SIZE; i++) {
         if (s_driver.ir_buffer[i] > max_val) max_val = s_driver.ir_buffer[i];
         if (s_driver.ir_buffer[i] < min_val) min_val = s_driver.ir_buffer[i];
     }
-    
+
+    // A flat trace is noise, not a pulse — no finger on the sensor.
+    if (max_val - min_val < HR_MIN_AMPLITUDE) {
+        metrics->hr_valid = false;
+        return;
+    }
+
     uint32_t threshold = min_val + (uint32_t)((max_val - min_val) * HR_THRESHOLD_RATIO);
     size_t current_idx = (s_driver.ir_buf_idx - 1) % HR_BUFFER_SIZE;
     size_t prev_idx = (current_idx == 0) ? HR_BUFFER_SIZE - 1 : current_idx - 1;
@@ -130,6 +152,7 @@ static void process_sample_for_hr(uint32_t ir_value, max30102_metrics_t *metrics
             if (metrics->heart_rate == 0) {
                 metrics->heart_rate = (uint16_t)bpm;
             }
+            metrics->hr_valid = true;
         }
     }
 }
@@ -149,15 +172,19 @@ static void process_sample_for_spo2(uint32_t red, uint32_t ir, max30102_metrics_
         float avg_red = s_driver.sum_red_dc / s_driver.ratio_count;
         float avg_ir = s_driver.sum_ir_dc / s_driver.ratio_count;
         
-        if (avg_ir > 1000 && avg_red > 1000) {
+        if (avg_ir > 1000 && avg_red > 1000 && avg_red < avg_ir * 3.0f) {
             float ratio = (avg_red / avg_ir);
             float spo2 = 110.0f - 25.0f * ratio;
-            
+
             if (spo2 > 100.0f) spo2 = 100.0f;
             if (spo2 < 70.0f) spo2 = 70.0f;
-            
+
             metrics->spo2 = (uint8_t)spo2;
             metrics->spo2_valid = true;
+        } else {
+            // Not enough signal separation — treat as unresolved rather than a
+            // valid reading, so the platform doesn't persist garbage as data.
+            metrics->spo2_valid = false;
         }
         
         s_driver.sum_red_dc = 0;
@@ -169,27 +196,43 @@ static void process_sample_for_spo2(uint32_t red, uint32_t ir, max30102_metrics_
 static void max30102_task(void *arg)
 {
     (void)arg;
-    max30102_sample_t samples[MAX30102_FIFO_SAMPLES];
+    max30102_sample_t samples[MAX30102_FIFO_SAMPLES] = {0};
     size_t samples_read = 0;
-    
+    uint32_t consecutive_errors = 0;
+
     while (s_driver.state == SPO2_STATE_RUNNING) {
-        if (max30102_read_fifo(samples, MAX30102_FIFO_SAMPLES, &samples_read) == ESP_OK) {
+        esp_err_t err = max30102_read_fifo(samples, MAX30102_FIFO_SAMPLES, &samples_read);
+
+        if (err == ESP_OK) {
+            consecutive_errors = 0;
             for (size_t i = 0; i < samples_read; i++) {
                 process_sample_for_hr(samples[i].ir, &s_driver.latest_metrics);
                 process_sample_for_spo2(samples[i].red, samples[i].ir, &s_driver.latest_metrics);
-                
+
                 if (s_driver.callback != NULL) {
                     s_driver.callback(&samples[i], &s_driver.latest_metrics, s_driver.callback_arg);
                 }
-                
+
                 s_driver.sample_count++;
             }
+        } else if (++consecutive_errors >= MAX30102_MAX_CONSECUTIVE_ERRORS) {
+            // The sensor has gone away mid-session. Stop rather than spin on a
+            // failing bus, and make sure nothing downstream treats the last
+            // metrics as current.
+            ESP_LOGE(TAG, "MAX30102 unreachable (%s) — stopping", esp_err_to_name(err));
+            s_driver.latest_metrics.hr_valid = false;
+            s_driver.latest_metrics.spo2_valid = false;
+            break;
         }
-        
+
         vTaskDelay(pdMS_TO_TICKS(20));
     }
-    
-    s_driver.state = SPO2_STATE_IDLE;
+
+    // Preserve ERROR; anything else settles back to IDLE.
+    if (s_driver.state != SPO2_STATE_ERROR) {
+        s_driver.state = SPO2_STATE_IDLE;
+    }
+    s_driver.task_handle = NULL;
     vTaskDelete(NULL);
 }
 
@@ -234,24 +277,37 @@ esp_err_t max30102_start(void)
     if (s_driver.state == SPO2_STATE_RUNNING) {
         return ESP_OK;
     }
-    
+    // A start arriving while the previous task is still winding down would
+    // create a second reader on the same I2C device. This happened on every
+    // MQTT reconnect, since connect auto-starts the sensors.
+    if (s_driver.task_handle != NULL) {
+        ESP_LOGW(TAG, "MAX30102 is still stopping — ignoring start");
+        return ESP_ERR_INVALID_STATE;
+    }
+
     ESP_LOGI(TAG, "Starting MAX30102 measurement");
-    
+
     max30102_write_reg(MAX30102_REG_MODE_CONFIG, 0x03);
-    
+
     // Reset HR/SpO2 accumulators
     memset(&s_driver.latest_metrics, 0, sizeof(max30102_metrics_t));
     s_driver.ir_buf_idx = 0;
     s_driver.last_peak_idx = 0;
+    s_driver.buffer_ready = false;
     s_driver.sum_red_dc = 0;
     s_driver.sum_ir_dc = 0;
     s_driver.ratio_count = 0;
-    
+
     s_driver.state = SPO2_STATE_RUNNING;
     s_driver.sample_count = 0;
-    
-    xTaskCreate(max30102_task, "max30102_task", 4096, NULL, 5, &s_driver.task_handle);
-    
+
+    if (xTaskCreate(max30102_task, "max30102_task", 4096, NULL, 5, &s_driver.task_handle) != pdPASS) {
+        s_driver.task_handle = NULL;
+        s_driver.state = SPO2_STATE_IDLE;
+        ESP_LOGE(TAG, "Could not create MAX30102 task");
+        return ESP_ERR_NO_MEM;
+    }
+
     return ESP_OK;
 }
 
@@ -260,16 +316,12 @@ void max30102_stop(void)
     if (s_driver.state != SPO2_STATE_RUNNING) {
         return;
     }
-    
+
     ESP_LOGI(TAG, "Stopping MAX30102 measurement");
-    
+
+    // The task observes this, settles the state and clears its own handle.
     s_driver.state = SPO2_STATE_STOPPING;
     max30102_write_reg(MAX30102_REG_MODE_CONFIG, 0x00);
-    
-    // Let the task self-delete
-    if (s_driver.task_handle != NULL) {
-        s_driver.task_handle = NULL;
-    }
 }
 
 bool max30102_is_running(void)
@@ -283,23 +335,47 @@ void max30102_set_callback(spo2_data_callback_t callback, void *arg)
     s_driver.callback_arg = arg;
 }
 
+/**
+ * Drains up to `max_samples` entries from the sensor FIFO.
+ *
+ * Every I2C access is checked. The previous version ignored all of them and
+ * still returned ESP_OK, so a disconnected sensor left `samples` holding
+ * uninitialised stack bytes that the caller then published as VALID readings.
+ */
 esp_err_t max30102_read_fifo(max30102_sample_t *samples, size_t max_samples, size_t *read_count)
 {
+    if (samples == NULL || read_count == NULL) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    *read_count = 0;
+
     uint8_t fifo_wr_ptr = 0, fifo_rd_ptr = 0;
-    
-    max30102_read_reg(MAX30102_REG_FIFO_WR_PTR, &fifo_wr_ptr);
-    max30102_read_reg(MAX30102_REG_FIFO_RD_PTR, &fifo_rd_ptr);
-    
-    *read_count = (fifo_wr_ptr - fifo_rd_ptr) & 0x0F;
-    
-    if (*read_count > max_samples) {
-        *read_count = max_samples;
+
+    esp_err_t err = max30102_read_reg(MAX30102_REG_FIFO_WR_PTR, &fifo_wr_ptr);
+    if (err != ESP_OK) {
+        return err;
     }
-    
-    for (size_t i = 0; i < *read_count; i++) {
-        max30102_read_fifo_data(&samples[i].ir, &samples[i].red);
+
+    err = max30102_read_reg(MAX30102_REG_FIFO_RD_PTR, &fifo_rd_ptr);
+    if (err != ESP_OK) {
+        return err;
     }
-    
+
+    size_t available = (size_t)((fifo_wr_ptr - fifo_rd_ptr) & 0x0F);
+    if (available > max_samples) {
+        available = max_samples;
+    }
+
+    for (size_t i = 0; i < available; i++) {
+        err = max30102_read_fifo_data(&samples[i].ir, &samples[i].red);
+        if (err != ESP_OK) {
+            // Report what was actually read; the caller must not look past it.
+            return (i > 0) ? ESP_OK : err;
+        }
+        *read_count = i + 1;
+    }
+
     return ESP_OK;
 }
 

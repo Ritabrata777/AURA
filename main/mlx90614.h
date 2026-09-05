@@ -15,6 +15,7 @@ typedef struct {
 typedef enum {
     TEMP_STATE_IDLE,
     TEMP_STATE_RUNNING,
+    TEMP_STATE_STOPPING,
     TEMP_STATE_ERROR
 } temp_state_t;
 

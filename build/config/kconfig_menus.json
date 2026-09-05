@@ -41755,7 +41755,7 @@
                     }
                 ],
                 "depends_on": null,
-                "id": "component-config-health-device-configuration-C:-Users-ASUS-OneDrive-Desktop-esp-main-Kconfig-1",
+                "id": "component-config-health-device-configuration-C:-Users-LENOVO-Desktop-New folder (3)-esp32-health-device-main-Kconfig-1",
                 "title": "Health Device Configuration",
                 "type": "menu"
             },
@@ -41783,7 +41783,7 @@
                     }
                 ],
                 "depends_on": null,
-                "id": "component-config-cjson-C:-Users-ASUS-OneDrive-Desktop-esp-managed_components-espressif__cjson-Kconfig-1",
+                "id": "component-config-cjson-C:-Users-LENOVO-Desktop-New folder (3)-esp32-health-device-managed_components-espressif__cjson-Kconfig-1",
                 "title": "cJSON",
                 "type": "menu"
             },
@@ -42008,7 +42008,7 @@
                                 ],
                                 "depends_on": "MQTT_TASK_CORE_SELECTION_ENABLED",
                                 "help": null,
-                                "id": "component-config-esp-mqtt-configurations-enable-mqtt-task-core-selection-core-to-use--C:-Users-ASUS-OneDrive-Desktop-esp-managed_components-espressif__mqtt-Kconfig-146",
+                                "id": "component-config-esp-mqtt-configurations-enable-mqtt-task-core-selection-core-to-use--C:-Users-LENOVO-Desktop-New folder (3)-esp32-health-device-managed_components-espressif__mqtt-Kconfig-146",
                                 "name": "MQTT_TASK_CORE_SELECTION",
                                 "title": "Core to use ?",
                                 "type": "choice"
@@ -42084,7 +42084,7 @@
                     }
                 ],
                 "depends_on": null,
-                "id": "component-config-esp-mqtt-configurations-C:-Users-ASUS-OneDrive-Desktop-esp-managed_components-espressif__mqtt-Kconfig-1",
+                "id": "component-config-esp-mqtt-configurations-C:-Users-LENOVO-Desktop-New folder (3)-esp32-health-device-managed_components-espressif__mqtt-Kconfig-1",
                 "title": "ESP-MQTT Configurations",
                 "type": "menu"
             },

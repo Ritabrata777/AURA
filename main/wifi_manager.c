@@ -6,6 +6,7 @@
 #include "esp_log.h"
 #include "esp_netif.h"
 #include "esp_mac.h"
+#include "esp_timer.h"
 #include "nvs_flash.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -16,6 +17,12 @@ static const char *TAG = "wifi_manager";
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
 
+// Reconnect backoff: 1s, 2s, 4s, 8s, 16s, then hold at 30s. Retrying instantly
+// in the disconnect handler pins the radio and the CPU when the AP is simply
+// out of range, which is the common failure mode for a wearable device.
+#define WIFI_RECONNECT_BASE_MS 1000
+#define WIFI_RECONNECT_MAX_MS  30000
+
 static EventGroupHandle_t s_wifi_event_group = NULL;
 static esp_netif_t *s_sta_netif = NULL;
 static esp_netif_t *s_ap_netif = NULL;
@@ -23,6 +30,44 @@ static wifi_event_callback_t s_event_callback = NULL;
 static void *s_callback_arg = NULL;
 static bool s_is_connected = false;
 static bool s_is_provisioning = false;
+static esp_timer_handle_t s_reconnect_timer = NULL;
+static uint32_t s_reconnect_attempts = 0;
+
+static void reconnect_timer_cb(void *arg)
+{
+    (void)arg;
+    if (s_is_provisioning || s_is_connected) {
+        return;
+    }
+    ESP_LOGI(TAG, "Reconnect attempt %lu", (unsigned long)s_reconnect_attempts);
+    esp_wifi_connect();
+}
+
+static void schedule_reconnect(void)
+{
+    if (s_reconnect_timer == NULL) {
+        const esp_timer_create_args_t args = {
+            .callback = reconnect_timer_cb,
+            .name = "wifi_reconnect",
+        };
+        if (esp_timer_create(&args, &s_reconnect_timer) != ESP_OK) {
+            // Timer creation failed — fall back to the old immediate retry so we
+            // still eventually reconnect.
+            esp_wifi_connect();
+            return;
+        }
+    }
+
+    uint32_t delay_ms = WIFI_RECONNECT_BASE_MS << (s_reconnect_attempts < 5 ? s_reconnect_attempts : 5);
+    if (delay_ms > WIFI_RECONNECT_MAX_MS) {
+        delay_ms = WIFI_RECONNECT_MAX_MS;
+    }
+    s_reconnect_attempts++;
+
+    esp_timer_stop(s_reconnect_timer);
+    esp_timer_start_once(s_reconnect_timer, (uint64_t)delay_ms * 1000ULL);
+    ESP_LOGW(TAG, "Reconnecting in %lu ms", (unsigned long)delay_ms);
+}
 
 static void wifi_event_handler(void *arg, esp_event_base_t event_base,
                                int32_t event_id, void *event_data)
@@ -46,9 +91,9 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
                     s_event_callback(APP_WIFI_EVENT_DISCONNECTED, s_callback_arg);
                 }
                 
-                // Auto-reconnect if not in provisioning mode
+                // Auto-reconnect if not in provisioning mode, with backoff.
                 if (!s_is_provisioning) {
-                    esp_wifi_connect();
+                    schedule_reconnect();
                 }
                 break;
             }
@@ -85,6 +130,10 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
         ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
         ESP_LOGI(TAG, "STA got IP: " IPSTR, IP2STR(&event->ip_info.ip));
         s_is_connected = true;
+        s_reconnect_attempts = 0;
+        if (s_reconnect_timer != NULL) {
+            esp_timer_stop(s_reconnect_timer);
+        }
         xEventGroupClearBits(s_wifi_event_group, WIFI_FAIL_BIT);
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
         
@@ -96,7 +145,18 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
 
 void wifi_manager_init(void)
 {
-    ESP_ERROR_CHECK(nvs_flash_init());
+    // A firmware update that grows the NVS partition, or a partition left dirty
+    // by a previous image, makes nvs_flash_init() return NO_FREE_PAGES /
+    // NEW_VERSION_FOUND. Bare ESP_ERROR_CHECK would abort into a boot loop, so
+    // erase and retry once — losing saved credentials is far better than a brick.
+    esp_err_t nvs_err = nvs_flash_init();
+    if (nvs_err == ESP_ERR_NVS_NO_FREE_PAGES || nvs_err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_LOGW(TAG, "NVS partition needs erase (%s), reformatting", esp_err_to_name(nvs_err));
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        nvs_err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(nvs_err);
+
     ESP_ERROR_CHECK(esp_netif_init());
     
     s_wifi_event_group = xEventGroupCreate();
@@ -121,6 +181,11 @@ void wifi_manager_init(void)
 
 esp_err_t wifi_manager_save_credentials(const app_wifi_config_t *config)
 {
+    if (config == NULL || config->ssid[0] == '\0') {
+        ESP_LOGE(TAG, "Refusing to save empty Wi-Fi SSID");
+        return ESP_ERR_INVALID_ARG;
+    }
+
     nvs_handle_t nvs;
     esp_err_t err = nvs_open(WIFI_NAMESPACE, NVS_READWRITE, &nvs);
     if (err != ESP_OK) {
@@ -149,29 +214,42 @@ esp_err_t wifi_manager_save_credentials(const app_wifi_config_t *config)
 
 esp_err_t wifi_manager_load_credentials(app_wifi_config_t *config)
 {
+    if (config == NULL) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    // Zero first so a partial read never leaves caller-visible garbage that
+    // then gets handed to esp_wifi_set_config().
+    memset(config, 0, sizeof(*config));
+
     nvs_handle_t nvs;
     esp_err_t err = nvs_open(WIFI_NAMESPACE, NVS_READONLY, &nvs);
     if (err != ESP_OK) {
         ESP_LOGI(TAG, "No Wi-Fi credentials in NVS");
         return err;
     }
-    
-    size_t ssid_len = WIFI_MAX_SSID_LENGTH;
+
+    size_t ssid_len = sizeof(config->ssid);
     err = nvs_get_str(nvs, WIFI_KEY_SSID, config->ssid, &ssid_len);
     if (err != ESP_OK) {
         nvs_close(nvs);
         return err;
     }
-    
-    size_t pass_len = WIFI_MAX_PASSWORD_LENGTH;
-    err = nvs_get_str(nvs, WIFI_KEY_PASSWORD, config->password, &pass_len);
+
+    // An open network has no stored password; that is not a load failure.
+    size_t pass_len = sizeof(config->password);
+    esp_err_t pass_err = nvs_get_str(nvs, WIFI_KEY_PASSWORD, config->password, &pass_len);
     nvs_close(nvs);
-    
-    if (err == ESP_OK) {
-        ESP_LOGI(TAG, "Wi-Fi credentials loaded from NVS: SSID=%s", config->ssid);
+
+    if (pass_err != ESP_OK && pass_err != ESP_ERR_NVS_NOT_FOUND) {
+        return pass_err;
     }
-    
-    return err;
+    if (pass_err == ESP_ERR_NVS_NOT_FOUND) {
+        config->password[0] = '\0';
+    }
+
+    ESP_LOGI(TAG, "Wi-Fi credentials loaded from NVS: SSID=%s", config->ssid);
+    return ESP_OK;
 }
 
 esp_err_t wifi_manager_clear_credentials(void)
@@ -233,7 +311,9 @@ void wifi_manager_start(void)
     
     if (has_credentials) {
         ESP_LOGI(TAG, "Starting STA mode with credentials for SSID=%s", app_config.ssid);
-        
+
+        s_reconnect_attempts = 0;
+
         ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
         
         wifi_config_t sta_config = {0};
@@ -252,26 +332,39 @@ void wifi_manager_start(void)
 
 void wifi_manager_stop(void)
 {
+    if (s_reconnect_timer != NULL) {
+        esp_timer_stop(s_reconnect_timer);
+    }
+    s_reconnect_attempts = 0;
     ESP_ERROR_CHECK(esp_wifi_stop());
     s_is_connected = false;
 }
 
 void wifi_manager_start_provisioning_mode(void)
 {
-    ESP_LOGI(TAG, "Starting Wi-Fi provisioning AP: 'HealthDevice-XXXX'");
-    
+    // Derive the AP SSID from the device MAC so each device presents a unique
+    // provisioning network (e.g. HealthDevice-A7F291) instead of a fixed one.
+    uint8_t mac[6] = {0};
+    esp_read_mac(mac, ESP_MAC_WIFI_STA);
+
+    char ap_ssid[32];
+    snprintf(ap_ssid, sizeof(ap_ssid), "HealthDevice-%02X%02X%02X",
+             mac[3], mac[4], mac[5]);
+
+    ESP_LOGI(TAG, "Starting Wi-Fi provisioning AP: '%s'", ap_ssid);
+
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
-    
+
     wifi_config_t ap_config = {0};
-    strncpy((char *)ap_config.ap.ssid, "HealthDevice-XXXX", sizeof(ap_config.ap.ssid) - 1);
+    strncpy((char *)ap_config.ap.ssid, ap_ssid, sizeof(ap_config.ap.ssid) - 1);
     ap_config.ap.channel = 0;
     ap_config.ap.max_connection = 4;
     ap_config.ap.authmode = WIFI_AUTH_OPEN;
-    
+
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &ap_config));
     ESP_ERROR_CHECK(esp_wifi_start());
-    
+
     s_is_provisioning = true;
-    
+
     ESP_LOGI(TAG, "Provisioning AP started. Connect and POST credentials to /wifi/config endpoint");
 }

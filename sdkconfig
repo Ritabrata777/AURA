@@ -3478,7 +3478,7 @@ CONFIG_WL_SECTOR_SIZE=4096
 # Health Device Configuration
 #
 # default:
-CONFIG_MQTT_BROKER_URI="mqtt://192.168.1.35:1883"
+CONFIG_MQTT_BROKER_URI="mqtt://10.200.200.232:1883"
 # default:
 CONFIG_WIFI_SSID=""
 # default:

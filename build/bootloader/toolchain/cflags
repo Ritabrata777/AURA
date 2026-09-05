@@ -1,4 +1,4 @@
-"-specs=C:/Users/ASUS/OneDrive/Desktop/esp/build/bootloader/specs/picolibc.specs"
+"-specs=C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader/specs/picolibc.specs"
 -Wno-frame-address
 -mlongcalls
 -fno-builtin-memcpy

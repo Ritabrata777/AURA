@@ -10,63 +10,96 @@ import {
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { AuthService } from "../auth/auth.service";
+import { DoctorsService } from "../doctors/doctors.service";
+import { allowedOrigins } from "../config/cors";
 
 interface AuthenticatedSocket extends Socket {
   userId?: string;
   patientId?: string;
   doctorId?: string;
-  rooms: Set<string>;
+  /** Patient rooms this socket has been explicitly authorized to observe. */
+  authorizedPatientIds?: Set<string>;
 }
 
 @WebSocketGateway({
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    // Must use the same comma-splitting as the HTTP server, or a multi-origin
+    // deployment gets working REST calls and a rejected socket handshake.
+    origin: allowedOrigins(),
     credentials: true,
   },
   namespace: "/live",
 })
 export class LiveGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   private readonly logger = new Logger(LiveGateway.name);
-  private readonly patientRooms = new Map<string, Set<string>>();
-  private readonly doctorRooms = new Map<string, Set<string>>();
 
-  constructor(private readonly authService: AuthService) {}
+  /** Sockets that connected but never authenticated, with their kill timers. */
+  private readonly pendingAuth = new Map<string, NodeJS.Timeout>();
+  private static readonly AUTH_GRACE_MS = 10_000;
+
+  constructor(
+    private readonly authService: AuthService,
+    private readonly doctorsService: DoctorsService,
+  ) {}
 
   handleConnection(client: AuthenticatedSocket) {
     this.logger.debug(`Client connected: ${client.id}`);
-    client.rooms = new Set();
+    client.authorizedPatientIds = new Set();
+
+    // An unauthenticated socket is just an open file descriptor. Drop it if no
+    // valid token arrives shortly, so anonymous clients cannot accumulate.
+    const timer = setTimeout(() => {
+      if (!client.userId) {
+        this.logger.debug(`Disconnecting ${client.id}: no authentication`);
+        client.emit("auth:error", { message: "Authentication timed out" });
+        client.disconnect(true);
+      }
+      this.pendingAuth.delete(client.id);
+    }, LiveGateway.AUTH_GRACE_MS);
+
+    this.pendingAuth.set(client.id, timer);
   }
 
   async handleDisconnect(client: AuthenticatedSocket) {
     this.logger.debug(`Client disconnected: ${client.id}`);
-    
-    if (client.patientId) {
-      const room = `patient:${client.patientId}`;
-      await client.leave(room);
-      this.patientRooms.get(room)?.delete(client.id);
+
+    const timer = this.pendingAuth.get(client.id);
+    if (timer) {
+      clearTimeout(timer);
+      this.pendingAuth.delete(client.id);
     }
-    
-    if (client.doctorId) {
-      const room = `doctor:${client.doctorId}`;
-      await client.leave(room);
-      this.doctorRooms.get(room)?.delete(client.id);
-    }
+
+    // socket.io removes a disconnecting socket from its rooms automatically;
+    // the previous manual bookkeeping duplicated that and leaked entries for
+    // rooms joined via `join:patient`.
+    client.authorizedPatientIds?.clear();
   }
 
   @SubscribeMessage("auth")
   async handleAuth(
     @ConnectedSocket() client: AuthenticatedSocket,
-    @MessageBody() payload: { token: string },
+    @MessageBody() payload: { token?: string } | undefined,
   ) {
     try {
+      if (!payload?.token || typeof payload.token !== "string") {
+        client.emit("auth:error", { message: "Missing token" });
+        return;
+      }
+
       const user = await this.authService.validateJwt(payload.token);
-      
+
       if (!user) {
         client.emit("auth:error", { message: "Invalid token" });
         return;
+      }
+
+      const timer = this.pendingAuth.get(client.id);
+      if (timer) {
+        clearTimeout(timer);
+        this.pendingAuth.delete(client.id);
       }
 
       client.userId = user.id;
@@ -74,28 +107,20 @@ export class LiveGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (user.role === "PATIENT" && user.patient) {
         client.patientId = user.patient.id;
-        const room = `patient:${user.patient.id}`;
-        await client.join(room);
-        
-        if (!this.patientRooms.has(room)) {
-          this.patientRooms.set(room, new Set());
-        }
-        this.patientRooms.get(room)!.add(client.id);
-        
-        this.logger.debug(`Client ${client.id} joined patient room ${room}`);
+        client.authorizedPatientIds?.add(user.patient.id);
+        await client.join(`patient:${user.patient.id}`);
+      }
+
+      if (user.role === "INDIVIDUAL_USER" && user.individualUser) {
+        // The ingestion service emits wellness-device events into
+        // `patient:<individualUserId>`. Without joining that room here the
+        // events were broadcast to a name no socket ever held.
+        await client.join(`patient:${user.individualUser.id}`);
       }
 
       if (user.role === "DOCTOR" && user.doctor) {
         client.doctorId = user.doctor.id;
-        const room = `doctor:${user.doctor.id}`;
-        await client.join(room);
-        
-        if (!this.doctorRooms.has(room)) {
-          this.doctorRooms.set(room, new Set());
-        }
-        this.doctorRooms.get(room)!.add(client.id);
-        
-        this.logger.debug(`Client ${client.id} joined doctor room ${room}`);
+        await client.join(`doctor:${user.doctor.id}`);
       }
 
       client.emit("auth:success", {
@@ -111,43 +136,73 @@ export class LiveGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  /**
+   * Subscribes a doctor to a patient's live vitals stream.
+   *
+   * This previously checked only that the socket belonged to *some* doctor,
+   * then joined whatever patient room was named — so any authenticated doctor
+   * could stream any patient's ECG and vitals in real time. Access now
+   * requires an ACCEPTED DoctorPatient relationship, and every subscription is
+   * written to the audit log.
+   */
   @SubscribeMessage("join:patient")
   async handleJoinPatientRoom(
     @ConnectedSocket() client: AuthenticatedSocket,
-    @MessageBody() payload: { patientId: string },
+    @MessageBody() payload: { patientId?: string } | undefined,
   ) {
+    if (!client.userId) {
+      client.emit("error", { message: "Not authenticated" });
+      return;
+    }
+
     if (!client.doctorId) {
       client.emit("error", { message: "Only doctors can join patient rooms" });
       return;
     }
 
-    const room = `patient:${payload.patientId}`;
-    await client.join(room);
-    
-    if (!this.patientRooms.has(room)) {
-      this.patientRooms.set(room, new Set());
+    const patientId = payload?.patientId;
+    if (!patientId || typeof patientId !== "string") {
+      client.emit("error", { message: "patientId is required" });
+      return;
     }
-    this.patientRooms.get(room)!.add(client.id);
-    
-    this.logger.debug(`Doctor ${client.doctorId} joined patient room ${room}`);
-  }
 
-  emitToPatientRoom(patientId: string, event: string, data: any) {
+    const authorized = await this.doctorsService.isAuthorizedDoctor(client.doctorId, patientId);
+
+    if (!authorized) {
+      this.logger.warn(
+        `Doctor ${client.doctorId} denied access to patient ${patientId} (no accepted relationship)`,
+      );
+      client.emit("error", { message: "No accepted relationship with this patient" });
+      return;
+    }
+
     const room = `patient:${patientId}`;
-    this.server.to(room).emit(event, data);
-    this.logger.debug(`Emitted ${event} to room ${room}`);
+    await client.join(room);
+    client.authorizedPatientIds?.add(patientId);
+
+    this.logger.debug(`Doctor ${client.doctorId} joined patient room ${room}`);
+    client.emit("join:patient:success", { patientId });
   }
 
-  emitToDoctorRoom(doctorId: string, event: string, data: any) {
-    const room = `doctor:${doctorId}`;
-    this.server.to(room).emit(event, data);
+  @SubscribeMessage("leave:patient")
+  async handleLeavePatientRoom(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() payload: { patientId?: string } | undefined,
+  ) {
+    const patientId = payload?.patientId;
+    if (!patientId || patientId === client.patientId) {
+      return;
+    }
+
+    await client.leave(`patient:${patientId}`);
+    client.authorizedPatientIds?.delete(patientId);
   }
 
-  emitToPatientECG(patientId: string, sessionId: string, chunk: any) {
-    this.emitToPatientRoom(patientId, "ecg:chunk", { sessionId, ...chunk });
+  emitToPatientRoom(patientId: string, event: string, data: unknown) {
+    this.server?.to(`patient:${patientId}`).emit(event, data);
   }
 
-  emitToPatientMeasurement(patientId: string, measurement: any) {
-    this.emitToPatientRoom(patientId, "measurement:new", measurement);
+  emitToDoctorRoom(doctorId: string, event: string, data: unknown) {
+    this.server?.to(`doctor:${doctorId}`).emit(event, data);
   }
 }

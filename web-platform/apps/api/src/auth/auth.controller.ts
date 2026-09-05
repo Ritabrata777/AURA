@@ -13,9 +13,9 @@ class RegisterDto {
   password: string;
 
   @IsString()
-  @IsIn(["PATIENT", "DOCTOR"])
+  @IsIn(["PATIENT", "DOCTOR", "INDIVIDUAL_USER"])
   @IsNotEmpty()
-  role: "PATIENT" | "DOCTOR";
+  role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER";
 }
 
 class LoginDto {
