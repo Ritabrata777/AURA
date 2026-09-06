@@ -10,8 +10,9 @@ import {
   X,
 } from "lucide-react";
 import { EcgMonitor, EcgStaticTrace, type EcgMonitorHandle } from "@/components/user/ecg-monitor";
-import { LoadingState, LoadingSpinner } from "@/components/ui/LoadingState";
+import { LoadingSpinner, LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { EcgMonitorSkeleton } from "@/components/ui/Skeleton";
 import { useAuth, useApi } from "@/lib/auth";
 import { useLiveFeed } from "@/lib/live";
 import { glassCard, InnerGlow } from "@/components/kiosk";
@@ -224,8 +225,8 @@ export default function UserEcgPage() {
 
   // ── Render ────────────────────────────────────────────────────────────
   if (status !== "authenticated" || loading) {
-    // Unauthenticated renders here for one frame while the effect redirects.
-    return <LoadingState message="Loading ECG monitor…" />;
+    // Show skeleton during initial load to prevent white flash
+    return <EcgMonitorSkeleton />;
   }
 
   if (pageError) {

@@ -4,11 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TrendingUp } from "lucide-react";
 import { TrendChart } from "@/components/ui/TrendChart";
-import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { glassCard } from "@/components/kiosk";
 import { useAuth, useApi } from "@/lib/auth";
 import { queryString } from "@/lib/api";
-import { glassCard } from "@/components/kiosk";
 import type { MeasurementType, TrendPoint } from "@/lib/types";
 
 const TRENDS: Array<{ type: MeasurementType; unit: string; title: string }> = [
@@ -71,7 +70,22 @@ export default function UserTrends() {
   }, [status, router, load, days]);
 
   if (status !== "authenticated" || loading) {
-    return <LoadingState message="Loading trends…" />;
+    return (
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-6">
+          <div className="h-8 w-40 rounded bg-white/10 animate-pulse" />
+          <div className="mt-2 h-4 w-64 rounded bg-white/10 animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className={`${glassCard} p-6 animate-pulse`}>
+              <div className="mb-4 h-5 w-32 rounded bg-white/10" />
+              <div className="h-40 rounded bg-white/5" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {

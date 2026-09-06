@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, ArrowRight, HeartPulse, Radio, Wifi, WifiOff } from "lucide-react";
 import { VitalCard } from "@/components/ui/VitalCard";
-import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { DashboardSkeleton } from "@/components/ui/Skeleton";
 import { EcgMonitor, type EcgMonitorHandle } from "@/components/user/ecg-monitor";
 import { useAuth, useApi } from "@/lib/auth";
 import { useLiveFeed } from "@/lib/live";
@@ -111,7 +111,7 @@ export default function UserDashboard() {
   const deviceOnline = device ? isOnline(device.lastSeenAt) : false;
 
   if (status !== "authenticated" || loading) {
-    return <LoadingState message="Loading your dashboard…" />;
+    return <DashboardSkeleton />;
   }
 
   if (error) {

@@ -13,7 +13,9 @@
     "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
-    "lightningcss": "^1.32.0",
-    "lightningcss-win32-x64-msvc": "^1.32.0"
+    "lightningcss-win32-x64-msvc": "^1.28.1"
+  },
+  "dependencies": {
+    "lightningcss": "^1.28.1"
   }
 }

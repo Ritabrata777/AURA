@@ -25,7 +25,7 @@ interface AuthContextValue {
   status: AuthStatus;
   token: string | null;
   user: SessionUser | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER") => Promise<void>;
   register: (email: string, password: string, role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER") => Promise<void>;
   logout: () => void;
 }
@@ -89,10 +89,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string, role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER") => {
       const result = await apiRequest<AuthResult>("/auth/login", {
         method: "POST",
-        body: { email, password },
+        body: { email, password, role },
       });
       persist(result);
     },

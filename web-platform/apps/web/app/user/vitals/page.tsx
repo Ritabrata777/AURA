@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { VitalCard } from "@/components/ui/VitalCard";
-import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SkeletonCard } from "@/components/ui/Skeleton";
 import { useAuth, useApi } from "@/lib/auth";
 import { useLiveFeed } from "@/lib/live";
 import { glassCard } from "@/components/kiosk";
@@ -81,7 +81,19 @@ export default function UserVitals() {
   });
 
   if (status !== "authenticated" || loading) {
-    return <LoadingState message="Loading vitals…" />;
+    return (
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-6">
+          <div className="h-8 w-40 rounded bg-white/10 animate-pulse" />
+          <div className="mt-2 h-4 w-64 rounded bg-white/10 animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
+            <SkeletonCard key={i} lines={2} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {

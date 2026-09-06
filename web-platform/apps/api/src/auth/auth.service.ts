@@ -45,25 +45,8 @@ export class AuthService {
   ): Promise<AuthResult> {
     const normalizedEmail = AuthService.normalizeEmail(email);
 
-    const existingUser = await this.prisma.user.findUnique({
+    let user = await this.prisma.user.findUnique({
       where: { email: normalizedEmail },
-    });
-
-    if (existingUser) {
-      throw new ConflictException("Email already registered");
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const user = await this.prisma.user.create({
-      data: {
-        email: normalizedEmail,
-        passwordHash,
-        role,
-        patient: role === "PATIENT" ? { create: {} } : undefined,
-        doctor: role === "DOCTOR" ? { create: {} } : undefined,
-        individualUser: role === "INDIVIDUAL_USER" ? { create: {} } : undefined,
-      },
       include: {
         patient: true,
         doctor: true,
@@ -71,14 +54,75 @@ export class AuthService {
       },
     });
 
-    return this.generateAuthResult(user);
+    if (user) {
+      // User exists - add the new role if they don't have it
+      const passwordValid = await bcrypt.compare(password, user.passwordHash);
+      if (!passwordValid) {
+        throw new UnauthorizedException("Invalid password for existing account");
+      }
+
+      // Check if they already have this role
+      if (
+        (role === "PATIENT" && user.patient) ||
+        (role === "DOCTOR" && user.doctor) ||
+        (role === "INDIVIDUAL_USER" && user.individualUser)
+      ) {
+        throw new ConflictException(`You already have the ${role} role. Please login instead.`);
+      }
+
+      // Add the new role
+      if (role === "PATIENT") {
+        await this.prisma.patient.create({
+          data: { userId: user.id },
+        });
+      } else if (role === "DOCTOR") {
+        await this.prisma.doctor.create({
+          data: { userId: user.id },
+        });
+      } else if (role === "INDIVIDUAL_USER") {
+        await this.prisma.individualUser.create({
+          data: { userId: user.id },
+        });
+      }
+
+      // Fetch updated user
+      user = await this.prisma.user.findUnique({
+        where: { id: user.id },
+        include: {
+          patient: true,
+          doctor: true,
+          individualUser: true,
+        },
+      });
+    } else {
+      // New user - create with the specified role
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      user = await this.prisma.user.create({
+        data: {
+          email: normalizedEmail,
+          passwordHash,
+          role, // Default role
+          patient: role === "PATIENT" ? { create: {} } : undefined,
+          doctor: role === "DOCTOR" ? { create: {} } : undefined,
+          individualUser: role === "INDIVIDUAL_USER" ? { create: {} } : undefined,
+        },
+        include: {
+          patient: true,
+          doctor: true,
+          individualUser: true,
+        },
+      });
+    }
+
+    return this.generateAuthResult(user!, role);
   }
 
   static normalizeEmail(email: string): string {
     return email.trim().toLowerCase();
   }
 
-  async login(email: string, password: string): Promise<AuthResult> {
+  async login(email: string, password: string, role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER"): Promise<AuthResult> {
     const user = await this.prisma.user.findUnique({
       where: { email: AuthService.normalizeEmail(email) },
       include: {
@@ -97,14 +141,23 @@ export class AuthService {
       throw new UnauthorizedException("Invalid credentials");
     }
 
-    return this.generateAuthResult(user);
+    // Check if user has the requested role
+    if (
+      (role === "PATIENT" && !user.patient) ||
+      (role === "DOCTOR" && !user.doctor) ||
+      (role === "INDIVIDUAL_USER" && !user.individualUser)
+    ) {
+      throw new UnauthorizedException(`You don't have access as ${role}. Please register for this role first.`);
+    }
+
+    return this.generateAuthResult(user, role);
   }
 
-  private generateAuthResult(user: any): AuthResult {
+  private generateAuthResult(user: any, activeRole: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER"): AuthResult {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
-      role: user.role,
+      role: activeRole, // Use the selected role, not user.role
     };
 
     return {
@@ -112,7 +165,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role,
+        role: activeRole,
         patientId: user.patient?.id,
         doctorId: user.doctor?.id,
         individualUserId: user.individualUser?.id,
