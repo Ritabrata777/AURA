@@ -27,6 +27,16 @@ export function HealthCompanionBubble({ deviceOnline = false }: HealthCompanionB
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
+  // Escape closes the panel from anywhere inside it.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen]);
+
   // Don't render if not available for this user type
   if (!isAvailable) {
     return null;

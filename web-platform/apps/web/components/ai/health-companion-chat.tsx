@@ -11,6 +11,12 @@ interface HealthCompanionChatProps {
   deviceOnline?: boolean;
 }
 
+const FOLLOW_UPS = [
+  "Explain my latest readings",
+  "Anything unusual?",
+  "Is my device OK?",
+];
+
 export function HealthCompanionChat({ deviceOnline = false }: HealthCompanionChatProps) {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -28,7 +34,16 @@ export function HealthCompanionChat({ deviceOnline = false }: HealthCompanionCha
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
+
+  // Focus the input once the pop-in finishes — desktop only, so mobile
+  // doesn't get an unwanted keyboard on open. The panel remounts on every
+  // open, so this runs once per open.
+  useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const timer = setTimeout(() => inputRef.current?.focus(), 350);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -58,6 +73,11 @@ export function HealthCompanionChat({ deviceOnline = false }: HealthCompanionCha
       handleSend();
     }
   };
+
+  const showFollowUps =
+    messages.length > 0 &&
+    !isLoading &&
+    messages[messages.length - 1]?.role === "assistant";
 
   return (
     <div className="flex flex-col h-full">
@@ -92,6 +112,21 @@ export function HealthCompanionChat({ deviceOnline = false }: HealthCompanionCha
           </>
         )}
       </div>
+
+      {/* Follow-up suggestions */}
+      {showFollowUps && (
+        <div className="relative flex gap-2 overflow-x-auto px-4 pb-2 pt-1">
+          {FOLLOW_UPS.map((question) => (
+            <button
+              key={question}
+              onClick={() => void sendMessage(question)}
+              className="whitespace-nowrap rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-200 transition-colors hover:bg-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+            >
+              {question}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Input Area */}
       <div className="relative border-t border-white/10 bg-black/30 px-4 py-3">

@@ -4,6 +4,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   transpilePackages: ["@health-platform/protocol"],
 
+  // Allow network access for development
+  allowedDevOrigins: ['192.168.1.37'],
+
   // Pinned so Turbopack doesn't infer the root by walking up to the git
   // repository root (esp32-health-device/), which sits one level above the npm
   // workspace that actually holds package-lock.json and node_modules.
