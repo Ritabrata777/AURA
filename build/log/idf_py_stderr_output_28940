@@ -1,7 +1,0 @@
-Command: C:\Users\LENOVO\.espressif\python_env\idf6.1_py3.11_env\Scripts\python.exe C:\esp\v6.1\esp-idf\tools/idf_monitor.py -p COM5 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 C:\Users\LENOVO\Desktop\New folder (3)\esp32-health-device\build\esp32-health-device.elf C:\Users\LENOVO\Desktop\New folder (3)\esp32-health-device\build\bootloader\bootloader.elf --force-color -m 'C:\Users\LENOVO\.espressif\python_env\idf6.1_py3.11_env\Scripts\python.exe' 'C:\esp\v6.1\esp-idf\tools\idf.py' '-p' 'COM5'
---- WARNING: GDB cannot open serial ports accessed as COMx
---- NOTE: Using \\.\COM5 instead...
---- esp-idf-monitor 1.10.0 on \\.\COM5 115200
---- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
---- 0x40080400: _invalid_pc_placeholder at C:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S:2259
---- 0x40080644: call_start_cpu0 at C:/esp/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
