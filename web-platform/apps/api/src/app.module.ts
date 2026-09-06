@@ -11,6 +11,7 @@ import { MqttModule } from "./mqtt/mqtt.module";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { IndividualUsersModule } from "./individual-users/individual-users.module";
+import { AiModule } from "./ai/ai.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { IndividualUsersModule } from "./individual-users/individual-users.modul
     PrescriptionsModule,
     VideoModule,
     IndividualUsersModule,
+    AiModule,
   ],
   controllers: [AppController],
 })

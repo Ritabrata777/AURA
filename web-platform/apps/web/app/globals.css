@@ -13,3 +13,16 @@
     --foreground: 0 0% 100%;
   }
 }
+
+/* Seamless full-bleed look: scrollbars are hidden everywhere, but scrolling
+   (wheel, touch, keyboard, auto-scroll) keeps working as before. */
+* {
+  -ms-overflow-style: none; /* IE / legacy Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, modern Edge */
+  width: 0;
+  height: 0;
+}
