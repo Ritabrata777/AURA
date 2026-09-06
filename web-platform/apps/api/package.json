@@ -2,6 +2,7 @@
   "name": "@health-platform/api",
   "private": true,
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@health-platform/protocol": "1.0.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.0",

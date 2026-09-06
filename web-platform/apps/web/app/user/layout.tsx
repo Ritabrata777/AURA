@@ -16,6 +16,7 @@ import { useAuth } from "@/lib/auth";
 import { KioskScreen } from "@/components/kiosk";
 import { PillNav } from "@/components/pill-nav";
 import { PageTransition } from "@/components/ui/PageTransition";
+import { HealthCompanionBubble } from "@/components/ai";
 
 const navigation = [
   { name: "Dashboard", href: "/user/dashboard", icon: Home, mobile: true },
@@ -109,6 +110,9 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
           );
         })}
       </nav>
+
+      {/* AI Health Companion Chatbot */}
+      <HealthCompanionBubble />
     </KioskScreen>
   );
 }
