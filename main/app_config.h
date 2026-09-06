@@ -16,7 +16,7 @@
 
 // ─── MQTT Broker ─────────────────────────────────────────────────
 #ifndef CONFIG_MQTT_BROKER_URI
-#define CONFIG_MQTT_BROKER_URI "mqtt://192.168.1.35:1883"
+#define CONFIG_MQTT_BROKER_URI "mqtt://10.38.218.232:1883"
 #endif
 
 // ─── Wi-Fi (fallback when NVS is empty) ──────────────────────────

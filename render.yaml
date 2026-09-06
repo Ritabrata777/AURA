@@ -1,0 +1,44 @@
+# Render Blueprint — deploys the API and the MQTT broker.
+# The web app goes to Vercel (see DEPLOY.md); Postgres stays on Neon.
+#
+# Render's free tier spins services down after inactivity, which breaks the
+# API's persistent MQTT and WebSocket connections — use a paid plan (Starter)
+# for anything left running unattended.
+services:
+  - type: web
+    name: aura-api
+    runtime: node
+    plan: starter
+    rootDir: web-platform
+    buildCommand: npm ci && npm run build -w @health-platform/protocol && npm run build -w @health-platform/api
+    startCommand: npm run start:migrated -w @health-platform/api
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false            # Neon connection string (set in dashboard)
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEVICE_PROVISIONING_TOKEN
+        generateValue: true
+      - key: MQTT_URL
+        sync: false            # e.g. mqtt://broker-user:broker-pass@aura-broker.onrender.com:1883
+      - key: FRONTEND_URL
+        sync: false            # your Vercel URL, e.g. https://aura.vercel.app
+      - key: GETSTREAM_API_KEY
+        sync: false
+      - key: GETSTREAM_API_SECRET
+        sync: false
+
+  - type: web
+    name: aura-broker
+    runtime: docker            # plain TCP is exposed alongside HTTP on Render
+    plan: starter
+    rootDir: infra/mosquitto
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: MQTT_USERNAME
+        sync: false            # choose a broker username
+      - key: MQTT_PASSWORD
+        sync: false            # choose a broker password
