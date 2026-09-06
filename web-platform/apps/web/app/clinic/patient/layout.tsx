@@ -6,6 +6,7 @@ import { ClinicPatientProvider, useClinicPatient } from "@/components/clinic/pat
 import { PillNav } from "@/components/pill-nav";
 import { KioskScreen } from "@/components/kiosk";
 import { useAuth } from "@/lib/auth";
+import { PageTransition } from "@/components/ui/PageTransition";
 
 const navigation = [
   { name: "Dashboard", href: "/clinic/patient/dashboard" },
@@ -59,7 +60,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 
       <main className="mx-auto flex flex-col gap-4 px-4 pb-10 pt-24 sm:px-6 lg:px-10">
         {!loading ? <Banners /> : null}
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </main>
     </KioskScreen>
   );

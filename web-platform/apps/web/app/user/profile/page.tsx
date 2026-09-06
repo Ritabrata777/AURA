@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Mail, ShieldCheck, Hash } from "lucide-react";
-import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useAuth } from "@/lib/auth";
 import { glassCard, InnerGlow } from "@/components/kiosk";
+import { FadeIn } from "@/components/ui/PageTransition";
 
 /**
  * Profile shows exactly what the platform actually knows about the account —
@@ -22,7 +22,7 @@ export default function UserProfile() {
   }, [status, router]);
 
   if (status !== "authenticated") {
-    return <LoadingState message="Loading profile…" />;
+    return null;
   }
 
   if (!user) {
@@ -34,7 +34,8 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <FadeIn>
+      <div className="mx-auto max-w-4xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white sm:text-3xl">Profile</h1>
         <p className="mt-1 text-sm text-white/50">Your account details.</p>
@@ -76,6 +77,7 @@ export default function UserProfile() {
         Editable profile details (name, date of birth, contact) arrive with the API&apos;s
         profile endpoint.
       </p>
-    </div>
+      </div>
+    </FadeIn>
   );
 }

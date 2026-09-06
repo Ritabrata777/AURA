@@ -15,6 +15,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import { KioskScreen } from "@/components/kiosk";
 import { PillNav } from "@/components/pill-nav";
+import { PageTransition } from "@/components/ui/PageTransition";
 
 const navigation = [
   { name: "Dashboard", href: "/user/dashboard", icon: Home, mobile: true },
@@ -85,7 +86,9 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
 
       {/* Main content */}
       <main className="mx-auto px-4 pb-28 pt-8 sm:px-6 lg:px-10 lg:pb-10 lg:pt-28">
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </main>
 
       {/* Mobile bottom navigation */}
