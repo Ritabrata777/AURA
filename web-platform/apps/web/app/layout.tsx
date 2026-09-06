@@ -14,8 +14,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AURA",
-  description: "Remote vitals and ECG monitoring for connected health devices",
+  applicationName: "AURA Health",
+  title: {
+    default: "AURA — Remote Vitals & ECG Monitoring",
+    template: "%s · AURA",
+  },
+  description:
+    "Remote vitals and ECG monitoring for connected health devices. Engineering-prototype measurements for monitoring purposes — not a medical diagnosis.",
+  keywords: ["ECG", "vitals", "remote monitoring", "ESP32", "telehealth"],
+  themeColor: "#121212",
+  openGraph: {
+    type: "website",
+    siteName: "AURA Health",
+    title: "AURA — Remote Vitals & ECG Monitoring",
+    description:
+      "Live vitals and ECG streaming from your connected health monitor.",
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

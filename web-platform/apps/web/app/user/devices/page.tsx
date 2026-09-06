@@ -3,11 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, Plus, Trash2, X } from "lucide-react";
-import { LoadingState, LoadingSpinner } from "@/components/ui/LoadingState";
+import { LoadingSpinner } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { glassCard, InnerGlow } from "@/components/kiosk";
 import { useAuth, useApi } from "@/lib/auth";
 import { useLiveFeed } from "@/lib/live";
-import { glassCard, InnerGlow } from "@/components/kiosk";
 import type { DeviceSummary } from "@/lib/types";
 
 /**
@@ -97,7 +97,25 @@ export default function UserDevices() {
   };
 
   if (status !== "authenticated" || loading) {
-    return <LoadingState message="Loading your devices…" />;
+    return (
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-8">
+          <div className="h-8 w-48 rounded bg-white/10 animate-pulse" />
+          <div className="mt-2 h-4 w-80 rounded bg-white/10 animate-pulse" />
+        </div>
+        <div className={`${glassCard} p-6 animate-pulse`}>
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded bg-white/10" />
+                <div className="h-4 w-32 rounded bg-white/10" />
+              </div>
+              <div className="h-8 w-24 rounded bg-white/10" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (

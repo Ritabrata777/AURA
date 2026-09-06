@@ -26,6 +26,11 @@ class LoginDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsString()
+  @IsIn(["PATIENT", "DOCTOR", "INDIVIDUAL_USER"])
+  @IsNotEmpty()
+  role: "PATIENT" | "DOCTOR" | "INDIVIDUAL_USER";
 }
 
 @Controller("auth")
@@ -41,6 +46,6 @@ export class AuthController {
   @Post("login")
   @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto): Promise<AuthResult> {
-    return this.authService.login(dto.email, dto.password);
+    return this.authService.login(dto.email, dto.password, dto.role);
   }
 }

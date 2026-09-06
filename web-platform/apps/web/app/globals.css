@@ -1,68 +1,15 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #121212;
-  --foreground: #ededed;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* The whole product is dark; without this Chromium paints light scrollbars,
-   form controls, and autofill — the white strips users see in Brave. */
-html {
-  color-scheme: dark;
-  overflow-x: clip;
-}
-
-/* Match the scrollbar to the kiosk theme instead of the OS default. */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #0d0d10;
-}
-::-webkit-scrollbar-thumb {
-  background: #2c2c33;
-  border-radius: 8px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3c3c45;
-}
-
-html,
-body {
-  min-height: 100%;
-}
-
-body {
-  margin: 0;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-}
-
-input,
-select,
-button,
-textarea {
-  font-family: inherit;
-}
-
-/* The floating pill nav scrolls instead of wrapping on narrow viewports,
-   but the scrollbar itself should never be visible. */
-.pill-nav {
-  scrollbar-width: none;
-}
-.pill-nav::-webkit-scrollbar {
-  display: none;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+  }
 }

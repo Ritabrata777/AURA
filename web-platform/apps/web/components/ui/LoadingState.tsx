@@ -4,7 +4,7 @@ import { glassCard, InnerGlow } from "../kiosk";
 
 export function LoadingState({ message = "Loading..." }: { message?: string }) {
   return (
-    <div className={`${glassCard} p-12 text-center`}>
+    <div className={`${glassCard} p-12 text-center bg-[#1a1a2e]/90`}>
       <InnerGlow />
       <div className="relative animate-spin rounded-full h-10 w-10 border-2 border-violet-400 border-t-transparent mx-auto mb-4" />
       <p className="relative text-sm text-white/50">{message}</p>
