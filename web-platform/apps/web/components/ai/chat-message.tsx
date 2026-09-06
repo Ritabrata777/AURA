@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment, type ReactNode } from "react";
 import { MessageCircleHeart, User } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -45,7 +46,13 @@ export function ChatMessage({ message }: ChatMessageProps) {
               : "border border-white/10 bg-white/10 text-white/90"
           }`}
         >
-          <div className="whitespace-pre-wrap break-words">{message.content}</div>
+          <div className="break-words">
+            {isUser ? (
+              <div className="whitespace-pre-wrap">{message.content}</div>
+            ) : (
+              renderMarkdown(message.content)
+            )}
+          </div>
         </div>
         
         {message.timestamp && (
@@ -59,4 +66,92 @@ export function ChatMessage({ message }: ChatMessageProps) {
       </div>
     </motion.div>
   );
+}
+
+/**
+ * Minimal markdown renderer for assistant replies (Gemini returns markdown).
+ * Supports **bold**, `code`, bullet and numbered lists, and paragraphs.
+ * Deliberately dependency-free and text-only — no raw HTML is ever injected.
+ */
+function renderInline(text: string, keyPrefix: string): ReactNode[] {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return parts.map((part, i) => {
+    const key = `${keyPrefix}-i${i}`;
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      return (
+        <strong key={key} className="font-semibold text-white">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+      return (
+        <code
+          key={key}
+          className="rounded bg-black/40 px-1 py-0.5 font-mono text-[12px] text-violet-200"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return <Fragment key={key}>{part}</Fragment>;
+  });
+}
+
+function renderMarkdown(content: string): ReactNode {
+  const lines = content.split("\n");
+  const blocks: ReactNode[] = [];
+  let listItems: ReactNode[][] | null = null;
+  let listOrdered = false;
+
+  const flushList = () => {
+    if (!listItems || listItems.length === 0) {
+      listItems = null;
+      return;
+    }
+    const items = listItems;
+    const key = `list-${blocks.length}`;
+    listItems = null;
+    blocks.push(
+      listOrdered ? (
+        <ol key={key} className="my-1 list-decimal space-y-1 pl-5">
+          {items.map((item, i) => (
+            <li key={`${key}-${i}`}>{item}</li>
+          ))}
+        </ol>
+      ) : (
+        <ul key={key} className="my-1 list-disc space-y-1 pl-5">
+          {items.map((item, i) => (
+            <li key={`${key}-${i}`}>{item}</li>
+          ))}
+        </ul>
+      ),
+    );
+  };
+
+  lines.forEach((line, index) => {
+    const bullet = line.match(/^\s*[-*•]\s+(.*)$/);
+    const ordered = line.match(/^\s*\d+[.)]\s+(.*)$/);
+    if (bullet || ordered) {
+      const text = (bullet?.[1] ?? ordered?.[1] ?? "").trim();
+      const isOrdered = Boolean(ordered);
+      if (!listItems || listOrdered !== isOrdered) {
+        flushList();
+        listItems = [];
+        listOrdered = isOrdered;
+      }
+      listItems.push(renderInline(text, `l${index}`));
+      return;
+    }
+    flushList();
+    if (line.trim() === "") return; // blank line = paragraph gap via spacing
+    blocks.push(
+      <p key={`p-${index}`} className="my-1 first:mt-0 last:mb-0">
+        {renderInline(line, `p${index}`)}
+      </p>,
+    );
+  });
+  flushList();
+
+  return <div className="space-y-1">{blocks}</div>;
 }
