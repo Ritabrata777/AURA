@@ -15,6 +15,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import { KioskScreen } from "@/components/kiosk";
 import { PillNav } from "@/components/pill-nav";
+import { LimelightNav, NavItem } from "@/components/ui/limelight-nav";
 import { PageTransition } from "@/components/ui/PageTransition";
 import { HealthCompanionBubble } from "@/components/ai";
 
@@ -40,14 +41,25 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
     router.replace("/");
   };
 
+  // Convert navigation to LimelightNav format
+  const limelightNavItems: NavItem[] = navigation.map((item) => ({
+    id: item.name.toLowerCase().replace(/\s+/g, '-'),
+    icon: <item.icon className="h-4 w-4" />,
+    label: item.name,
+    href: item.href,
+    active: pathname === item.href,
+    onClick: () => router.push(item.href)
+  }));
+
   return (
     <KioskScreen>
-      {/* Floating pill navigation (desktop) */}
-      <PillNav
+      {/* Floating limelight navigation (desktop) */}
+      <LimelightNav
+        className="bg-black/20 border-white/10"
+        items={limelightNavItems}
+        onLogout={handleLogout}
         brandHref="/user/dashboard"
         activeHref={pathname}
-        links={navigation.map(({ name, href }) => ({ label: name, href }))}
-        onLogout={handleLogout}
       />
 
       {/* Mobile top bar */}

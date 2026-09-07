@@ -2,10 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
 
 interface PageTransitionProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export function PageTransition({ children }: PageTransitionProps) {
@@ -23,13 +22,13 @@ export function PageTransition({ children }: PageTransitionProps) {
           ease: [0.4, 0.0, 0.2, 1],
         }}
       >
-        {children}
+        {children as any}
       </motion.div>
     </AnimatePresence>
   );
 }
 
-export function FadeIn({ children }: { children: ReactNode }) {
+export function FadeIn({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -39,13 +38,13 @@ export function FadeIn({ children }: { children: ReactNode }) {
         ease: [0.4, 0.0, 0.2, 1],
       }}
     >
-      {children}
+      {children as any}
     </motion.div>
   );
 }
 
 export function SlideIn({ children, direction = "left" }: { 
-  children: ReactNode; 
+  children: React.ReactNode; 
   direction?: "left" | "right" | "up" | "down" 
 }) {
   const variants = {
@@ -64,7 +63,7 @@ export function SlideIn({ children, direction = "left" }: {
         ease: [0.4, 0.0, 0.2, 1],
       }}
     >
-      {children}
+      {children as any}
     </motion.div>
   );
 }

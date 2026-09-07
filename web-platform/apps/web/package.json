@@ -5,6 +5,7 @@
     "@health-platform/protocol": "1.0.0",
     "@stream-io/video-react-sdk": "^1.43.0",
     "autoprefixer": "^10.4.20",
+    "clsx": "^2.1.1",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.41.0",
     "next": "^16.3.4",
@@ -12,7 +13,8 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "recharts": "^3.10.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
