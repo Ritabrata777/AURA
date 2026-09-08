@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "../lib/auth";
-import { LoginScreen } from "../components/login-screen";
+import { Landing } from "../components/landing/landing";
 import { glassPanel, InnerGlow, KioskScreen } from "../components/kiosk";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -32,7 +32,9 @@ export default function HomePage() {
   }
 
   if (status === "unauthenticated" || !user) {
-    return <LoginScreen />;
+    // Signed-out visitors get the marketing landing (hero + sticky showcase);
+    // the role-selecting sign-in panel lives at its own /login route.
+    return <Landing />;
   }
 
   if (user.role !== "ADMIN") {

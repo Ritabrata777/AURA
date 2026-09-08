@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "../lib/auth";
@@ -14,19 +14,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  applicationName: "AURA Health",
+  applicationName: "PulseLink Health",
   title: {
-    default: "AURA — Remote Vitals & ECG Monitoring",
-    template: "%s · AURA",
+    default: "PulseLink — Remote Vitals & ECG Monitoring",
+    template: "%s · PulseLink",
   },
   description:
     "Remote vitals and ECG monitoring for connected health devices. Engineering-prototype measurements for monitoring purposes — not a medical diagnosis.",
   keywords: ["ECG", "vitals", "remote monitoring", "ESP32", "telehealth"],
-  themeColor: "#121212",
   openGraph: {
     type: "website",
-    siteName: "AURA Health",
-    title: "AURA — Remote Vitals & ECG Monitoring",
+    siteName: "PulseLink Health",
+    title: "PulseLink — Remote Vitals & ECG Monitoring",
     description:
       "Live vitals and ECG streaming from your connected health monitor.",
   },
@@ -34,6 +33,10 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#121212",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

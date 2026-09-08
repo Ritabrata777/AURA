@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       </p>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-white/70">
         <p>
-          AURA collects account details and health measurements from your connected device
+          PulseLink collects account details and health measurements from your connected device
           (heart rate, SpO2, temperature, ECG) to display them to you and, with your
           consent, to clinicians you approve.
         </p>

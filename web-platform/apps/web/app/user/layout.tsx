@@ -54,7 +54,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-[#121212]/80 px-4 py-3 backdrop-blur-xl lg:hidden">
         <span className="flex items-center gap-2 text-base font-bold text-white">
           <HeartPulse className="h-5 w-5 text-red-400" />
-          AURA
+          PulseLink
         </span>
         <div className="flex items-center gap-1">
           <Link

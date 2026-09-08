@@ -373,14 +373,31 @@ Your purpose is to make the user's health-monitoring data easier to understand â
       const messageWithContext = `${contextText}\n\nUser Question: ${userMessage.trim()}`;
 
       // Send message with timeout (free-tier first calls can be slow)
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Request timeout')), 60000); // 60 second timeout
-      });
+      const sendWithTimeout = () => {
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Request timeout')), 60000); // 60 second timeout
+        });
+        return Promise.race([
+          chat.sendMessage(messageWithContext),
+          timeoutPromise,
+        ]);
+      };
 
-      const result = await Promise.race([
-        chat.sendMessage(messageWithContext),
-        timeoutPromise,
-      ]);
+      let result: any;
+      try {
+        result = await sendWithTimeout();
+      } catch (firstError: any) {
+        const firstMessage: string = firstError?.message ?? String(firstError);
+        // Transient model overload â€” wait briefly and retry once before
+        // surfacing an error to the user.
+        if (/\[503|UNAVAILABLE|overload|high demand/i.test(firstMessage)) {
+          this.logger.warn('Gemini overloaded, retrying once after delay');
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          result = await sendWithTimeout();
+        } else {
+          throw firstError;
+        }
+      }
 
       const response = (result as any).response;
       const text = response.text();
@@ -413,6 +430,10 @@ Your purpose is to make the user's health-monitoring data easier to understand â
 
       if (/\[429/.test(rawMessage) || rawMessage.includes('quota') || rawMessage.includes('RESOURCE_EXHAUSTED')) {
         throw new BadRequestException('AI service is busy right now. Please try again in a little while.');
+      }
+
+      if (/\[503/.test(rawMessage) || rawMessage.includes('UNAVAILABLE') || /overload|high demand/i.test(rawMessage)) {
+        throw new BadRequestException('AI service is overloaded right now. Please try again in a little while.');
       }
 
       if (/\[403/.test(rawMessage) || rawMessage.includes('PERMISSION_DENIED')) {

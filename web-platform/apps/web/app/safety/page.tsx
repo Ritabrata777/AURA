@@ -11,7 +11,7 @@ export default function SafetyPage() {
       </p>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-white/70">
         <p>
-          AURA and its connected sensors are not certified medical devices. They do not
+          PulseLink and its connected sensors are not certified medical devices. They do not
           diagnose, treat, or prevent any disease.
         </p>
         <ul className="list-disc space-y-2 pl-5">
