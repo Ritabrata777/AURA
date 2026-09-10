@@ -47,7 +47,7 @@ const SLIDES = [
     Scene: TrendsScene,
   },
   {
-    kicker: "PulseLink Intelligence",
+    kicker: "AURA Intelligence",
     title: "An AI that explains your numbers.",
     body: "Ask the built-in companion about last night's sleep or what a dip in HRV means — in your own language. It explains; it never diagnoses.",
     accent: "text-purple-300",

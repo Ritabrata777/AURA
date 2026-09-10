@@ -157,7 +157,7 @@ function GlassNav() {
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_0_22px_rgba(139,92,246,0.55),inset_0_1px_1px_rgba(255,255,255,0.5)] ring-1 ring-white/25">
             <ShieldCheck size={17} className="text-white" />
           </span>
-          <span className="text-base font-bold tracking-[0.26em] text-white">PulseLink</span>
+          <span className="text-base font-bold tracking-[0.26em] text-white">AURA</span>
         </a>
 
         <div className="ml-auto hidden items-center gap-1 lg:flex">
@@ -275,7 +275,7 @@ function Hero() {
         </h1>
 
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
-          PulseLink streams vitals and single-lead ECG from the bedside monitor to patients, clinicians
+          AURA streams vitals and single-lead ECG from the bedside monitor to patients, clinicians
           and personal dashboards — live, low-latency, and private by design.
         </p>
 

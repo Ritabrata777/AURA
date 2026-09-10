@@ -1,0 +1,20 @@
+Command: C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe -m esptool -p COM8 -b 460800 --before default-reset --after hard-reset --chip esp32 erase-flash
+esptool v5.3.1
+Serial port COM8:
+Connecting..............
+Connected to ESP32 on COM8:
+Chip type:          ESP32-D0WD-V3 (revision v3.1)
+Features:           Wi-Fi, BT, Dual Core + LP Core, 240MHz, Vref calibration in eFuse, Coding Scheme None
+Crystal frequency:  40MHz
+MAC:                ec:e3:34:14:9c:ac
+
+Uploading stub flasher...
+Running stub flasher...
+Stub flasher running.
+Changing baud rate to 460800...
+Changed.
+
+Erasing flash memory (this may take a while)...
+Flash memory erased successfully in 6.5 seconds.
+
+Hard resetting via RTS pin...
