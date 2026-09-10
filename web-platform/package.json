@@ -17,5 +17,15 @@
   },
   "dependencies": {
     "lightningcss": "^1.28.1"
+  },
+  "overrides": {
+    "metro": "0.84.5",
+    "metro-cache": "0.84.5",
+    "metro-config": "0.84.5",
+    "metro-core": "0.84.5",
+    "metro-resolver": "0.84.5",
+    "metro-runtime": "0.84.5",
+    "metro-transform-worker": "0.84.5",
+    "metro-react-native-babel-preset": "0.84.5"
   }
 }

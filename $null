@@ -1,0 +1,8 @@
+At line:1 char:83
++ ... ject { $_.Id -eq (Get-PnpDevice -PresentOnly | Where-Object { $_.Clas ...
++                                                                 ~
+Missing closing '}' in statement block or type definition.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordEx 
+   ception
+    + FullyQualifiedErrorId : MissingEndCurlyBrace
+ 
