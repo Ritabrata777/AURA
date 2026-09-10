@@ -18,7 +18,12 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Public routes
-  if (pathname === "/" || pathname.startsWith("/_next") || pathname.startsWith("/api")) {
+  if (
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api")
+  ) {
     return noStore(NextResponse.next());
   }
 
