@@ -11,10 +11,12 @@
 #include "buzzer.h"
 #include "local_ui.h"
 #include "device_comm.h"
+#include "piezo_heartbeat.h"
 #include "esp_log.h"
 #include "esp_sntp.h"
 #include "esp_timer.h"
 #include "driver/i2c_master.h"
+#include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -46,6 +48,10 @@ static void sntp_sync_init(void)
 // ─── Centralized I2C Bus Init ────────────────────────────────────
 static void i2c_bus_init(void)
 {
+    // Reset I2C GPIO pins to ensure clean state
+    gpio_reset_pin(APP_I2C_SDA_IO);
+    gpio_reset_pin(APP_I2C_SCL_IO);
+    
     i2c_master_bus_config_t bus_config = {
         .clk_source = I2C_CLK_SRC_DEFAULT,
         .i2c_port = APP_I2C_MASTER_NUM,
@@ -93,6 +99,7 @@ static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *me
     (void)sample;
     if (metrics != NULL) {
         local_ui_set_spo2(metrics);
+        local_ui_set_max30102_heart_rate(metrics->heart_rate, metrics->hr_valid);
     }
     static uint32_t publish_counter = 0;
     publish_counter++;
@@ -101,13 +108,24 @@ static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *me
     if (publish_counter % 50 == 0 && metrics != NULL) {
         if (sample != NULL) device_comm_publish_spo2_raw(sample, NULL);
         if (metrics->hr_valid && metrics->heart_rate > 0) {
-            ESP_LOGI(TAG, "Heart Rate: %d bpm", metrics->heart_rate);
+            ESP_LOGI(TAG, "MAX30102 Heart Rate: %d bpm", metrics->heart_rate);
             device_comm_publish_measurement("HEART_RATE", (float)metrics->heart_rate, "bpm", "VALID", NULL);
         }
         if (metrics->spo2_valid && metrics->spo2 > 0) {
             ESP_LOGI(TAG, "SpO2: %d%%", metrics->spo2);
             device_comm_publish_measurement("SPO2", (float)metrics->spo2, "%", "VALID", NULL);
         }
+    }
+}
+
+static void piezo_heartbeat_callback(int bpm, bool valid, void *arg)
+{
+    (void)arg;
+    local_ui_set_piezo_heart_rate(bpm, valid);
+    if (valid) {
+        device_comm_publish_measurement("PIEZO_HEART_RATE", (float)bpm, "bpm", "VALID", NULL);
+    } else {
+        device_comm_publish_measurement("PIEZO_HEART_RATE", 0.0f, "bpm", "UNAVAILABLE", NULL);
     }
 }
 
@@ -362,6 +380,8 @@ void app_main(void)
     buzzer_beep(120);
     buttons_init();
     local_ui_init(device_identity_status()->pairing_code);
+    piezo_heartbeat_init();
+    piezo_heartbeat_set_callback(piezo_heartbeat_callback, NULL);
     
     // 4. Initialize sensors
     ecg_ad8232_init();
@@ -403,6 +423,7 @@ void app_main(void)
     device_comm_init();
     device_comm_set_device_id(status->device_id);
     device_comm_set_command_handler(handle_device_command, NULL);
+    piezo_heartbeat_start();
 
     // Everything downstream of a connection is now wired up.
     wifi_manager_start();
