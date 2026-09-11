@@ -34,6 +34,10 @@ static size_t s_ecg_count = 0;
 static tcs34725_reading_t s_color = {0};
 static bool s_spo2_running = false;
 static bool s_temp_running = false;
+static int s_piezo_bpm = 0;
+static bool s_piezo_valid = false;
+static int s_max30102_hr = 0;
+static bool s_max30102_hr_valid = false;
 
 static const char *local_ui_screen_name(void)
 {
@@ -253,6 +257,18 @@ void local_ui_set_spo2(const max30102_metrics_t *metrics)
     if (metrics != NULL) {
         s_spo2 = *metrics;
     }
+}
+
+void local_ui_set_max30102_heart_rate(int heart_rate, bool valid)
+{
+    s_max30102_hr = heart_rate;
+    s_max30102_hr_valid = valid;
+}
+
+void local_ui_set_piezo_heart_rate(int bpm, bool valid)
+{
+    s_piezo_bpm = bpm;
+    s_piezo_valid = valid;
 }
 
 void local_ui_set_temperature(const mlx90614_temp_t *temp)
