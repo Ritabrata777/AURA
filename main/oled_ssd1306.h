@@ -31,6 +31,7 @@ typedef struct {
 
 void oled_ssd1306_init(void);
 void oled_ssd1306_set_bus_handle(void *bus_handle);
+void oled_show_boot_diagnostics(void);
 esp_err_t oled_clear(void);
 void oled_clear_framebuffer(void);
 void oled_clear_area(int x, int y, int w, int h);

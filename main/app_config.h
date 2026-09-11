@@ -11,7 +11,7 @@
 #define HEARTBEAT_GPIO GPIO_NUM_17
 #endif
 
-// ─── I2C Bus (shared by OLED, MAX30102, MLX90614) ───────────────
+// ─── I2C Bus (shared by OLED and MAX30102) ──────────────────────
 #define APP_I2C_MASTER_NUM    I2C_NUM_0
 #define APP_I2C_SDA_IO        GPIO_NUM_22
 #define APP_I2C_SCL_IO        GPIO_NUM_21

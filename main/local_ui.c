@@ -16,9 +16,9 @@ static const char *TAG = "local_ui";
 typedef enum {
     LOCAL_SCREEN_HOME,
     LOCAL_SCREEN_SPO2,
-    LOCAL_SCREEN_TEMP,
     LOCAL_SCREEN_ECG,
     LOCAL_SCREEN_COLOR,
+    LOCAL_SCREEN_COUNT,
 } local_screen_t;
 
 typedef struct {
@@ -28,12 +28,10 @@ typedef struct {
 static QueueHandle_t s_event_queue;
 static local_screen_t s_screen = LOCAL_SCREEN_HOME;
 static max30102_metrics_t s_spo2 = {0};
-static mlx90614_temp_t s_temp = {0};
 static int16_t s_ecg_samples[SSD1306_WIDTH] = {0};
 static size_t s_ecg_count = 0;
 static tcs34725_reading_t s_color = {0};
 static bool s_spo2_running = false;
-static bool s_temp_running = false;
 static int s_piezo_bpm = 0;
 static bool s_piezo_valid = false;
 static int s_max30102_hr = 0;
@@ -43,7 +41,6 @@ static const char *local_ui_screen_name(void)
 {
     switch (s_screen) {
         case LOCAL_SCREEN_SPO2: return "VITALS";
-        case LOCAL_SCREEN_TEMP: return "TEMP";
         case LOCAL_SCREEN_ECG: return "ECG";
         case LOCAL_SCREEN_COLOR: return "COLOR";
         default: return "HOME";
@@ -53,7 +50,8 @@ static const char *local_ui_screen_name(void)
 static void local_ui_draw_header(void)
 {
     char header[22];
-    snprintf(header, sizeof(header), "%s  %d/5", local_ui_screen_name(), (int)s_screen + 1);
+    snprintf(header, sizeof(header), "%s  %d/%d", local_ui_screen_name(),
+             (int)s_screen + 1, (int)LOCAL_SCREEN_COUNT);
     oled_draw_text(2, 0, header, 1);
     oled_draw_line(0, 9, SSD1306_WIDTH - 1, 9);
 }
@@ -108,16 +106,6 @@ static void local_ui_draw_full(void)
             local_ui_draw_footer("START", s_spo2_running);
             break;
 
-        case LOCAL_SCREEN_TEMP:
-            if (s_temp.valid) {
-                snprintf(line, sizeof(line), "%.1f C", s_temp.object_temp_c);
-                oled_draw_string_centered(17, line, 2);
-            } else {
-                oled_draw_string_centered(17, "--.- C", 2);
-            }
-            local_ui_draw_footer("START", s_temp_running);
-            break;
-
         case LOCAL_SCREEN_ECG:
             if (s_ecg_count > 0) {
                 oled_draw_ecg_waveform(s_ecg_samples, s_ecg_count);
@@ -140,6 +128,9 @@ static void local_ui_draw_full(void)
             }
             local_ui_draw_footer("READ", false);
             break;
+
+        default:
+            break;
     }
 
     oled_flush();
@@ -154,10 +145,6 @@ static void local_ui_stop_measurement(void)
         max30102_stop();
         s_spo2_running = false;
     }
-    if (s_screen == LOCAL_SCREEN_TEMP) {
-        mlx90614_stop_continuous();
-        s_temp_running = false;
-    }
 }
 
 static void local_ui_start_measurement(void)
@@ -167,8 +154,6 @@ static void local_ui_start_measurement(void)
         running = ecg_ad8232_is_running();
     } else if (s_screen == LOCAL_SCREEN_SPO2) {
         running = s_spo2_running;
-    } else if (s_screen == LOCAL_SCREEN_TEMP) {
-        running = s_temp_running;
     }
 
     if (running) {
@@ -181,10 +166,6 @@ static void local_ui_start_measurement(void)
         case LOCAL_SCREEN_SPO2:
             max30102_start();
             s_spo2_running = true;
-            break;
-        case LOCAL_SCREEN_TEMP:
-            mlx90614_start_continuous(NULL, NULL);
-            s_temp_running = true;
             break;
         case LOCAL_SCREEN_ECG:
             s_ecg_count = 0;
@@ -206,7 +187,7 @@ static void local_ui_task(void *arg)
             switch (message.event) {
                 case BUTTON_EVENT_UP_SHORT:
                     local_ui_stop_measurement();
-                    s_screen = (local_screen_t)((s_screen + 1) % 5);
+                    s_screen = (local_screen_t)((s_screen + 1) % LOCAL_SCREEN_COUNT);
                     local_ui_draw_full();
                     break;
                 case BUTTON_EVENT_SELECT_SHORT:
@@ -225,8 +206,7 @@ static void local_ui_task(void *arg)
 
         // Refresh only the changing numeric values; static labels and button
         // hints stay untouched so the screen no longer flashes on every update.
-        if (s_screen == LOCAL_SCREEN_SPO2 || s_screen == LOCAL_SCREEN_TEMP ||
-            s_screen == LOCAL_SCREEN_COLOR) {
+        if (s_screen == LOCAL_SCREEN_SPO2 || s_screen == LOCAL_SCREEN_COLOR) {
             local_ui_draw_full();
         } else if (s_screen == LOCAL_SCREEN_ECG && ecg_ad8232_is_running()) {
             local_ui_draw_full();
@@ -269,13 +249,6 @@ void local_ui_set_piezo_heart_rate(int bpm, bool valid)
 {
     s_piezo_bpm = bpm;
     s_piezo_valid = valid;
-}
-
-void local_ui_set_temperature(const mlx90614_temp_t *temp)
-{
-    if (temp != NULL) {
-        s_temp = *temp;
-    }
 }
 
 void local_ui_set_ecg_chunk(const ecg_chunk_t *chunk)

@@ -1,4 +1,4 @@
-idf_component_register(SRCS "oled_ssd1306.c" "buzzer.c" "device_comm.c" "buttons.c" "mlx90614.c" "max30102.c" "tcs34725.c" "ecg_ad8232.c" "local_ui.c" "esp32-health-device.c"
+idf_component_register(SRCS "i2c_bus.c" "oled_ssd1306.c" "buzzer.c" "device_comm.c" "buttons.c" "max30102.c" "tcs34725.c" "ecg_ad8232.c" "local_ui.c" "esp32-health-device.c"
                             "device_identity.c"
                             "device_status_task.c"
                             "wifi_manager.c"

@@ -5,7 +5,7 @@
 #include "app_mqtt.h"
 #include "ecg_ad8232.h"
 #include "max30102.h"
-#include "mlx90614.h"
+#include "i2c_bus.h"
 #include "oled_ssd1306.h"
 #include "buttons.h"
 #include "buzzer.h"
@@ -15,13 +15,10 @@
 #include "esp_log.h"
 #include "esp_sntp.h"
 #include "esp_timer.h"
-#include "driver/i2c_master.h"
-#include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 static const char *TAG = "app";
-static i2c_master_bus_handle_t s_i2c_bus_handle = NULL;
 
 // ─── SNTP Time Sync ──────────────────────────────────────────────
 
@@ -45,53 +42,7 @@ static void sntp_sync_init(void)
     s_sntp_started = true;
 }
 
-// ─── Centralized I2C Bus Init ────────────────────────────────────
-static void i2c_bus_init(void)
-{
-    // Reset I2C GPIO pins to ensure clean state
-    gpio_reset_pin(APP_I2C_SDA_IO);
-    gpio_reset_pin(APP_I2C_SCL_IO);
-    
-    i2c_master_bus_config_t bus_config = {
-        .clk_source = I2C_CLK_SRC_DEFAULT,
-        .i2c_port = APP_I2C_MASTER_NUM,
-        .scl_io_num = APP_I2C_SCL_IO,
-        .sda_io_num = APP_I2C_SDA_IO,
-        .glitch_ignore_cnt = 7,
-        .intr_priority = 0,
-        .trans_queue_depth = 0,
-        .flags = {
-            .enable_internal_pullup = true
-        }
-    };
-    ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &s_i2c_bus_handle));
-    ESP_LOGI(TAG, "I2C bus initialized: SDA=%d SCL=%d", APP_I2C_SDA_IO, APP_I2C_SCL_IO);
-}
-
 // ─── Sensor Callbacks → MQTT ─────────────────────────────────────
-
-// Spot readings are not part of a recording. device_comm fills in the active
-// ECG session id when there is one and an empty string otherwise; the field
-// itself is mandatory, so it can never be omitted again.
-static void temperature_callback(mlx90614_temp_t *temp, void *arg)
-{
-    (void)arg;
-    if (temp == NULL) {
-        return;
-    }
-
-    if (!temp->valid) {
-        local_ui_set_temperature(temp);
-        // Report the gap instead of dropping it silently, so a sensor that has
-        // stopped responding is visible on the dashboard.
-        device_comm_publish_measurement("TEMPERATURE", 0.0f, "C", "UNAVAILABLE", NULL);
-        return;
-    }
-
-    local_ui_set_temperature(temp);
-    ESP_LOGI(TAG, "Temperature: %.2f C", temp->object_temp_c);
-    device_comm_publish_measurement("TEMPERATURE", temp->object_temp_c, "C", "VALID", NULL);
-}
 
 static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *metrics, void *arg)
 {
@@ -239,7 +190,6 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
     switch (cmd->command) {
         case DEVICE_CMD_START_ECG: {
             max30102_stop();
-            mlx90614_stop_continuous();
             int duration_seconds = (cmd->parameters[0] > 0) ? cmd->parameters[0] : 0;
             const char *error_code = ecg_start_with_duration(duration_seconds);
             // The ack now reports what actually happened. It previously always
@@ -262,10 +212,6 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
         }
 
         case DEVICE_CMD_START_SPO2: {
-            // MAX30102 and MLX90614 share the I2C bus. Keep one sensor mode
-            // active at a time so the selected test owns the bus and stale
-            // readings from another mode are not produced.
-            mlx90614_stop_continuous();
             esp_err_t err = max30102_start();
             device_comm_publish_command_ack(cmd->command_id, "START_SPO2",
                                             err == ESP_OK ? "ACCEPTED" : "REJECTED",
@@ -280,7 +226,9 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
         }
 
         case DEVICE_CMD_START_TEMPERATURE: {
-            mlx90614_stop_continuous();
+            // There is no dedicated temperature sensor; the MAX30102 die
+            // temperature published by spo2_data_callback is what feeds the
+            // dashboard's TEMPERATURE measurements, so start the MAX30102.
             esp_err_t err = max30102_start();
             device_comm_publish_command_ack(cmd->command_id, "START_TEMPERATURE",
                                             err == ESP_OK ? "ACCEPTED" : "REJECTED",
@@ -318,18 +266,18 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
 static void wifi_event_callback(app_wifi_event_t event, void *arg)
 {
     (void)arg;
-    
+
     switch (event) {
         case APP_WIFI_EVENT_CONNECTED:
             ESP_LOGI(TAG, "Wi-Fi connected, syncing time and starting MQTT");
             sntp_sync_init();
             mqtt_client_start();
             break;
-            
+
         case APP_WIFI_EVENT_DISCONNECTED:
             ESP_LOGW(TAG, "Wi-Fi disconnected");
             break;
-            
+
         default:
             break;
     }
@@ -370,35 +318,34 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
 void app_main(void)
 {
     ESP_LOGI(TAG, "=== Health Device Starting ===");
-    
+
     // 1. Device identity (MAC-based IDs)
     device_identity_init();
-    
-    // 2. Initialize I2C bus ONCE (shared by OLED, MAX30102, MLX90614)
+
+    // 2. ONE shared I2C bus (SSD1306 + MAX30102), then scan it so the boot
+    //    log shows exactly which devices answered.
     i2c_bus_init();
-    
-    // 3. Initialize peripherals (all use the shared I2C bus)
-    oled_ssd1306_set_bus_handle(s_i2c_bus_handle);
+    i2c_bus_scan();
+
+    // 3. I2C peripherals attach to the shared bus handle — neither driver
+    //    recreates the bus or touches GPIO21/GPIO22 itself.
+    oled_ssd1306_set_bus_handle(i2c_bus_get_handle());
     oled_ssd1306_init();
-    max30102_set_bus_handle(s_i2c_bus_handle);
-    mlx90614_set_bus_handle(s_i2c_bus_handle);
+    max30102_set_bus_handle(i2c_bus_get_handle());
+    max30102_init();
+
+    // 4. Remaining peripherals
     buzzer_init();
     buzzer_beep(120);
     buttons_init();
     local_ui_init(device_identity_status()->pairing_code);
     piezo_heartbeat_init();
     piezo_heartbeat_set_callback(piezo_heartbeat_callback, NULL);
-    
-    // 4. Initialize sensors
+
     ecg_ad8232_init();
     ecg_ad8232_set_callback(ecg_data_callback, NULL);
     ecg_ad8232_set_session_end_callback(ecg_session_end_callback, NULL);
-
-    max30102_init();
     // MAX30102 callback is set when MQTT connects (in mqtt_event_callback)
-
-    mlx90614_init();
-    // MLX90614 continuous mode starts when MQTT connects
 
     // 5. Networking.
     //
@@ -436,7 +383,7 @@ void app_main(void)
 
     // 7. Status LED blinker
     device_status_task_start();
-    
+
     ESP_LOGI(TAG, "=== Device Ready ===");
     ESP_LOGI(TAG, "firmware=%s protocol=%d hardware=%s pairing=%s device_id=%s",
              APP_FIRMWARE_VERSION,
@@ -445,13 +392,13 @@ void app_main(void)
              status->pairing_code,
              status->device_id);
     ESP_LOGI(TAG, "MQTT broker: %s", CONFIG_MQTT_BROKER_URI);
-    
+
     oled_display_state_t display_state = {
         .current_screen = MENU_HOME,
         .device_status = "Ready"
     };
     oled_set_display_state(&display_state);
-    
+
     // Main loop — just keep alive
     while (true) {
         vTaskDelay(pdMS_TO_TICKS(1000));
