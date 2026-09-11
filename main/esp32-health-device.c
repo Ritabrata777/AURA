@@ -109,7 +109,7 @@ static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *me
         if (sample != NULL) device_comm_publish_spo2_raw(sample, NULL);
         if (metrics->hr_valid && metrics->heart_rate > 0) {
             ESP_LOGI(TAG, "MAX30102 Heart Rate: %d bpm", metrics->heart_rate);
-            device_comm_publish_measurement("HEART_RATE", (float)metrics->heart_rate, "bpm", "VALID", NULL);
+            device_comm_publish_measurement("MAX30102_HEART_RATE", (float)metrics->heart_rate, "bpm", "VALID", NULL);
         }
         if (metrics->spo2_valid && metrics->spo2 > 0) {
             ESP_LOGI(TAG, "SpO2: %d%%", metrics->spo2);
