@@ -22,6 +22,7 @@ import type {
   EcgSessionDetail,
   EcgSessionSummary,
   LiveEcgChunk,
+  MeasurementType,
 } from "@/lib/types";
 
 /**
@@ -44,6 +45,8 @@ const DURATION_OPTIONS = [
   { label: "5 minutes", value: 300 },
   { label: "Until I stop it", value: 0 },
 ] as const;
+
+const HEART_RATE_TYPES: readonly MeasurementType[] = ["HEART_RATE", "PIEZO_HEART_RATE", "MAX30102_HEART_RATE"];
 
 function formatDuration(totalSeconds: number): string {
   const minutes = Math.floor(totalSeconds / 60);
@@ -141,7 +144,7 @@ export default function UserEcgPage() {
 
   const live = useLiveFeed(token, {
     onMeasurement: (measurement) => {
-      if (measurement.type === "HEART_RATE" && measurement.quality === "VALID") {
+      if (HEART_RATE_TYPES.includes(measurement.type) && measurement.quality === "VALID") {
         setHeartRate(measurement.value);
       }
     },

@@ -64,7 +64,7 @@ export default function UserVitals() {
     setEcgSessions(sessions);
     setDevices(deviceList.map(d => ({
       deviceId: d.deviceId,
-      online: d.online || (d.lastSeenAt && Date.now() - new Date(d.lastSeenAt).getTime() < 90000),
+      online: d.online || Boolean(d.lastSeenAt && Date.now() - new Date(d.lastSeenAt).getTime() < 90000),
     })));
   }, [api]);
 

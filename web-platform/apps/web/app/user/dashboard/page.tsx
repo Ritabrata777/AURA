@@ -11,7 +11,7 @@ import { useAuth, useApi } from "@/lib/auth";
 import { useLiveFeed } from "@/lib/live";
 import { API_BASE_URL } from "@/lib/api";
 import { glassCard } from "@/components/kiosk";
-import type { DeviceSummary, LiveCommandAck, LiveMeasurement, VitalSummary } from "@/lib/types";
+import type { DeviceSummary, LiveCommandAck, LiveMeasurement, MeasurementType, VitalSummary } from "@/lib/types";
 
 function greeting(): string {
   const hour = new Date().getHours();
@@ -26,6 +26,8 @@ function isOnline(lastSeenAt: string | null): boolean {
   if (!lastSeenAt) return false;
   return Date.now() - new Date(lastSeenAt).getTime() < 90_000;
 }
+
+const HEART_RATE_TYPES: readonly MeasurementType[] = ["HEART_RATE", "PIEZO_HEART_RATE", "MAX30102_HEART_RATE"];
 
 export default function UserDashboard() {
   const { status, token } = useAuth();
@@ -47,7 +49,7 @@ export default function UserDashboard() {
     ]);
     setVitals(summary);
     setDevices(deviceList);
-    const recordedHeartRate = summary.find((v) => v.type === "HEART_RATE")?.latest;
+    const recordedHeartRate = summary.find((v) => HEART_RATE_TYPES.includes(v.type))?.latest;
     if (recordedHeartRate && recordedHeartRate.quality === "VALID") {
       setHeartRate(recordedHeartRate.value);
     }
@@ -76,22 +78,33 @@ export default function UserDashboard() {
 
   const live = useLiveFeed(token, {
     onMeasurement: (measurement: LiveMeasurement) => {
-      setVitals((previous) =>
-        previous.map((vital) =>
-          vital.type === measurement.type
-            ? {
-                ...vital,
-                latest: {
-                  value: measurement.value,
-                  unit: measurement.unit,
-                  quality: measurement.quality,
-                  measuredAt: measurement.measuredAt,
-                },
-              }
-            : vital,
-        ),
-      );
-      if (measurement.type === "HEART_RATE" && measurement.quality === "VALID") {
+      const latest = {
+        value: measurement.value,
+        unit: measurement.unit,
+        quality: measurement.quality,
+        measuredAt: measurement.measuredAt,
+      };
+
+      setVitals((previous) => {
+        const existing = previous.find((vital) => vital.type === measurement.type);
+        if (!existing) {
+          return [
+            ...previous,
+            {
+              type: measurement.type,
+              latest,
+              baseline: null,
+              deviationFromBaseline: null,
+            },
+          ];
+        }
+
+        return previous.map((vital) =>
+          vital.type === measurement.type ? { ...vital, latest } : vital,
+        );
+      });
+
+      if (HEART_RATE_TYPES.includes(measurement.type) && measurement.quality === "VALID") {
         setHeartRate(measurement.value);
       }
     },
@@ -345,15 +358,19 @@ export default function UserDashboard() {
               </button>
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {vitals.map((vital) => (
-                <VitalCard
-                  key={vital.type}
-                  type={vital.type}
-                  latest={vital.latest}
-                  baseline={vital.baseline}
-                  deviation={vital.deviationFromBaseline}
-                />
-              ))}
+              {/* Always show these 4 cards */}
+              {["PIEZO_HEART_RATE", "MAX30102_HEART_RATE", "SPO2", "TEMPERATURE"].map((type) => {
+                const vital = vitals.find((v) => v.type === type);
+                return (
+                  <VitalCard
+                    key={type}
+                    type={type as any}
+                    latest={vital?.latest ?? null}
+                    baseline={vital?.baseline ?? null}
+                    deviation={vital?.deviationFromBaseline ?? null}
+                  />
+                );
+              })}
             </div>
           </section>
 

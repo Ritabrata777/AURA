@@ -20,8 +20,7 @@ import { DEVICE_COMMANDS, DeviceCommand, ECG_MAX_DURATION_SECONDS, ECG_MIN_DURAT
 import { IndividualUsersService } from "./individual-users.service";
 import { AuthenticatedUser } from "../auth/auth.service";
 import { CurrentUser } from "../auth/current-user.decorator";
-
-const MEASUREMENT_TYPES = ["HEART_RATE", "SPO2", "TEMPERATURE"] as const;
+import { MEASUREMENT_TYPES } from "../measurements/measurement-types";
 
 class PairDeviceBody {
   @IsString()

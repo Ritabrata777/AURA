@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { MeasurementType, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+import { MEASUREMENT_TYPES } from "./measurement-types";
 
 export interface MeasurementQueryOptions {
   type?: MeasurementType;
@@ -184,7 +185,7 @@ export class MeasurementsService {
    */
   async getVitalsSummary(patientId: string, baselineDays = 14) {
     const since = new Date(Date.now() - baselineDays * 24 * 60 * 60 * 1000);
-    const types: MeasurementType[] = ["HEART_RATE", "SPO2", "TEMPERATURE"];
+    const types: readonly MeasurementType[] = MEASUREMENT_TYPES;
 
     const results = await Promise.all(
       types.map(async (type) => {

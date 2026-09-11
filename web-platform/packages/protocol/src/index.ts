@@ -9,7 +9,15 @@ export const MQTT_TOPIC_SUFFIXES = {
   acks: "acks",
 } as const;
 
-export type MeasurementType = "HEART_RATE" | "SPO2" | "TEMPERATURE";
+export const MEASUREMENT_TYPES = [
+  "HEART_RATE",
+  "PIEZO_HEART_RATE",
+  "MAX30102_HEART_RATE",
+  "SPO2",
+  "TEMPERATURE",
+] as const;
+
+export type MeasurementType = (typeof MEASUREMENT_TYPES)[number];
 export type MeasurementQuality = "VALID" | "INVALID" | "UNAVAILABLE";
 
 /**
@@ -198,7 +206,7 @@ export function isMeasurementMessage(value: unknown): value is MeasurementMessag
   if (!isProtocolEnvelope(value) || value.type !== "MEASUREMENT") return false;
   const m = value as unknown as Record<string, unknown>;
   return (
-    (["HEART_RATE", "SPO2", "TEMPERATURE"] as const).includes(m.measurementType as MeasurementType) &&
+    (MEASUREMENT_TYPES as readonly string[]).includes(m.measurementType as string) &&
     typeof m.value === "number" &&
     Number.isFinite(m.value) &&
     typeof m.unit === "string" &&

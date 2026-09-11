@@ -17,6 +17,8 @@ interface VitalsCardsProps {
 
 const ICONS: Record<MeasurementType, typeof Heart> = {
   HEART_RATE: Heart,
+  PIEZO_HEART_RATE: Heart,
+  MAX30102_HEART_RATE: Heart,
   SPO2: Droplets,
   TEMPERATURE: Thermometer,
 };

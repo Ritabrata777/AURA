@@ -16,8 +16,7 @@ import { DoctorsService } from "../doctors/doctors.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { AuthenticatedUser } from "../auth/auth.service";
 import { CurrentUser } from "../auth/current-user.decorator";
-
-const MEASUREMENT_TYPES = ["HEART_RATE", "SPO2", "TEMPERATURE"] as const;
+import { MEASUREMENT_TYPES } from "./measurement-types";
 
 // Query params arrive as strings. `@Type(() => Number)` works because main.ts
 // enables `transform: true` on the global pipe; without these DTOs the

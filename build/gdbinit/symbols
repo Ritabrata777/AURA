@@ -18,8 +18,8 @@ end
 
 # Load bootloader symbols
 set confirm off
-    add-symbol-file C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader/bootloader.elf
+    add-symbol-file C:/Users/LENOVO/Desktop/AURA/AURA/build/bootloader/bootloader.elf
 set confirm on
 
 # Load application symbols
-file C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp32-health-device.elf
+file C:/Users/LENOVO/Desktop/AURA/AURA/build/esp32-health-device.elf

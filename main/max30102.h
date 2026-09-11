@@ -14,8 +14,10 @@ typedef struct {
 typedef struct {
     int heart_rate;
     int spo2;
+    float temperature_c;
     bool hr_valid;
     bool spo2_valid;
+    bool temp_valid;
 } max30102_metrics_t;
 
 typedef enum {

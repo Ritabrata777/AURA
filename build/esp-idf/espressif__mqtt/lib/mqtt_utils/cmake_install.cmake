@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/managed_components/espressif__mqtt/lib/mqtt_utils
+# Install script for directory: C:/Users/LENOVO/Desktop/AURA/AURA/managed_components/espressif__mqtt/lib/mqtt_utils
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,6 +40,6 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/espressif__mqtt/lib/mqtt_utils/install_local_manifest.txt"
+  file(WRITE "C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/espressif__mqtt/lib/mqtt_utils/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

@@ -110,10 +110,18 @@ static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *me
         if (metrics->hr_valid && metrics->heart_rate > 0) {
             ESP_LOGI(TAG, "MAX30102 Heart Rate: %d bpm", metrics->heart_rate);
             device_comm_publish_measurement("MAX30102_HEART_RATE", (float)metrics->heart_rate, "bpm", "VALID", NULL);
+        } else {
+            device_comm_publish_measurement("MAX30102_HEART_RATE", 0.0f, "bpm", "UNAVAILABLE", NULL);
         }
         if (metrics->spo2_valid && metrics->spo2 > 0) {
             ESP_LOGI(TAG, "SpO2: %d%%", metrics->spo2);
             device_comm_publish_measurement("SPO2", (float)metrics->spo2, "%", "VALID", NULL);
+        }
+        if (metrics->temp_valid) {
+            ESP_LOGI(TAG, "MAX30102 Temperature: %.2f C", metrics->temperature_c);
+            device_comm_publish_measurement("TEMPERATURE", metrics->temperature_c, "C", "VALID", NULL);
+        } else {
+            device_comm_publish_measurement("TEMPERATURE", 0.0f, "C", "UNAVAILABLE", NULL);
         }
     }
 }
@@ -272,17 +280,15 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
         }
 
         case DEVICE_CMD_START_TEMPERATURE: {
-            max30102_stop();
-            mlx90614_start_continuous(temperature_callback, NULL);
-            bool started = mlx90614_is_running();
+            mlx90614_stop_continuous();
+            esp_err_t err = max30102_start();
             device_comm_publish_command_ack(cmd->command_id, "START_TEMPERATURE",
-                                            started ? "ACCEPTED" : "REJECTED",
-                                            started ? NULL : "SENSOR_UNAVAILABLE");
+                                            err == ESP_OK ? "ACCEPTED" : "REJECTED",
+                                            err == ESP_OK ? NULL : "SENSOR_UNAVAILABLE");
             break;
         }
 
         case DEVICE_CMD_STOP_TEMPERATURE: {
-            mlx90614_stop_continuous();
             device_comm_publish_command_ack(cmd->command_id, "STOP_TEMPERATURE", "COMPLETED", NULL);
             break;
         }
@@ -339,10 +345,10 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
             device_comm_subscribe_to_commands();
             device_comm_start_periodic_status();
 
-            // Auto-start sensors for development convenience
+            // Auto-start MAX30102 for development convenience. It publishes
+            // heart rate, SpO2, and the MAX30102 internal temperature.
             max30102_set_callback(spo2_data_callback, NULL);
             max30102_start();
-            mlx90614_start_continuous(temperature_callback, NULL);
             break;
 
         case APP_MQTT_EVENT_DATA:

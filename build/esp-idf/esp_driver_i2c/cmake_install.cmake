@@ -40,6 +40,6 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/esp_driver_i2c/install_local_manifest.txt"
+  file(WRITE "C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/esp_driver_i2c/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

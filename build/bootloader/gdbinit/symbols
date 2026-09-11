@@ -22,4 +22,4 @@ set confirm off
 set confirm on
 
 # Load application symbols
-file C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/bootloader/bootloader.elf
+file C:/Users/LENOVO/Desktop/AURA/AURA/build/bootloader/bootloader.elf

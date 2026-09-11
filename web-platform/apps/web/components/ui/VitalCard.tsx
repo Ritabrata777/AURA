@@ -71,7 +71,7 @@ export function VitalCard({ type, latest, baseline, deviation }: VitalCardProps)
           </div>
         </div>
 
-        {latest ? (
+        {latest && latest.quality !== "UNAVAILABLE" ? (
           <>
             {/* Main value */}
             <div className="mb-3">
@@ -130,6 +130,15 @@ export function VitalCard({ type, latest, baseline, deviation }: VitalCardProps)
               </div>
             )}
           </>
+        ) : latest?.quality === "UNAVAILABLE" ? (
+          <div className="flex h-20 items-center justify-center">
+            <div className="text-center">
+              <p className="text-white/30 text-sm">Waiting for signal</p>
+              <p className="text-white/20 text-xs mt-0.5">
+                {new Date(latest.measuredAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              </p>
+            </div>
+          </div>
         ) : (
           <div className="flex h-20 items-center justify-center">
             <div className="text-center">

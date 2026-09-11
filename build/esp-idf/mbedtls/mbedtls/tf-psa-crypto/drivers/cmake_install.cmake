@@ -39,16 +39,16 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/everest/cmake_install.cmake")
-  include("C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/p256-m/cmake_install.cmake")
-  include("C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/cmake_install.cmake")
-  include("C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/pqcp/cmake_install.cmake")
+  include("C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/everest/cmake_install.cmake")
+  include("C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/p256-m/cmake_install.cmake")
+  include("C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/cmake_install.cmake")
+  include("C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/pqcp/cmake_install.cmake")
 
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/LENOVO/Desktop/New folder (3)/esp32-health-device/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/install_local_manifest.txt"
+  file(WRITE "C:/Users/LENOVO/Desktop/AURA/AURA/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/drivers/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

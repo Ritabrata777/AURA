@@ -11,7 +11,8 @@ import { queryString } from "@/lib/api";
 import type { MeasurementType, TrendPoint } from "@/lib/types";
 
 const TRENDS: Array<{ type: MeasurementType; unit: string; title: string }> = [
-  { type: "HEART_RATE", unit: "bpm", title: "Heart Rate" },
+  { type: "PIEZO_HEART_RATE", unit: "bpm", title: "Piezo Heart Rate" },
+  { type: "MAX30102_HEART_RATE", unit: "bpm", title: "MAX30102 Heart Rate" },
   { type: "SPO2", unit: "%", title: "Blood Oxygen" },
   { type: "TEMPERATURE", unit: "°C", title: "Temperature" },
 ];
@@ -26,6 +27,8 @@ export default function UserTrends() {
   const [days, setDays] = useState<number>(7);
   const [trends, setTrends] = useState<Record<MeasurementType, TrendPoint[]>>({
     HEART_RATE: [],
+    PIEZO_HEART_RATE: [],
+    MAX30102_HEART_RATE: [],
     SPO2: [],
     TEMPERATURE: [],
   });
@@ -43,7 +46,10 @@ export default function UserTrends() {
           return [type, points] as const;
         }),
       );
-      setTrends(Object.fromEntries(results) as Record<MeasurementType, TrendPoint[]>);
+      setTrends((previous) => ({
+        ...previous,
+        ...Object.fromEntries(results),
+      }));
     },
     [api],
   );

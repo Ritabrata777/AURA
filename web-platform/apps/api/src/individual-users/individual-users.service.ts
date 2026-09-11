@@ -18,6 +18,7 @@ import {
 } from "@health-platform/protocol";
 import { v4 as uuidv4 } from "uuid";
 import * as bcrypt from "bcrypt";
+import { MEASUREMENT_TYPES } from "../measurements/measurement-types";
 
 @Injectable()
 export class IndividualUsersService {
@@ -179,7 +180,7 @@ export class IndividualUsersService {
   }
 
   async getSummary(individualUserId: string) {
-    const types: MeasurementType[] = ["HEART_RATE", "SPO2", "TEMPERATURE"];
+    const types: readonly MeasurementType[] = MEASUREMENT_TYPES;
     const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
 
     return Promise.all(

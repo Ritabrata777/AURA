@@ -1,16 +1,18 @@
 "use client";
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
-import type { TrendPoint } from "@/lib/types";
+import type { MeasurementType, TrendPoint } from "@/lib/types";
 
 interface TrendChartProps {
   data: TrendPoint[];
-  type: "HEART_RATE" | "SPO2" | "TEMPERATURE";
+  type: MeasurementType;
   unit: string;
 }
 
-const colors = {
+const colors: Record<MeasurementType, string> = {
   HEART_RATE: "#f87171",
+  PIEZO_HEART_RATE: "#fb7185",
+  MAX30102_HEART_RATE: "#f43f5e",
   SPO2: "#60a5fa",
   TEMPERATURE: "#fb923c",
 };

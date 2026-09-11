@@ -2,18 +2,24 @@ import type { MeasurementType } from "./types";
 
 export const VITAL_LABELS: Record<MeasurementType, string> = {
   HEART_RATE: "Heart rate",
+  PIEZO_HEART_RATE: "Piezo heart rate",
+  MAX30102_HEART_RATE: "MAX30102 heart rate",
   SPO2: "Blood oxygen",
   TEMPERATURE: "Temperature",
 };
 
 export const VITAL_TONES: Record<MeasurementType, string> = {
   HEART_RATE: "green",
+  PIEZO_HEART_RATE: "green",
+  MAX30102_HEART_RATE: "green",
   SPO2: "blue",
   TEMPERATURE: "orange",
 };
 
 export const VITAL_GLYPHS: Record<MeasurementType, string> = {
   HEART_RATE: "♥",
+  PIEZO_HEART_RATE: "♥",
+  MAX30102_HEART_RATE: "♥",
   SPO2: "O2",
   TEMPERATURE: "°",
 };

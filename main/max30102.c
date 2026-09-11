@@ -103,6 +103,35 @@ static esp_err_t max30102_read_fifo_data(uint32_t *ir, uint32_t *red)
     return ret;
 }
 
+static esp_err_t max30102_read_temperature_c(float *temperature_c)
+{
+    if (temperature_c == NULL) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    esp_err_t err = max30102_write_reg(MAX30102_REG_TEMP_CONFIG, 0x01);
+    if (err != ESP_OK) {
+        return err;
+    }
+
+    vTaskDelay(pdMS_TO_TICKS(35));
+
+    uint8_t integer_part = 0;
+    uint8_t fraction_part = 0;
+    err = max30102_read_reg(MAX30102_REG_TEMP_INTR, &integer_part);
+    if (err != ESP_OK) {
+        return err;
+    }
+
+    err = max30102_read_reg(MAX30102_REG_TEMP_FRAC, &fraction_part);
+    if (err != ESP_OK) {
+        return err;
+    }
+
+    *temperature_c = (float)((int8_t)integer_part) + (float)(fraction_part & 0x0F) * 0.0625f;
+    return ESP_OK;
+}
+
 // Simple moving-average based peak detection for heart rate
 static void process_sample_for_hr(uint32_t ir_value, max30102_metrics_t *metrics)
 {
@@ -212,12 +241,21 @@ static void max30102_task(void *arg)
             for (size_t i = 0; i < samples_read; i++) {
                 process_sample_for_hr(samples[i].ir, &s_driver.latest_metrics);
                 process_sample_for_spo2(samples[i].red, samples[i].ir, &s_driver.latest_metrics);
+                s_driver.sample_count++;
+
+                if (s_driver.sample_count % MAX30102_EFFECTIVE_SPS == 0) {
+                    float temperature_c = 0.0f;
+                    if (max30102_read_temperature_c(&temperature_c) == ESP_OK) {
+                        s_driver.latest_metrics.temperature_c = temperature_c;
+                        s_driver.latest_metrics.temp_valid = true;
+                    } else {
+                        s_driver.latest_metrics.temp_valid = false;
+                    }
+                }
 
                 if (s_driver.callback != NULL) {
                     s_driver.callback(&samples[i], &s_driver.latest_metrics, s_driver.callback_arg);
                 }
-
-                s_driver.sample_count++;
             }
         } else if (++consecutive_errors >= MAX30102_MAX_CONSECUTIVE_ERRORS) {
             // The sensor has gone away mid-session. Stop rather than spin on a
@@ -385,7 +423,7 @@ esp_err_t max30102_read_fifo(max30102_sample_t *samples, size_t max_samples, siz
         return err;
     }
 
-    size_t available = (size_t)((fifo_wr_ptr - fifo_rd_ptr) & 0x0F);
+    size_t available = (size_t)((fifo_wr_ptr - fifo_rd_ptr) & 0x1F);
     if (available > max_samples) {
         available = max_samples;
     }
