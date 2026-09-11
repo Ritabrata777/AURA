@@ -1180,4 +1180,342 @@ entry 0x40080644
 [0;33mW (172881) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
 [0;33mW (172881) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
 [0;32mI (172941) local_ui: Displaying HOME: MAX30102 HR=60 SpO2=93 piezo HR=0[0m
-[0;32mI (17
+[0;32mI (172981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (173981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (174531) app: MAX30102 Heart Rate: 60 bpm[0m
+[0;32mI (174541) app: SpO2: 93%[0m
+[0;32mI (174541) app: MAX30102 Temperature: 33.44 C[0m
+[0;32mI (174601) app_mqtt: MQTT published, msg_id=48315[0m
+[0;32mI (174601) app_mqtt: MQTT published, msg_id=36434[0m
+[0;32mI (174611) app_mqtt: MQTT published, msg_id=19156[0m
+[0;32mI (174981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (175981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (176041) local_ui: Displaying HOME: MAX30102 HR=60 SpO2=93 piezo HR=0[0m
+[0;32mI (176521) app: MAX30102 Heart Rate: 60 bpm[0m
+[0;32mI (176531) app: SpO2: 92%[0m
+[0;32mI (176531) app: MAX30102 Temperature: 33.62 C[0m
+[0;32mI (176691) app_mqtt: MQTT published, msg_id=24250[0m
+[0;32mI (176701) app_mqtt: MQTT published, msg_id=64049[0m
+[0;32mI (176701) app_mqtt: MQTT published, msg_id=26527[0m
+[0;32mI (176721) app_mqtt: MQTT published, msg_id=11671[0m
+[0;32mI (176981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (177981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (178171) i2c.master: I2C software timeout[0m
+[0;33mW (178171) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (178171) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (178531) app: SpO2: 92%[0m
+[0;32mI (178531) app: MAX30102 Temperature: 33.31 C[0m
+[0;32mI (178591) app_mqtt: MQTT published, msg_id=20116[0m
+[0;32mI (178591) app_mqtt: MQTT published, msg_id=56861[0m
+[0;32mI (178601) app_mqtt: MQTT published, msg_id=21583[0m
+[0;32mI (178981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (179171) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=92 piezo HR=0[0m
+[0;32mI (179981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (180541) app: SpO2: 93%[0m
+[0;32mI (180541) app: MAX30102 Temperature: 33.38 C[0m
+[0;32mI (180691) app_mqtt: MQTT published, msg_id=3081[0m
+[0;32mI (180691) app_mqtt: MQTT published, msg_id=63067[0m
+[0;32mI (180691) app_mqtt: MQTT published, msg_id=48481[0m
+[0;32mI (180981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (181021) i2c.master: I2C software timeout[0m
+[0;33mW (181021) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (181021) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (181021) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (181031) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (181031) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (181041) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (181051) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (181731) app_mqtt: MQTT published, msg_id=41461[0m
+[1;31mE (181981) i2c.master: I2C software timeout[0m
+[0;32mI (181981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;33mW (182001) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (182001) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (182001) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (182001) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (182011) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (182041) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (182041) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (182291) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (182601) app: SpO2: 93%[0m
+[0;32mI (182651) app_mqtt: MQTT published, msg_id=12305[0m
+[0;32mI (182661) app_mqtt: MQTT published, msg_id=15865[0m
+[0;32mI (182661) app_mqtt: MQTT published, msg_id=15132[0m
+[0;32mI (182981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (183831) i2c.master: I2C software timeout[0m
+[0;33mW (183831) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (183831) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (183831) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (183841) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (183841) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (183851) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (183851) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (183981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (184561) app: SpO2: 93%[0m
+[0;32mI (184561) app: MAX30102 Temperature: 32.94 C[0m
+[0;32mI (184621) app_mqtt: MQTT published, msg_id=25590[0m
+[0;32mI (184621) app_mqtt: MQTT published, msg_id=35006[0m
+[0;32mI (184631) app_mqtt: MQTT published, msg_id=58832[0m
+[1;31mE (184731) i2c.master: I2C software timeout[0m
+[0;33mW (184731) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (184731) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (184731) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (184741) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (184741) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (184751) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (184751) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (184981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (185371) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (185981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (186551) app: SpO2: 93%[0m
+[0;32mI (186561) app: MAX30102 Temperature: 32.94 C[0m
+[0;32mI (186621) app_mqtt: MQTT published, msg_id=29990[0m
+[0;32mI (186621) app_mqtt: MQTT published, msg_id=46817[0m
+[0;32mI (186631) app_mqtt: MQTT published, msg_id=15481[0m
+[0;32mI (186721) app_mqtt: MQTT published, msg_id=46747[0m
+[0;32mI (186981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (187981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (188481) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (188571) app: SpO2: 93%[0m
+[0;32mI (188571) app: MAX30102 Temperature: 32.75 C[0m
+[0;32mI (188671) app_mqtt: MQTT published, msg_id=59415[0m
+[0;32mI (188681) app_mqtt: MQTT published, msg_id=12392[0m
+[0;32mI (188681) app_mqtt: MQTT published, msg_id=61597[0m
+[0;32mI (188981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (189121) i2c.master: I2C software timeout[0m
+[0;33mW (189141) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (189141) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (189141) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (189141) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (189151) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (189181) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (189181) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (189681) i2c.master: I2C software timeout[0m
+[0;33mW (189681) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (189681) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (189681) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (189691) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (189691) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (189701) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (189701) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (189981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (190571) app: SpO2: 93%[0m
+[0;32mI (190571) app: MAX30102 Temperature: 32.62 C[0m
+[0;32mI (190631) app_mqtt: MQTT published, msg_id=63162[0m
+[0;32mI (190631) app_mqtt: MQTT published, msg_id=49265[0m
+[0;32mI (190641) app_mqtt: MQTT published, msg_id=55129[0m
+[0;32mI (190981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (191571) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (191751) app_mqtt: MQTT published, msg_id=53117[0m
+[0;32mI (191981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (192571) app: SpO2: 93%[0m
+[0;32mI (192571) app: MAX30102 Temperature: 32.50 C[0m
+[0;32mI (192671) app_mqtt: MQTT published, msg_id=7969[0m
+[0;32mI (192681) app_mqtt: MQTT published, msg_id=44688[0m
+[0;32mI (192681) app_mqtt: MQTT published, msg_id=4585[0m
+[0;32mI (192981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (193981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (194591) app: SpO2: 93%[0m
+[0;32mI (194591) app: MAX30102 Temperature: 32.50 C[0m
+[0;32mI (194701) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (194711) app_mqtt: MQTT published, msg_id=36789[0m
+[0;32mI (194721) app_mqtt: MQTT published, msg_id=63866[0m
+[0;32mI (194721) app_mqtt: MQTT published, msg_id=32428[0m
+[0;32mI (194981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (195981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (196591) app: SpO2: 93%[0m
+[0;32mI (196591) app: MAX30102 Temperature: 32.44 C[0m
+[0;32mI (196651) app_mqtt: MQTT published, msg_id=5394[0m
+[0;32mI (196651) app_mqtt: MQTT published, msg_id=37790[0m
+[0;32mI (196661) app_mqtt: MQTT published, msg_id=37990[0m
+[0;32mI (196721) app_mqtt: MQTT published, msg_id=40523[0m
+[0;32mI (196981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (197811) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (197981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (198131) i2c.master: I2C software timeout[0m
+[0;33mW (198151) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (198151) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (198151) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (198151) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (198161) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (198191) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (198191) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (198441) i2c.master: I2C software timeout[0m
+[0;33mW (198461) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (198461) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (198601) app: SpO2: 93%[0m
+[0;32mI (198601) app: MAX30102 Temperature: 32.44 C[0m
+[0;32mI (198711) app_mqtt: MQTT published, msg_id=1958[0m
+[0;32mI (198711) app_mqtt: MQTT published, msg_id=14485[0m
+[0;32mI (198721) app_mqtt: MQTT published, msg_id=33871[0m
+[0;32mI (198981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (199941) i2c.master: I2C software timeout[0m
+[0;33mW (199941) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (199941) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (199981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (200671) app: SpO2: 93%[0m
+[0;32mI (200671) app: MAX30102 Temperature: 32.25 C[0m
+[0;32mI (200731) app_mqtt: MQTT published, msg_id=33644[0m
+[0;32mI (200741) app_mqtt: MQTT published, msg_id=32891[0m
+[0;32mI (200741) app_mqtt: MQTT published, msg_id=44707[0m
+[0;32mI (200931) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (200981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (201731) app_mqtt: MQTT published, msg_id=29835[0m
+[0;32mI (201981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (202611) app: SpO2: 93%[0m
+[0;32mI (202611) app: MAX30102 Temperature: 32.31 C[0m
+[0;32mI (202701) app_mqtt: MQTT published, msg_id=38112[0m
+[0;32mI (202701) app_mqtt: MQTT published, msg_id=9704[0m
+[0;32mI (202711) app_mqtt: MQTT published, msg_id=43950[0m
+[0;32mI (202981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (203981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (204041) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (204601) app: SpO2: 93%[0m
+[0;32mI (204611) app: MAX30102 Temperature: 32.38 C[0m
+[0;32mI (204751) app_mqtt: MQTT published, msg_id=48592[0m
+[0;32mI (204751) app_mqtt: MQTT published, msg_id=11708[0m
+[0;32mI (204761) app_mqtt: MQTT published, msg_id=26927[0m
+[0;32mI (204981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (205981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (206611) app: SpO2: 93%[0m
+[0;32mI (206611) app: MAX30102 Temperature: 32.38 C[0m
+[0;32mI (206671) app_mqtt: MQTT published, msg_id=46580[0m
+[0;32mI (206681) app_mqtt: MQTT published, msg_id=7232[0m
+[0;32mI (206681) app_mqtt: MQTT published, msg_id=53323[0m
+[0;32mI (206721) app_mqtt: MQTT published, msg_id=27925[0m
+[0;32mI (206981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (207151) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (207981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (208611) app: SpO2: 93%[0m
+[0;32mI (208611) app: MAX30102 Temperature: 32.19 C[0m
+[0;32mI (208741) app_mqtt: MQTT published, msg_id=53069[0m
+[0;32mI (208751) app_mqtt: MQTT published, msg_id=18103[0m
+[0;32mI (208751) app_mqtt: MQTT published, msg_id=13296[0m
+[0;32mI (208981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (209281) i2c.master: I2C software timeout[0m
+[0;33mW (209281) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (209281) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (209281) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (209291) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (209291) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (209301) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (209301) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (209871) i2c.master: I2C software timeout[0m
+[0;33mW (209871) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (209871) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (209871) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (209881) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (209881) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (209891) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (209891) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (209981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (210201) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (210631) app: SpO2: 93%[0m
+[0;32mI (210631) app: MAX30102 Temperature: 32.12 C[0m
+[0;32mI (210691) app_mqtt: MQTT published, msg_id=4025[0m
+[0;32mI (210691) app_mqtt: MQTT published, msg_id=35796[0m
+[0;32mI (210701) app_mqtt: MQTT published, msg_id=14526[0m
+[0;32mI (210981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (211731) app_mqtt: MQTT published, msg_id=28496[0m
+[0;32mI (211981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (212631) app: SpO2: 93%[0m
+[0;32mI (212641) app: MAX30102 Temperature: 32.12 C[0m
+[0;32mI (212741) app_mqtt: MQTT published, msg_id=8582[0m
+[0;32mI (212741) app_mqtt: MQTT published, msg_id=38202[0m
+[0;32mI (212741) app_mqtt: MQTT published, msg_id=39336[0m
+[1;31mE (212931) i2c.master: I2C software timeout[0m
+[0;33mW (212931) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (212931) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (212931) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (212941) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (212941) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (212951) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (212961) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (212971) i2c.master: I2C software timeout[0m
+[0;32mI (212981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;33mW (212991) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (212991) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (213261) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (213981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (214681) app: SpO2: 93%[0m
+[0;32mI (214681) app: MAX30102 Temperature: 32.19 C[0m
+[0;32mI (214791) app_mqtt: MQTT published, msg_id=35796[0m
+[0;32mI (214801) app_mqtt: MQTT published, msg_id=63867[0m
+[0;32mI (214801) app_mqtt: MQTT published, msg_id=18221[0m
+[0;32mI (214981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (215981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (216081) i2c.master: I2C software timeout[0m
+[0;33mW (216101) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (216101) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (216381) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (216691) app: SpO2: 93%[0m
+[0;32mI (216831) app_mqtt: MQTT published, msg_id=26731[0m
+[0;32mI (216841) app_mqtt: MQTT published, msg_id=1951[0m
+[0;32mI (216841) app_mqtt: MQTT published, msg_id=11887[0m
+[0;32mI (216841) app_mqtt: MQTT published, msg_id=13774[0m
+[0;32mI (216981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (217981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (218691) app: SpO2: 93%[0m
+[0;32mI (218691) app: MAX30102 Temperature: 32.06 C[0m
+[0;32mI (218791) app_mqtt: MQTT published, msg_id=62711[0m
+[0;32mI (218801) app_mqtt: MQTT published, msg_id=50023[0m
+[0;32mI (218801) app_mqtt: MQTT published, msg_id=27420[0m
+[0;32mI (218981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (219501) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (219981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (220711) app: SpO2: 93%[0m
+[0;32mI (220831) app_mqtt: MQTT published, msg_id=61435[0m
+[0;32mI (220831) app_mqtt: MQTT published, msg_id=7820[0m
+[0;32mI (220841) app_mqtt: MQTT published, msg_id=21161[0m
+[0;32mI (220981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (221731) app_mqtt: MQTT published, msg_id=56803[0m
+[0;32mI (221981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (222611) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (222701) app: SpO2: 93%[0m
+[0;32mI (222701) app: MAX30102 Temperature: 31.94 C[0m
+[0;32mI (222881) app_mqtt: MQTT published, msg_id=41409[0m
+[0;32mI (222881) app_mqtt: MQTT published, msg_id=20245[0m
+[0;32mI (222881) app_mqtt: MQTT published, msg_id=3201[0m
+[0;32mI (222981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (223981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (224721) app: SpO2: 93%[0m
+[0;32mI (224721) app: MAX30102 Temperature: 32.00 C[0m
+[0;32mI (224821) app_mqtt: MQTT published, msg_id=52207[0m
+[0;32mI (224831) app_mqtt: MQTT published, msg_id=45855[0m
+[0;32mI (224831) app_mqtt: MQTT published, msg_id=19370[0m
+[0;32mI (224981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (225731) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (225981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (226711) app: SpO2: 93%[0m
+[0;32mI (226711) app: MAX30102 Temperature: 32.00 C[0m
+[0;32mI (226881) app_mqtt: MQTT published, msg_id=54127[0m
+[0;32mI (226891) app_mqtt: MQTT published, msg_id=14330[0m
+[0;32mI (226891) app_mqtt: MQTT published, msg_id=11662[0m
+[0;32mI (226891) app_mqtt: MQTT published, msg_id=7138[0m
+[0;32mI (226981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (227231) i2c.master: I2C software timeout[0m
+[0;33mW (227231) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (227231) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (227551) i2c.master: I2C software timeout[0m
+[0;33mW (227551) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (227551) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (227551) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (227561) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (227561) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (227571) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (227571) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (227981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (228711) app: SpO2: 93%[0m
+[0;32mI (228711) app: MAX30102 Temperature: 31.94 C[0m
+[0;32mI (228771) app_mqtt: MQTT published, msg_id=50845[0m
+[0;32mI (228771) app_mqtt: MQTT published, msg_id=53470[0m
+[0;32mI (228781) app_mqtt: MQTT published, msg_id=10145[0m
+[0;32mI (228821) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (228981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (229981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[0;32mI (230731) app: SpO2: 93%[0m
+[0;32mI (230731) app: MAX30102 Temperature: 31.94 C[0m
+[0;32mI (230791) app_mqtt: MQTT published, msg_id=18734[0m
+[0;32mI (230801) app_mqtt: MQTT published, msg_id=18259[0m
+[0;32mI (230801) app_mqtt: MQTT published, msg_id=28168[0m
+[0;32mI (230981) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=178300[0m
+[1;31mE (231311) i2c.master: I2C software timeout[
