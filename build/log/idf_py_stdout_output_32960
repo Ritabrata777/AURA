@@ -1,0 +1,1630 @@
+Command: C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe C:\esp\v6.1\esp-idf\tools/idf_monitor.py -p COM8 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 C:\Users\LENOVO\Desktop\AURA\AURA\build\esp32-health-device.elf C:\Users\LENOVO\Desktop\AURA\AURA\build\bootloader\bootloader.elf --force-color -m 'C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe' 'C:\esp\v6.1\esp-idf\tools\idf.py'
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET)ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0040,len:6272
+load:0x40078000,len:15824
+load:0x40080400,len:3988
+entry 0x40080644
+[0;32mI (27) boot: ESP-IDF v6.1-dirty 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Sep 11 2026 18:20:11[0m
+[0;32mI (28) boot: Multicore bootloader[0m
+[0;32mI (29) boot: chip revision: v3.1[0m
+[0;32mI (32) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (36) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (39) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (43) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (50) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (56) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (63) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (69) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (76) boot: End of partition table[0m
+[0;32mI (79) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=247f0h (149488) map[0m
+[0;32mI (140) esp_image: segment 1: paddr=00034818 vaddr=3ffb0000 size=046e4h ( 18148) load[0m
+[0;32mI (147) esp_image: segment 2: paddr=00038f04 vaddr=40080000 size=07114h ( 28948) load[0m
+[0;32mI (159) esp_image: segment 3: paddr=00040020 vaddr=400d0020 size=b117ch (725372) map[0m
+[0;32mI (418) esp_image: segment 4: paddr=000f11a4 vaddr=40087114 size=0f5e4h ( 62948) load[0m
+[0;32mI (444) esp_image: segment 5: paddr=00100790 vaddr=50000000 size=00028h (    40) load[0m
+[0;32mI (456) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (456) boot: Disabling RNG early entropy source...[0m
+[0;32mI (466) cpu_start: Multicore app[0m
+[0;32mI (474) cpu_start: GPIO 3 and 1 are used as console UART I/O pins[0m
+[0;32mI (475) cpu_start: Pro cpu start user code[0m
+[0;32mI (475) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (477) app_init: Application information:[0m
+[0;32mI (480) app_init: Project name:     esp32-health-device[0m
+[0;32mI (485) app_init: App version:      9f88a3a-dirty[0m
+[0;32mI (490) app_init: Compile time:     Sep 11 2026 22:28:50[0m
+[0;32mI (495) app_init: ELF file SHA256:  9b27b1738...[0m
+[0;32mI (499) app_init: ESP-IDF:          v6.1-dirty[0m
+[0;32mI (503) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (507) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (511) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (515) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (521) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (526) heap_init: At 3FFBA670 len 00025990 (150 KiB): DRAM[0m
+[0;32mI (532) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (537) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (542) heap_init: At 400966F8 len 00009908 (38 KiB): IRAM[0m
+[0;33mW (549) spi_flash: Detected boya flash chip but using generic driver. For optimal functionality, enable `SPI_FLASH_SUPPORT_BOYA_CHIP` in menuconfig[0m
+[0;32mI (561) spi_flash: detected chip: generic[0m
+[0;32mI (564) spi_flash: flash io: dio[0m
+[0;33mW (567) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (581) main_task: Started on CPU0[0m
+[0;32mI (581) main_task: Calling app_main()[0m
+[0;32mI (581) app: === Health Device Starting ===[0m
+[0;32mI (591) i2c: I2C: shared bus initialized SDA=22 SCL=21[0m
+[0;32mI (591) i2c: I2C SCAN: SDA=22 SCL=21[0m
+[0;32mI (591) i2c: I2C SCAN: Scanning addresses 0x08-0x77 ...[0m
+[0;32mI (621) i2c: I2C SCAN: 0x3C -> SSD1306 OLED[0m
+[0;32mI (631) i2c: I2C SCAN: 0x57 -> MAX30102[0m
+[0;32mI (641) i2c: I2C SCAN: 2 device(s) found[0m
+[0;32mI (641) adc_bus: ADC1 initialized[0m
+[0;32mI (641) oled_ssd1306: I2C: OLED device registered[0m
+[0;32mI (641) oled_ssd1306: OLED: Found at 0x3C[0m
+[0;32mI (771) oled_ssd1306: OLED: Initialization successful[0m
+[0;32mI (1881) max30102: Initializing MAX30102 sensor[0m
+[0;32mI (1881) max30102: I2C: MAX30102 device registered[0m
+[0;32mI (1881) max30102: MAX30102 found, chip ID: 0x15[0m
+[0;32mI (1881) max30102: MAX30102 configured for SpO2 and HR monitoring[0m
+[0;32mI (2001) buttons: Initializing buttons[0m
+[0;32mI (2001) buttons: Buttons initialized: UP=33, SELECT=32[0m
+[0;32mI (2001) piezo_heartbeat: PIEZO: ADC initialized GPIO=35 unit=0 channel=7 atten=3 sample_rate=200 Hz[0m
+[0;32mI (2001) ecg_ad8232: Initializing AD8232 ECG sensor[0m
+[0;32mI (2011) ecg_ad8232: AD8232 initialized: 250 Hz, 500 samples buffer[0m
+[0;32mI (2011) local_ui: Showing pairing code MED-149CAC for 5 seconds[0m
+[0;32mI (6511) buttons: Button 2 pressed[0m
+[0;32mI (7591) wifi:wifi driver task: 3ffc6fb4, prio:23, stack:6656, core=0[0m
+[0;32mI (7611) wifi:wifi firmware version: e12a754[0m
+[0;32mI (7611) wifi:wifi certification version: v7.0[0m
+[0;32mI (7611) wifi:config NVS flash: enabled[0m
+[0;32mI (7611) wifi:config nano formatting: disabled[0m
+[0;32mI (7611) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (7621) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (7621) wifi:Init management short buffer num: 32[0m
+[0;32mI (7631) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (7631) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (7631) wifi:Init static rx buffer num: 10[0m
+[0;32mI (7641) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (7641) wifi_init: rx ba win: 6[0m
+[0;32mI (7641) wifi_init: accept mbox: 6[0m
+[0;32mI (7651) wifi_init: tcpip mbox: 32[0m
+[0;32mI (7651) wifi_init: udp mbox: 6[0m
+[0;32mI (7651) wifi_init: tcp mbox: 6[0m
+[0;32mI (7661) wifi_init: tcp tx win: 5760[0m
+[0;32mI (7661) wifi_init: tcp rx win: 5760[0m
+[0;32mI (7661) wifi_init: tcp mss: 1440[0m
+[0;32mI (7671) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (7671) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (7681) app_mqtt: MQTT client initialized[0m
+[0;32mI (7681) device_comm: Initializing device communication[0m
+[0;32mI (7681) device_comm: Device ID set: ECE334149CAC[0m
+[0;32mI (7691) max30102: Starting MAX30102 measurement[0m
+[0;32mI (7691) wifi_manager: No Wi-Fi credentials in NVS[0m
+[0;32mI (7701) wifi_manager: Using Kconfig Wi-Fi credentials: SSID=zxc[0m
+[0;32mI (7701) wifi_manager: Starting STA mode with credentials for SSID=zxc[0m
+[0;33mW (7711) wifi:Password length matches WPA2 standards, authmode threshold changes from OPEN to WPA2[0m
+[0;32mI (7721) phy_init: phy_version 4863,a3a4459,Oct 28 2025,14:30:06[0m
+[0;32mI (7811) wifi:mode : sta (ec:e3:34:14:9c:ac)[0m
+[0;32mI (7811) wifi:enable tsf[0m
+[0;32mI (7811) wifi_manager: STA started, attempting to connect[0m
+[0;32mI (7821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=191428[0m
+[0;32mI (7821) app: === Device Ready ===[0m
+[0;32mI (7821) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (8131) app: firmware=0.1.0 protocol=1 hardware=ECE334149CAC pairing=MED-149CAC device_id=ECE334149CAC[0m
+[0;32mI (8131) app: MQTT broker: mqtt://10.146.117.232:1883[0m
+[0;32mI (8451) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (8461) wifi:Association refused temporarily time 1000, comeback time 1100 (TUs)[0m
+[0;32mI (8821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=190128[0m
+[0;32mI (9481) buttons: Button 2 pressed[0m
+[0;32mI (9581) wifi:state: assoc -> auth (0xb0)[0m
+[0;32mI (9681) buttons: BUTTON2: SHORT PRESS - SELECT[0m
+[0;32mI (9681) buttons: Selected mode -> HOME[0m
+[0;32mI (9681) buttons: ACTIVE MODE: NONE[0m
+[0;32mI (9821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=186920[0m
+[0;32mI (9831) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (10191) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (10231) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (10261) wifi:connected with zxc, aid = 4, channel 1, BW20, bssid = 76:a9:75:3a:1f:01[0m
+[0;32mI (10261) wifi:security: WPA3-SAE HUNT_AND_PECK, phy: bgn, rssi: -50, cipher(pairwise:0x3, group:0x3), pmf:1[0m
+[0;32mI (10271) wifi:pm start, type: 1[0m
+
+[0;32mI (10271) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (10301) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
+[0;32mI (10301) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
+[0;32mI (10301) wifi:<ba-add>idx:0 (ifx:0, 76:a9:75:3a:1f:01), tid:0, ssn:0, winSize:64[0m
+[0;32mI (10411) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=0 piezo HR=0[0m
+[0;32mI (10821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=189252[0m
+[0;32mI (11331) esp_netif_handlers: sta ip: 10.146.117.95, mask: 255.255.255.0, gw: 10.146.117.116[0m
+[0;32mI (11331) wifi_manager: STA got IP: 10.146.117.95[0m
+[0;32mI (11331) app: Wi-Fi connected, syncing time and starting MQTT[0m
+[0;32mI (11331) app: Initializing SNTP for time sync[0m
+[0;32mI (11341) app_mqtt: MQTT client started[0m
+[0;32mI (11541) app_mqtt: MQTT connected[0m
+[0;32mI (11541) app: MQTT connected — subscribing to commands[0m
+[0;32mI (11541) device_comm: Subscribing to devices/ECE334149CAC/commands[0m
+[0;32mI (11551) app_mqtt: Subscribed to devices/ECE334149CAC/commands, msg_id=3841[0m
+[0;32mI (11571) app_mqtt: MQTT subscribed, msg_id=3841[0m
+[0;32mI (11581) app_mqtt: MQTT published, msg_id=55388[0m
+[0;32mI (11741) app: SpO2: 91%[0m
+[0;32mI (11741) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (11791) buttons: Button 2 pressed[0m
+[0;32mI (11821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173176[0m
+[0;32mI (11861) app_mqtt: MQTT published, msg_id=37994[0m
+[0;32mI (11861) app_mqtt: MQTT published, msg_id=22476[0m
+[0;32mI (11871) app_mqtt: MQTT published, msg_id=40463[0m
+[0;32mI (11971) buttons: BUTTON2: SHORT PRESS - SELECT[0m
+[0;32mI (11971) buttons: Selected mode -> HOME[0m
+[0;32mI (11971) buttons: ACTIVE MODE: NONE[0m
+[0;32mI (12151) wifi:<ba-add>idx:1 (ifx:0, 76:a9:75:3a:1f:01), tid:1, ssn:0, winSize:64[0m
+[0;32mI (12821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177212[0m
+[0;32mI (13101) buttons: Button 1 pressed[0m
+[0;32mI (13301) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (13311) buttons: BUTTON1: NEXT PAGE[0m
+[0;32mI (13311) buttons: Next page -> MAX30102[0m
+[0;32mI (13771) app: SpO2: 91%[0m
+[0;32mI (13771) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (13821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173072[0m
+[0;32mI (13901) app_mqtt: MQTT published, msg_id=54142[0m
+[0;32mI (13911) app_mqtt: MQTT published, msg_id=56372[0m
+[0;32mI (13911) app_mqtt: MQTT published, msg_id=61910[0m
+[0;32mI (14821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177216[0m
+[0;32mI (15141) buttons: Button 1 pressed[0m
+[0;32mI (15321) buttons: BUTTON1: NEXT PAGE[0m
+[0;32mI (15321) buttons: Next page -> PIEZO[0m
+[0;32mI (15781) app: SpO2: 91%[0m
+[0;32mI (15781) app: MAX30102 Temperature: 30.69 C[0m
+[0;32mI (15821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173072[0m
+[0;32mI (15951) app_mqtt: MQTT published, msg_id=18358[0m
+[0;32mI (15951) app_mqtt: MQTT published, msg_id=22462[0m
+[0;32mI (15961) app_mqtt: MQTT published, msg_id=36595[0m
+[0;32mI (16051) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (16581) app_mqtt: MQTT published, msg_id=64449[0m
+[0;32mI (16821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177216[0m
+[0;32mI (16941) buttons: Button 2 pressed[0m
+[0;32mI (17111) buttons: PIEZO: mode selected[0m
+[0;32mI (17111) piezo_heartbeat: PIEZO: sampling started[0m
+[0;32mI (17111) buttons: BUTTON2: SHORT PRESS - SELECT[0m
+[0;32mI (17111) buttons: Selected mode -> PIEZO[0m
+[0;32mI (17111) buttons: ACTIVE MODE: PIEZO[0m
+[0;32mI (17151) piezo_heartbeat: PIEZO: waiting for signal[0m
+[0;32mI (17821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177128[0m
+[0;32mI (17861) app: SpO2: 91%[0m
+[0;32mI (17861) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (17921) app_mqtt: MQTT published, msg_id=48055[0m
+[0;32mI (17921) app_mqtt: MQTT published, msg_id=62759[0m
+[0;32mI (17931) app_mqtt: MQTT published, msg_id=49813[0m
+[0;32mI (18151) piezo_heartbeat: PIEZO: ADC=0 min=0 max=56 avg=0 p2p=56 noise=0 thr=12[0m
+[0;32mI (18151) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (18821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177128[0m
+[0;32mI (19091) local_ui: Displaying PIEZO: MAX30102 HR=37 SpO2=91 piezo HR=0[0m
+[0;32mI (19151) piezo_heartbeat: PIEZO: ADC=0 min=0 max=48 avg=0 p2p=48 noise=0 thr=12[0m
+[0;32mI (19151) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (19761) app: MAX30102 Heart Rate: 37 bpm[0m
+[0;32mI (19771) app: SpO2: 91%[0m
+[0;32mI (19771) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (19821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=172860[0m
+[0;32mI (20051) app_mqtt: MQTT published, msg_id=17899[0m
+[0;32mI (20051) app_mqtt: MQTT published, msg_id=43978[0m
+[0;32mI (20061) app_mqtt: MQTT published, msg_id=37613[0m
+[0;32mI (20151) piezo_heartbeat: PIEZO: ADC=0 min=0 max=24 avg=0 p2p=24 noise=0 thr=12[0m
+[0;33mW (20151) piezo_heartbeat: PIEZO: NO SIGNAL[0m
+[0;32mI (20171) app_mqtt: MQTT published, msg_id=11007[0m
+[0;32mI (20821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (21151) piezo_heartbeat: PIEZO: ADC=4095 min=0 max=4095 avg=1740 p2p=4095 noise=0 thr=12[0m
+[0;33mW (21151) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (21171) app_mqtt: MQTT published, msg_id=53856[0m
+[0;32mI (21581) app_mqtt: MQTT published, msg_id=536[0m
+[0;32mI (21771) app: MAX30102 Heart Rate: 37 bpm[0m
+[0;32mI (21781) app: SpO2: 91%[0m
+[0;32mI (21781) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (21821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=172864[0m
+[0;32mI (21891) app_mqtt: MQTT published, msg_id=36522[0m
+[0;32mI (21901) app_mqtt: MQTT published, msg_id=31618[0m
+[0;32mI (21901) app_mqtt: MQTT published, msg_id=23124[0m
+[1;31mE (22151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (22151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (22151) task_wdt: Tasks currently running:[0m
+[1;31mE (22151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (22151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (22151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x400DE586:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (22181) piezo_heartbeat: PIEZO: ADC=4095 min=0 max=4095 avg=1952 p2p=4095 noise=81 thr=212[0m
+[0;33mW (22181) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (22211) app_mqtt: MQTT published, msg_id=57801[0m
+[0;32mI (22231) local_ui: Displaying PIEZO: MAX30102 HR=37 SpO2=91 piezo HR=0[0m
+[0;32mI (22821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (23181) piezo_heartbeat: PIEZO: ADC=4095 min=3787 max=4095 avg=4094 p2p=308 noise=0 thr=12[0m
+[0;32mI (23181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (23811) app: MAX30102 Heart Rate: 63 bpm[0m
+[0;32mI (23821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173876[0m
+[0;32mI (23821) app: SpO2: 91%[0m
+[0;32mI (23821) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (23941) app_mqtt: MQTT published, msg_id=20954[0m
+[0;32mI (23951) app_mqtt: MQTT published, msg_id=49406[0m
+[0;32mI (23951) app_mqtt: MQTT published, msg_id=46300[0m
+[0;32mI (24001) piezo_heartbeat: PIEZO: BEAT DETECTED interval=482 ms[0m
+[0;32mI (24181) piezo_heartbeat: PIEZO: ADC=4095 min=3835 max=4095 avg=4094 p2p=260 noise=0 thr=12[0m
+[0;32mI (24181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (24461) piezo_heartbeat: PIEZO: BEAT DETECTED interval=467 ms[0m
+[0;32mI (24821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (25181) piezo_heartbeat: PIEZO: ADC=4095 min=3911 max=4095 avg=4094 p2p=184 noise=0 thr=12[0m
+[0;32mI (25181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (25331) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (25461) piezo_heartbeat: PIEZO: BEAT DETECTED interval=544 ms[0m
+[0;32mI (25781) app: SpO2: 91%[0m
+[0;32mI (25781) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (25821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=172864[0m
+[0;32mI (25881) app_mqtt: MQTT published, msg_id=29048[0m
+[0;32mI (25891) app_mqtt: MQTT published, msg_id=18728[0m
+[0;32mI (25891) app_mqtt: MQTT published, msg_id=57148[0m
+[0;32mI (26181) piezo_heartbeat: PIEZO: ADC=4095 min=3921 max=4095 avg=4094 p2p=174 noise=1 thr=12[0m
+[0;32mI (26181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (26581) app_mqtt: MQTT published, msg_id=3245[0m
+[0;32mI (26601) piezo_heartbeat: PIEZO: BEAT DETECTED interval=685 ms[0m
+[0;32mI (26601) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (26611) app_mqtt: MQTT published, msg_id=32032[0m
+[0;32mI (26821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (27101) piezo_heartbeat: PIEZO: BEAT DETECTED interval=508 ms[0m
+[0;32mI (27111) piezo_heartbeat: PIEZO: BPM=113[0m
+[0;32mI (27131) app_mqtt: MQTT published, msg_id=47017[0m
+[1;31mE (27151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (27151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (27151) task_wdt: Tasks currently running:[0m
+[1;31mE (27151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (27151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (27151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40084271:0x3FFBF640 0x4017E862:0x3FFBF660 0x400DEB5F:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (27181) piezo_heartbeat: PIEZO: ADC=4095 min=3951 max=4095 avg=4094 p2p=144 noise=0 thr=12[0m
+[0;32mI (27191) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (27571) piezo_heartbeat: PIEZO: BEAT DETECTED interval=462 ms[0m
+[0;32mI (27571) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (27591) app_mqtt: MQTT published, msg_id=36734[0m
+[0;32mI (27821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (27881) app: SpO2: 91%[0m
+[0;32mI (27881) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (28031) app_mqtt: MQTT published, msg_id=16559[0m
+[0;32mI (28041) app_mqtt: MQTT published, msg_id=30395[0m
+[0;32mI (28041) app_mqtt: MQTT published, msg_id=38590[0m
+[0;32mI (28161) piezo_heartbeat: PIEZO: BEAT DETECTED interval=591 ms[0m
+[0;32mI (28161) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (28181) app_mqtt: MQTT published, msg_id=15903[0m
+[0;32mI (28181) piezo_heartbeat: PIEZO: ADC=4095 min=3949 max=4095 avg=4094 p2p=146 noise=0 thr=12[0m
+[0;32mI (28181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (28461) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=109[0m
+[0;32mI (28651) piezo_heartbeat: PIEZO: BEAT DETECTED interval=494 ms[0m
+[0;32mI (28651) piezo_heartbeat: PIEZO: BPM=111[0m
+[0;32mI (28671) app_mqtt: MQTT published, msg_id=48529[0m
+[0;32mI (28821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (29181) piezo_heartbeat: PIEZO: ADC=4095 min=3871 max=4095 avg=4094 p2p=224 noise=0 thr=12[0m
+[0;32mI (29181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (29621) piezo_heartbeat: PIEZO: BEAT DETECTED interval=505 ms[0m
+[0;32mI (29621) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (29641) app_mqtt: MQTT published, msg_id=2079[0m
+[0;32mI (29791) app: SpO2: 91%[0m
+[0;32mI (29791) app: MAX30102 Temperature: 30.69 C[0m
+[0;32mI (29821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=172864[0m
+[0;32mI (29881) app_mqtt: MQTT published, msg_id=60469[0m
+[0;32mI (29881) app_mqtt: MQTT published, msg_id=25657[0m
+[0;32mI (29891) app_mqtt: MQTT published, msg_id=53594[0m
+[0;32mI (30181) piezo_heartbeat: PIEZO: ADC=4095 min=3786 max=4095 avg=4094 p2p=309 noise=0 thr=12[0m
+[0;32mI (30181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (30601) piezo_heartbeat: PIEZO: BEAT DETECTED interval=551 ms[0m
+[0;32mI (30601) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (30621) app_mqtt: MQTT published, msg_id=31890[0m
+[0;32mI (30821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (31181) piezo_heartbeat: PIEZO: ADC=4095 min=3888 max=4095 avg=4094 p2p=207 noise=0 thr=12[0m
+[0;32mI (31181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (31531) piezo_heartbeat: PIEZO: BEAT DETECTED interval=472 ms[0m
+[0;32mI (31531) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (31551) app_mqtt: MQTT published, msg_id=10745[0m
+[0;32mI (31561) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=115[0m
+[0;32mI (31581) app_mqtt: MQTT published, msg_id=62864[0m
+[0;32mI (31821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (31881) app: SpO2: 91%[0m
+[0;32mI (31881) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (31951) app_mqtt: MQTT published, msg_id=37136[0m
+[0;32mI (31961) app_mqtt: MQTT published, msg_id=59324[0m
+[0;32mI (31961) app_mqtt: MQTT published, msg_id=27894[0m
+[1;31mE (32151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (32151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (32151) task_wdt: Tasks currently running:[0m
+[1;31mE (32151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (32151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (32151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (32181) piezo_heartbeat: PIEZO: ADC=4095 min=3835 max=4095 avg=4094 p2p=260 noise=0 thr=12[0m
+[0;32mI (32191) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (32821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (32911) piezo_heartbeat: PIEZO: BEAT DETECTED interval=475 ms[0m
+[0;32mI (32911) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (32931) app_mqtt: MQTT published, msg_id=1514[0m
+[0;32mI (33181) piezo_heartbeat: PIEZO: ADC=4095 min=3871 max=4095 avg=4094 p2p=224 noise=0 thr=12[0m
+[0;32mI (33181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (33801) app: SpO2: 91%[0m
+[0;32mI (33801) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (33821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=172864[0m
+[0;32mI (33821) piezo_heartbeat: PIEZO: BEAT DETECTED interval=464 ms[0m
+[0;32mI (33821) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (33861) app_mqtt: MQTT published, msg_id=57184[0m
+[0;32mI (33871) app_mqtt: MQTT published, msg_id=61674[0m
+[0;32mI (33871) app_mqtt: MQTT published, msg_id=32452[0m
+[0;32mI (33881) app_mqtt: MQTT published, msg_id=54580[0m
+[0;32mI (34181) piezo_heartbeat: PIEZO: ADC=4095 min=3791 max=4095 avg=4094 p2p=304 noise=0 thr=12[0m
+[0;32mI (34181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (34291) piezo_heartbeat: PIEZO: BEAT DETECTED interval=469 ms[0m
+[0;32mI (34291) piezo_heartbeat: PIEZO: BPM=123[0m
+[0;32mI (34311) app_mqtt: MQTT published, msg_id=60640[0m
+[1;31mE (34391) i2c.master: I2C software timeout[0m
+[0;33mW (34411) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (34411) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (34411) i2c.common: GPIO 22 is not usble, maybe conflict with others[0m
+[0;33mW (34411) i2c.common: GPIO 21 s not usable, maybe conflict with others[0m
+[1;31mE (34421) i2c.master: I2C hardware timeout deteced[0m
+[0;33mW (34451) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (34451) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (34691) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=123[0m
+[0;32mI (34791) piezo_heartbeat: PIEZO: BEAT DETECTED interval=503 ms[0m
+[0;32mI (34791) piezo_heartbeat: PIEZO: BPM=125[0m
+[0;32mI (34811) app_mqtt: MQTT published, msg_id=59674[0m
+[0;32mI (34821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (35181) piezo_heartbeat: PIEZO: ADC=4095 min=3911 max=4095 avg=4094 p2p=184 noise=0 thr=12[0m
+[0;32mI (35181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (35311) piezo_heartbeat: PIEZO: BEAT DETECTED interval=512 ms[0m
+[0;32mI (35311) piezo_heartbeat: PIEZO: BPM=123[0m
+[0;32mI (35331) app_mqtt: MQTT published, msg_id=44840[0m
+[0;32mI (35821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173872[0m
+[0;32mI (35821) app: SpO2: 91%[0m
+[0;32mI (35821) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (35921) app_mqtt: MQTT published, msg_id=10743[0m
+[0;32mI (35931) app_mqtt: MQTT published, msg_id=53778[0m
+[0;32mI (35931) app_mqtt: MQTT published, msg_id=14191[0m
+[0;32mI (36181) piezo_heartbeat: PIEZO: ADC=4095 min=3871 max=4095 avg=4094 p2p=224 noise=0 thr=12[0m
+[0;32mI (36181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (36581) app_mqtt: MQTT published, msg_id=6364[0m
+[0;32mI (36691) piezo_heartbeat: PIEZO: BEAT DETECTED interval=499 ms[0m
+[0;32mI (36691) piezo_heartbeat: PIEZO: BPM=122[0m
+[0;32mI (36711) app_mqtt: MQTT published, msg_id=18842[0m
+[0;32mI (36821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[1;31mE (37151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (37151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (37151) task_wdt: Tasks currently running:[0m
+[1;31mE (37151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (37151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (37151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (37181) piezo_heartbeat: PIEZO: ADC=4095 min=3775 max=4095 avg=4094 p2p=320 noise=0 thr=12[0m
+[0;32mI (37191) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (37211) i2c.master: I2C software timeout[0m
+[0;33mW (37231) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (37231) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (37231) i2c.common: GPIO 22 isnot usable, mybe conflict with others[0m
+[0;33mW (37231) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (37241) piezo_heartbeat: PIEZO: BEAT DETECTED interval=551 ms[0m
+[1;31mE (37241) i2c.master: I2C hardware timeout detected[0m
+[0;32mI (37251) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;33mW (37271) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (37271) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (37271) app_mqtt: MQTT published, msg_id=54162[0m
+[0;32mI (37731) piezo_heartbeat: PIEZO: BEAT DETECTED interval=491 ms[0m
+[0;32mI (37731) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (37751) app_mqtt: MQTT published, msg_id=21769[0m
+[0;32mI (37821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (37821) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=118[0m
+[0;32mI (37871) app: SpO2: 91%[0m
+[0;32mI (37871) app: MAX30102 Temperature: 30.69 C[0m
+[0;32mI (38081) app_mqtt: MQTT published, msg_id=59417[0m
+[0;32mI (38081) app_mqtt: MQTT published, msg_id=38092[0m
+[0;32mI (38081) app_mqtt: MQTT published, msg_id=18039[0m
+[0;32mI (38181) piezo_heartbeat: PIEZO: ADC=4095 min=3803 max=4095 avg=4094 p2p=292 noise=0 thr=12[0m
+[0;32mI (38181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (38241) piezo_heartbeat: PIEZO: BEAT DETECTED interval=512 ms[0m
+[0;32mI (38241) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (38261) app_mqtt: MQTT published, msg_id=57864[0m
+[0;32mI (38821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (39181) piezo_heartbeat: PIEZO: ADC=4095 min=3835 max=4095 avg=4094 p2p=260 noise=0 thr=12[0m
+[0;32mI (39181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (39601) piezo_heartbeat: PIEZO: BEAT DETECTED interval=481 ms[0m
+[0;32mI (39601) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;32mI (39621) app_mqtt: MQTT published, msg_id=55002[0m
+[0;32mI (39821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173872[0m
+[0;32mI (39821) app: SpO2: 91%[0m
+[0;32mI (39821) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (39881) app_mqtt: MQTT published, msg_id=40906[0m
+[0;32mI (39891) app_mqtt: MQTT published, msg_id=13156[0m
+[0;32mI (39901) app_mqtt: MQTT published, msg_id=41081[0m
+[0;32mI (40081) piezo_heartbeat: PIEZO: BEAT DETECTED interval=482 ms[0m
+[0;32mI (40081) piezo_heartbeat: PIEZO: BPM=119[0m
+[0;32mI (40101) app_mqtt: MQTT published, msg_id=33630[0m
+[0;32mI (40181) piezo_heartbeat: PIEZO: ADC=4095 min=3825 max=4095 avg=4094 p2p=270 noise=0 thr=12[0m
+[0;32mI (40181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (40571) piezo_heartbeat: PIEZO: BEAT DETECTED interval=485 ms[0m
+[0;32mI (40571) piezo_heartbeat: PIEZO: BPM=122[0m
+[0;32mI (40591) app_mqtt: MQTT published, msg_id=38529[0m
+[0;32mI (40821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (40921) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=122[0m
+[0;32mI (41091) piezo_heartbeat: PIEZO: BEAT DETECTED interval=523 ms[0m
+[0;32mI (41091) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (41111) app_mqtt: MQTT published, msg_id=25118[0m
+[0;32mI (41181) piezo_heartbeat: PIEZO: ADC=4095 min=3926 max=4095 avg=4094 p2p=169 noise=0 thr=12[0m
+[0;32mI (41181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (41581) app_mqtt: MQTT published, msg_id=28441[0m
+[0;32mI (41581) piezo_heartbeat: PIEZO: BEAT DETECTED interval=489 ms[0m
+[0;32mI (41581) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (41591) app_mqtt: MQTT published, msg_id=25040[0m
+[0;32mI (41821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (41901) app: SpO2: 91%[0m
+[0;32mI (41901) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (41961) app_mqtt: MQTT published, msg_id=29016[0m
+[0;32mI (41961) app_mqtt: MQTT published, msg_id=60204[0m
+[0;32mI (41971) app_mqtt: MQTT published, msg_id=29174[0m
+[0;32mI (42071) piezo_heartbeat: PIEZO: BEAT DETECTED interval=496 ms[0m
+[0;32mI (42071) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (42101) app_mqtt: MQTT published, msg_id=16563[0m
+[0;32mI (42181) piezo_heartbeat: PIEZO: ADC=4095 min=3919 max=4095 avg=4094 p2p=176 noise=0 thr=12[0m
+[0;32mI (42181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (42251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (42251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (42251) task_wdt: Tasks currently running:[0m
+[1;31mE (42251) task_wdt: CPU 0: wifi[0m
+[1;31mE (42251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (42251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40149732:0x3FFC6D30 0x4008F1F2:0x3FFC6E40 0x4008F251:0x3FFC6EA0 0x40093629:0x3FFC6EC0 0x400905FF:0x3FFC6EE0 0x4017D1AA:0x3FFC6F10
+
+[0;32mI (42591) piezo_heartbeat: PIEZO: BEAT DETECTED interval=518 ms[0m
+[0;32mI (42591) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;32mI (42621) app_mqtt: MQTT published, msg_id=38949[0m
+[0;32mI (42821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (43181) piezo_heartbeat: PIEZO: ADC=4095 min=3887 max=4095 avg=4094 p2p=208 noise=0 thr=12[0m
+[0;32mI (43181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (43551) piezo_heartbeat: PIEZO: BEAT DETECTED interval=514 ms[0m
+[0;32mI (43551) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (43581) app_mqtt: MQTT published, msg_id=39571[0m
+[0;32mI (43821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (43831) app: SpO2: 91%[0m
+[0;32mI (43831) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (43891) app_mqtt: MQTT published, msg_id=23682[0m
+[0;32mI (43901) app_mqtt: MQTT published, msg_id=39199[0m
+[0;32mI (43901) app_mqtt: MQTT published, msg_id=4591[0m
+[0;32mI (44021) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=117[0m
+[0;32mI (44181) piezo_heartbeat: PIEZO: ADC=4095 min=3926 max=4095 avg=4094 p2p=169 noise=0 thr=12[0m
+[0;32mI (44181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (44551) piezo_heartbeat: PIEZO: BEAT DETECTED interval=555 ms[0m
+[0;32mI (44551) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (44581) app_mqtt: MQTT published, msg_id=46664[0m
+[0;32mI (44821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (45091) piezo_heartbeat: PIEZO: BEAT DETECTED interval=535 ms[0m
+[0;32mI (45091) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (45111) app_mqtt: MQTT published, msg_id=19829[0m
+[0;32mI (45181) piezo_heartbeat: PIEZO: ADC=4095 min=3795 max=4095 avg=4094 p2p=300 noise=0 thr=12[0m
+[0;32mI (45181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (45581) piezo_heartbeat: PIEZO: BEAT DETECTED interval=491 ms[0m
+[0;32mI (45581) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (45601) app_mqtt: MQTT published, msg_id=58958[0m
+[0;32mI (45821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (45921) app: SpO2: 91%[0m
+[0;32mI (45921) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (46061) app_mqtt: MQTT published, msg_id=47782[0m
+[0;32mI (46061) app_mqtt: MQTT published, msg_id=36441[0m
+[0;32mI (46061) app_mqtt: MQTT published, msg_id=5488[0m
+[0;32mI (46181) piezo_heartbeat: PIEZO: ADC=4095 min=3819 max=4095 avg=4094 p2p=276 noise=0 thr=12[0m
+[0;32mI (46181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (46581) app_mqtt: MQTT published, msg_id=6571[0m
+[0;32mI (46821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (47121) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=114[0m
+[0;32mI (47181) piezo_heartbeat: PIEZO: ADC=4095 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (47181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (47251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (47251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (47251) task_wdt: Tasks currently running:[0m
+[1;31mE (47251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (47251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (47251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (47821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (47841) app: SpO2: 91%[0m
+[0;32mI (47841) app: MAX30102 Temperature: 31.81 C[0m
+[0;32mI (47901) app_mqtt: MQTT published, msg_id=54718[0m
+[0;32mI (47911) app_mqtt: MQTT published, msg_id=32191[0m
+[0;32mI (47911) app_mqtt: MQTT published, msg_id=26635[0m
+[0;32mI (47941) piezo_heartbeat: PIEZO: BEAT DETECTED interval=585 ms[0m
+[0;32mI (47941) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (47961) app_mqtt: MQTT published, msg_id=21329[0m
+[0;32mI (48181) piezo_heartbeat: PIEZO: ADC=4095 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (48181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (48521) piezo_heartbeat: PIEZO: BEAT DETECTED interval=583 ms[0m
+[0;32mI (48531) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (48551) app_mqtt: MQTT published, msg_id=43058[0m
+[0;32mI (48821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (49181) piezo_heartbeat: PIEZO: ADC=4095 min=3837 max=4095 avg=4094 p2p=258 noise=0 thr=12[0m
+[0;32mI (49181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (49501) piezo_heartbeat: PIEZO: BEAT DETECTED interval=518 ms[0m
+[0;32mI (49501) piezo_heartbeat: PIEZO: BPM=110[0m
+[0;32mI (49521) app_mqtt: MQTT published, msg_id=12174[0m
+[0;32mI (49821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (49951) app: SpO2: 91%[0m
+[0;32mI (49951) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (49961) piezo_heartbeat: PIEZO: BEAT DETECTED interval=462 ms[0m
+[0;32mI (49961) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (50011) app_mqtt: MQTT published, msg_id=29241[0m
+[0;32mI (50021) app_mqtt: MQTT published, msg_id=43282[0m
+[0;32mI (50021) app_mqtt: MQTT published, msg_id=65257[0m
+[0;32mI (50031) app_mqtt: MQTT published, msg_id=25779[0m
+[0;32mI (50181) piezo_heartbeat: PIEZO: ADC=4095 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (50181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (50221) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=114[0m
+[0;32mI (50821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (51181) piezo_heartbeat: PIEZO: ADC=4095 min=3818 max=4095 avg=4094 p2p=277 noise=0 thr=12[0m
+[0;32mI (51181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (51501) piezo_heartbeat: PIEZO: BEAT DETECTED interval=462 ms[0m
+[0;32mI (51581) app_mqtt: MQTT published, msg_id=19003[0m
+[0;32mI (51821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (51851) app: SpO2: 91%[0m
+[0;32mI (51851) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (51911) app_mqtt: MQTT published, msg_id=51983[0m
+[0;32mI (51921) app_mqtt: MQTT published, msg_id=55519[0m
+[0;32mI (51921) app_mqtt: MQTT published, msg_id=40452[0m
+[0;32mI (51961) piezo_heartbeat: PIEZO: BEAT DETECTED interval=467 ms[0m
+[0;32mI (52181) piezo_heartbeat: PIEZO: ADC=4095 min=3895 max=4095 avg=4094 p2p=200 noise=0 thr=12[0m
+[0;32mI (52181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (52251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (52251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (52251) task_wdt: Tasks currently running:[0m
+[1;31mE (52251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (52251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (52251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40084271:0x3FFBF640 0x4017E862:0x3FFBF660 0x400DEB5F:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (52821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (52951) piezo_heartbeat: PIEZO: BEAT DETECTED interval=550 ms[0m
+[0;32mI (53181) piezo_heartbeat: PIEZO: ADC=4095 min=3870 max=4095 avg=4094 p2p=225 noise=0 thr=12[0m
+[0;32mI (53181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (53321) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=114[0m
+[0;32mI (53821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (53921) piezo_heartbeat: PIEZO: BEAT DETECTED interval=522 ms[0m
+[0;32mI (53921) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (53941) app_mqtt: MQTT published, msg_id=3527[0m
+[0;32mI (53951) app: SpO2: 91%[0m
+[0;32mI (53951) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (54041) app_mqtt: MQTT published, msg_id=14263[0m
+[0;32mI (54091) app_mqtt: MQTT published, msg_id=61726[0m
+[0;32mI (54091) app_mqtt: MQTT published, msg_id=26295[0m
+[0;32mI (54181) piezo_heartbeat: PIEZO: ADC=4049 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (54181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (54821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (54851) piezo_heartbeat: PIEZO: BEAT DETECTED interval=499 ms[0m
+[0;32mI (54851) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (54881) app_mqtt: MQTT published, msg_id=47946[0m
+[0;32mI (55181) piezo_heartbeat: PIEZO: ADC=4095 min=3813 max=4095 avg=4094 p2p=282 noise=0 thr=12[0m
+[0;32mI (55181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (55821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (55861) app: SpO2: 91%[0m
+[0;32mI (55861) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (55921) app_mqtt: MQTT published, msg_id=59187[0m
+[0;32mI (55921) app_mqtt: MQTT published, msg_id=20188[0m
+[0;32mI (55931) app_mqtt: MQTT published, msg_id=46098[0m
+[0;32mI (56181) piezo_heartbeat: PIEZO: ADC=4095 min=3826 max=4095 avg=4094 p2p=269 noise=0 thr=12[0m
+[0;32mI (56181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (56301) piezo_heartbeat: PIEZO: BEAT DETECTED interval=552 ms[0m
+[0;32mI (56301) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (56321) app_mqtt: MQTT published, msg_id=48896[0m
+I (56421) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=115
+[0;32mI (56581) app_mqtt: MQTT published, msg_id=37736[0m
+[0;32mI (56821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+I (56921) piezo_heartbeat: PIEZO: BEAT DETECTED interval=620 ms
+[0;32mI (56921) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (56941) app_mqtt: MQTT published, msg_id=41441[0m
+[0;32mI (57181) piezo_heartbeat: PIEZO: ADC=4095 min=3930 max=4095 avg=4094 p2p=165 noise=0 thr=12[0m
+[0;32mI (57181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (57251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (57251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (57251) task_wdt: Tasks currently running:[0m
+[1;31mE (57251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (57251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (57251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4017D9B3:0x3FFBF570 0x40082E31:0x3FFBF5B0 0x40082F41:0x3FFBF5E0 0x4015A7DF:0x3FFBF600 0x40105A90:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (57471) piezo_heartbeat: PIEZO: BEAT DETECTED interval=546 ms[0m
+[0;32mI (57471) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (57491) app_mqtt: MQTT published, msg_id=9391[0m
+[0;32mI (57821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (57871) app: SpO2: 91%[0m
+[0;32mI (57871) app: MAX30102 Temperature: 31.06 C[0m
+[0;32mI (57961) piezo_heartbeat: PIEZO: BEAT DETECTED interval=489 ms[0m
+[0;32mI (57961) piezo_heartbeat: PIEZO: BPM=111[0m
+[0;32mI (58041) app_mqtt: MQTT published, msg_id=31073[0m
+[0;32mI (58041) app_mqtt: MQTT published, msg_id=26264[0m
+[0;32mI (58051) app_mqtt: MQTT published, msg_id=44267[0m
+[0;32mI (58051) app_mqtt: MQTT published, msg_id=60152[0m
+[0;32mI (58181) piezo_heartbeat: PIEZO: ADC=4095 min=3889 max=4095 avg=4094 p2p=206 noise=0 thr=12[0m
+[0;32mI (58181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (58491) piezo_heartbeat: PIEZO: BEAT DETECTED interval=538 ms[0m
+[0;32mI (58491) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (58521) app_mqtt: MQTT published, msg_id=33346[0m
+[0;32mI (58821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (58981) piezo_heartbeat: PIEZO: BEAT DETECTED interval=481 ms[0m
+[0;32mI (58981) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (59001) app_mqtt: MQTT published, msg_id=44214[0m
+[0;32mI (59181) piezo_heartbeat: PIEZO: ADC=4095 min=3837 max=4095 avg=4094 p2p=258 noise=0 thr=12[0m
+[0;32mI (59181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (59471) piezo_heartbeat: PIEZO: BEAT DETECTED interval=495 ms[0m
+[0;32mI (59471) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (59501) app_mqtt: MQTT published, msg_id=46978[0m
+[0;32mI (59561) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=112[0m
+[0;32mI (59821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (59911) app: SpO2: 91%[0m
+[0;32mI (59911) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (60091) app_mqtt: MQTT published, msg_id=40661[0m
+[0;32mI (60091) app_mqtt: MQTT published, msg_id=58189[0m
+[0;32mI (60101) app_mqtt: MQTT published, msg_id=6461[0m
+[0;32mI (60181) piezo_heartbeat: PIEZO: ADC=4095 min=3950 max=4095 avg=4094 p2p=145 noise=0 thr=12[0m
+[0;32mI (60181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (60821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (60821) piezo_heartbeat: PIEZO: BEAT DETECTED interval=470 ms[0m
+[0;32mI (60821) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (60841) app_mqtt: MQTT published, msg_id=55211[0m
+[0;32mI (61181) piezo_heartbeat: PIEZO: ADC=4095 min=3888 max=4095 avg=4094 p2p=207 noise=0 thr=12[0m
+[0;32mI (61181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (61311) piezo_heartbeat: PIEZO: BEAT DETECTED interval=492 ms[0m
+[0;32mI (61311) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (61341) app_mqtt: MQTT published, msg_id=17847[0m
+[0;32mI (61581) app_mqtt: MQTT published, msg_id=34434[0m
+[0;32mI (61821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (61861) piezo_heartbeat: PIEZO: BEAT DETECTED interval=544 ms[0m
+[0;32mI (61861) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (61871) app: SpO2: 91%[0m
+[0;32mI (61881) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (61881) app_mqtt: MQTT published, msg_id=37654[0m
+[0;32mI (61901) app_mqtt: MQTT published, msg_id=46834[0m
+[0;32mI (61911) app_mqtt: MQTT published, msg_id=2418[0m
+[0;32mI (61951) app_mqtt: MQTT published, msg_id=59794[0m
+[0;32mI (62181) piezo_heartbeat: PIEZO: ADC=4095 min=3970 max=4095 avg=4094 p2p=125 noise=0 thr=12[0m
+[0;32mI (62181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (62251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (62251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (62251) task_wdt: Tasks currently running:[0m
+[1;31mE (62251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (62251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (62251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (62331) piezo_heartbeat: PIEZO: BEAT DETECTED interval=477 ms[0m
+[0;32mI (62331) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (62351) app_mqtt: MQTT published, msg_id=59609[0m
+[0;32mI (62691) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=120[0m
+[0;32mI (62821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (62911) piezo_heartbeat: PIEZO: BEAT DETECTED interval=571 ms[0m
+[0;32mI (62911) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (62931) app_mqtt: MQTT published, msg_id=30455[0m
+[0;32mI (63181) piezo_heartbeat: PIEZO: ADC=4095 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (63181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (63481) piezo_heartbeat: PIEZO: BEAT DETECTED interval=579 ms[0m
+[0;32mI (63491) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (63501) app_mqtt: MQTT published, msg_id=38967[0m
+[0;32mI (63821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (63971) app: SpO2: 91%[0m
+[0;32mI (63971) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (64031) app_mqtt: MQTT published, msg_id=3970[0m
+[0;32mI (64031) app_mqtt: MQTT published, msg_id=18806[0m
+[0;32mI (64031) app_mqtt: MQTT published, msg_id=24975[0m
+[0;32mI (64181) piezo_heartbeat: PIEZO: ADC=4095 min=3998 max=4095 avg=4094 p2p=97 noise=0 thr=12[0m
+[0;32mI (64181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (64821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (64841) piezo_heartbeat: PIEZO: BEAT DETECTED interval=462 ms[0m
+[0;32mI (64841) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (64861) app_mqtt: MQTT published, msg_id=65471[0m
+[0;32mI (65181) piezo_heartbeat: PIEZO: ADC=4095 min=3895 max=4095 avg=4094 p2p=200 noise=0 thr=12[0m
+[0;32mI (65191) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (65341) piezo_heartbeat: PIEZO: BEAT DETECTED interval=504 ms[0m
+[0;32mI (65341) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (65361) app_mqtt: MQTT published, msg_id=61564[0m
+[0;32mI (65791) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=116[0m
+[0;32mI (65821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (65841) piezo_heartbeat: PIEZO: BEAT DETECTED interval=500 ms[0m
+[0;32mI (65841) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (65861) app_mqtt: MQTT published, msg_id=22253[0m
+[0;32mI (65891) app: SpO2: 91%[0m
+[0;32mI (65891) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (66021) app_mqtt: MQTT published, msg_id=27110[0m
+[0;32mI (66071) app_mqtt: MQTT published, msg_id=31480[0m
+[0;32mI (66071) app_mqtt: MQTT published, msg_id=59936[0m
+[0;32mI (66181) piezo_heartbeat: PIEZO: ADC=4095 min=3755 max=4095 avg=4094 p2p=340 noise=0 thr=12[0m
+[0;32mI (66181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (66571) app_mqtt: MQTT published, msg_id=49804[0m
+[0;32mI (66741) piezo_heartbeat: PIEZO: BEAT DETECTED interval=469 ms[0m
+[0;32mI (66751) piezo_heartbeat: PIEZO: BPM=119[0m
+[0;32mI (66771) app_mqtt: MQTT published, msg_id=61979[0m
+[0;32mI (66821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (67181) piezo_heartbeat: PIEZO: ADC=4095 min=3939 max=4095 avg=4094 p2p=156 noise=0 thr=12[0m
+[0;32mI (67181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (67251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (67251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (67251) task_wdt: Tasks currently running:[0m
+[1;31mE (67251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (67251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (67251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4015A7DF:0x3FFBF600 0x40105A90:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (67821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (68001) app: SpO2: 91%[0m
+[0;32mI (68001) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (68061) app_mqtt: MQTT published, msg_id=56448[0m
+[0;32mI (68071) app_mqtt: MQTT published, msg_id=54679[0m
+[0;32mI (68071) app_mqtt: MQTT published, msg_id=17682[0m
+[0;32mI (68171) piezo_heartbeat: PIEZO: BEAT DETECTED interval=545 ms[0m
+[0;32mI (68171) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (68181) piezo_heartbeat: PIEZO: ADC=4095 min=3824 max=4095 avg=4094 p2p=271 noise=2 thr=12[0m
+[0;32mI (68181) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (68201) app_mqtt: MQTT published, msg_id=18463[0m
+[0;32mI (68821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (68921) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=121[0m
+[0;32mI (69181) piezo_heartbeat: PIEZO: BEAT DETECTED interval=562 ms[0m
+[0;32mI (69181) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (69191) piezo_heartbeat: PIEZO: ADC=4095 min=3847 max=4095 avg=4094 p2p=248 noise=1 thr=12[0m
+[0;32mI (69191) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (69211) app_mqtt: MQTT published, msg_id=49066[0m
+[0;32mI (69701) piezo_heartbeat: PIEZO: BEAT DETECTED interval=520 ms[0m
+[0;32mI (69701) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (69721) app_mqtt: MQTT published, msg_id=55808[0m
+[0;32mI (69821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (69891) app: SpO2: 91%[0m
+[0;32mI (69891) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (70021) app_mqtt: MQTT published, msg_id=22927[0m
+[0;32mI (70031) app_mqtt: MQTT published, msg_id=23487[0m
+[0;32mI (70031) app_mqtt: MQTT published, msg_id=30687[0m
+[0;32mI (70181) piezo_heartbeat: PIEZO: BEAT DETECTED interval=481 ms[0m
+[0;32mI (70191) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (70191) piezo_heartbeat: PIEZO: ADC=4095 min=3890 max=4095 avg=4094 p2p=205 noise=1 thr=12[0m
+[0;32mI (70191) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (70211) app_mqtt: MQTT published, msg_id=1753[0m
+[0;32mI (70821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (71191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=4095 avg=1008 p2p=4095 noise=4094 thr=10646[0m
+[0;33mW (71191) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (71221) app_mqtt: MQTT published, msg_id=63872[0m
+[0;32mI (71571) app_mqtt: MQTT published, msg_id=48940[0m
+[0;32mI (71821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (71911) app: SpO2: 91%[0m
+[0;32mI (71911) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (72021) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (72071) app_mqtt: MQTT published, msg_id=35767[0m
+[0;32mI (72071) app_mqtt: MQTT published, msg_id=37322[0m
+[0;32mI (72081) app_mqtt: MQTT published, msg_id=14175[0m
+[0;32mI (72191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=99 avg=0 p2p=99 noise=0 thr=12[0m
+[0;32mI (72191) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[1;31mE (72251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (72251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (72251) task_wdt: Tasks currently running:[0m
+[1;31mE (72251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (72251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (72251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40105ACE:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (72821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (73191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=57 avg=0 p2p=57 noise=0 thr=12[0m
+[0;32mI (73191) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (73201) piezo_heartbeat: PIEZO: BEAT DETECTED interval=980 ms[0m
+[0;32mI (73821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (73871) piezo_heartbeat: PIEZO: BEAT DETECTED interval=663 ms[0m
+[0;32mI (73951) app: SpO2: 91%[0m
+[0;32mI (73951) app: MAX30102 Temperature: 31.06 C[0m
+[0;32mI (74011) app_mqtt: MQTT published, msg_id=8394[0m
+[0;32mI (74021) app_mqtt: MQTT published, msg_id=3725[0m
+[0;32mI (74021) app_mqtt: MQTT published, msg_id=57299[0m
+[0;32mI (74191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=48 avg=0 p2p=48 noise=0 thr=12[0m
+[0;32mI (74201) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (74421) piezo_heartbeat: PIEZO: BEAT DETECTED interval=557 ms[0m
+[0;32mI (74821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (75111) piezo_heartbeat: PIEZO: BEAT DETECTED interval=689 ms[0m
+[0;32mI (75111) piezo_heartbeat: PIEZO: BPM=86[0m
+[0;32mI (75141) app_mqtt: MQTT published, msg_id=65189[0m
+[0;32mI (75151) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (75191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=49 avg=0 p2p=49 noise=0 thr=12[0m
+[0;32mI (75191) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (75581) piezo_heartbeat: PIEZO: BEAT DETECTED interval=463 ms[0m
+[0;32mI (75581) piezo_heartbeat: PIEZO: BPM=94[0m
+[0;32mI (75601) app_mqtt: MQTT published, msg_id=6744[0m
+[0;32mI (75821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (75911) app: SpO2: 91%[0m
+[0;32mI (75911) app: MAX30102 Temperature: 30.00 C[0m
+[0;32mI (76061) app_mqtt: MQTT published, msg_id=38081[0m
+[0;32mI (76071) app_mqtt: MQTT published, msg_id=24999[0m
+[0;32mI (76071) app_mqtt: MQTT published, msg_id=58001[0m
+[0;32mI (76191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=73 avg=0 p2p=73 noise=0 thr=12[0m
+[0;32mI (76191) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (76571) app_mqtt: MQTT published, msg_id=25409[0m
+[0;32mI (76821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (76901) piezo_heartbeat: PIEZO: BEAT DETECTED interval=650 ms[0m
+[0;32mI (77191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=65 avg=0 p2p=65 noise=0 thr=12[0m
+[0;32mI (77191) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[1;31mE (77251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (77251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (77251) task_wdt: Tasks currently running:[0m
+[1;31mE (77251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (77251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (77251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40084271:0x3FFBF640 0x4017E862:0x3FFBF660 0x400DEB5F:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[1;31mE (77361) i2c.master: I2C software timeout[0m
+[0;33mW (77381) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (77381) i2c.common: GPIO 21 is not usable, maybe conflictwith others[0m
+[0;32mI (77821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (77951) piezo_heartbeat: PIEZO: BEAT DETECTED interval=611 ms[0m
+[0;32mI (78011) app: SpO2: 91%[0m
+[0;32mI (78011) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (78111) app_mqtt: MQTT published, msg_id=24698[0m
+[0;32mI (78121) app_mqtt: MQTT published, msg_id=64597[0m
+[0;32mI (78121) app_mqtt: MQTT published, msg_id=12826[0m
+[0;32mI (78191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=27 avg=0 p2p=27 noise=0 thr=12[0m
+[0;33mW (78201) piezo_heartbeat: PIEZO: NO SIGNAL[0m
+[0;32mI (78221) app_mqtt: MQTT published, msg_id=3149[0m
+[0;32mI (78281) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=94[0m
+[0;32mI (78821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (79191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=61 avg=0 p2p=61 noise=0 thr=12[0m
+[0;32mI (79201) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (79821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (79971) app: SpO2: 91%[0m
+[0;32mI (79971) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (80051) app_mqtt: MQTT published, msg_id=33236[0m
+[0;32mI (80061) app_mqtt: MQTT published, msg_id=53588[0m
+[0;32mI (80061) app_mqtt: MQTT published, msg_id=61248[0m
+[0;32mI (80191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=101 avg=0 p2p=101 noise=0 thr=12[0m
+[0;32mI (80201) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (80281) piezo_heartbeat: PIEZO: BEAT DETECTED interval=782 ms[0m
+[0;33mW (80591) piezo_heartbeat: PIEZO: waiting for valid heartbeat[0m
+[0;32mI (80601) app_mqtt: MQTT published, msg_id=20312[0m
+[0;32mI (80821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (81021) piezo_heartbeat: PIEZO: BEAT DETECTED interval=744 ms[0m
+[0;32mI (81191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=39 avg=0 p2p=39 noise=0 thr=12[0m
+[0;33mW (81201) piezo_heartbeat: PIEZO: NO SIGNAL[0m
+[0;32mI (81211) app_mqtt: MQTT published, msg_id=42742[0m
+[0;32mI (81381) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (81571) app_mqtt: MQTT published, msg_id=52000[0m
+[0;32mI (81821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (82051) app: SpO2: 91%[0m
+[0;32mI (82051) app: MAX30102 Temperature: 31.06 C[0m
+[0;32mI (82111) app_mqtt: MQTT published, msg_id=25711[0m
+[0;32mI (82121) app_mqtt: MQTT published, msg_id=14212[0m
+[0;32mI (82131) app_mqtt: MQTT published, msg_id=63635[0m
+[0;32mI (82191) piezo_heartbeat: PIEZO: ADC=0 min=0 max=48 avg=0 p2p=48 noise=0 thr=12[0m
+[0;32mI (82201) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[1;31mE (82251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (82251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (82251) task_wdt: Tasks currently running:[0m
+[1;31mE (82251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (82251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (82251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4008B9C9:0x3FFBF5B0 0x40082F41:0x3FFBF5E0 0x4015A7DF:0x3FFBF600 0x40105A90:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (82821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (83191) piezo_heartbeat: PIEZO: ADC=4095 min=0 max=4095 avg=3267 p2p=4095 noise=4094 thr=10646[0m
+[0;33mW (83201) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (83221) app_mqtt: MQTT published, msg_id=32944[0m
+[0;32mI (83821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=176980[0m
+[0;32mI (83981) app: SpO2: 91%[0m
+[0;32mI (83981) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (84041) app_mqtt: MQTT published, msg_id=9943[0m
+[0;32mI (84051) app_mqtt: MQTT published, msg_id=8578[0m
+[0;32mI (84051) app_mqtt: MQTT published, msg_id=65088[0m
+[0;32mI (84191) piezo_heartbeat: PIEZO: ADC=4095 min=3889 max=4095 avg=4094 p2p=206 noise=0 thr=12[0m
+[0;32mI (84201) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (84521) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (84821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (85191) piezo_heartbeat: PIEZO: ADC=4095 min=3815 max=4095 avg=4094 p2p=280 noise=0 thr=12[0m
+[0;32mI (85201) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (85261) piezo_heartbeat: PIEZO: BEAT DETECTED interval=523 ms[0m
+[0;32mI (85731) piezo_heartbeat: PIEZO: BEAT DETECTED interval=469 ms[0m
+[0;32mI (85821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (86081) app: SpO2: 91%[0m
+[0;32mI (86081) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (86201) app_mqtt: MQTT published, msg_id=56401[0m
+[0;32mI (86201) app_mqtt: MQTT published, msg_id=38253[0m
+[0;32mI (86211) app_mqtt: MQTT published, msg_id=11507[0m
+[0;32mI (86211) piezo_heartbeat: PIEZO: ADC=4095 min=3750 max=4095 avg=4094 p2p=345 noise=0 thr=12[0m
+[0;32mI (86211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (86221) piezo_heartbeat: PIEZO: BEAT DETECTED interval=486 ms[0m
+[0;32mI (86571) app_mqtt: MQTT published, msg_id=43460[0m
+[0;32mI (86821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (87161) piezo_heartbeat: PIEZO: BEAT DETECTED interval=502 ms[0m
+[0;32mI (87161) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (87181) app_mqtt: MQTT published, msg_id=18467[0m
+[0;32mI (87211) piezo_heartbeat: PIEZO: ADC=4095 min=3870 max=4095 avg=4094 p2p=225 noise=0 thr=12[0m
+[0;32mI (87211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (87251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (87251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (87251) task_wdt: Tasks currently running:[0m
+[1;31mE (87251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (87251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (87251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40084271:0x3FFBF640 0x4017E862:0x3FFBF660 0x400DEB5F:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (87621) piezo_heartbeat: PIEZO: BEAT DETECTED interval=461 ms[0m
+[0;32mI (87631) piezo_heartbeat: PIEZO: BPM=122[0m
+[0;32mI (87651) app_mqtt: MQTT published, msg_id=34003[0m
+[0;32mI (87651) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=120[0m
+[0;32mI (87821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (88001) app: SpO2: 91%[0m
+[0;32mI (88001) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (88141) app_mqtt: MQTT published, msg_id=48618[0m
+[0;32mI (88151) app_mqtt: MQTT published, msg_id=47834[0m
+[0;32mI (88151) app_mqtt: MQTT published, msg_id=54081[0m
+[0;32mI (88211) piezo_heartbeat: PIEZO: ADC=4095 min=3873 max=4095 avg=4094 p2p=222 noise=0 thr=12[0m
+[0;32mI (88211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (88821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (89211) piezo_heartbeat: PIEZO: ADC=4095 min=3867 max=4095 avg=4094 p2p=228 noise=0 thr=12[0m
+[0;32mI (89211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (89821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (89981) app: SpO2: 91%[0m
+[0;32mI (89981) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (90091) app_mqtt: MQTT published, msg_id=16083[0m
+[0;32mI (90101) app_mqtt: MQTT published, msg_id=38081[0m
+[0;32mI (90101) app_mqtt: MQTT published, msg_id=47809[0m
+I (90211) piezo_heartbeat: PIEZO: ADC=4095 min=3903 max=4095 avg=4094 p2p=192 noise=0 thr=12
+[0;32mI (90211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (90341) piezo_heartbeat: PIEZO: BEAT DETECTED interval=664 ms[0m
+[0;32mI (90751) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=122[0m
+[0;32mI (90821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (90831) piezo_heartbeat: PIEZO: BEAT DETECTED interval=491 ms[0m
+[0;32mI (91211) piezo_heartbeat: PIEZO: ADC=4095 min=3871 max=4095 avg=4094 p2p=224 noise=0 thr=12[0m
+[0;32mI (91211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (91431) piezo_heartbeat: PIEZO: BEAT DETECTED interval=599 ms[0m
+[0;32mI (91581) app_mqtt: MQTT published, msg_id=38458[0m
+[0;32mI (91821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (91971) piezo_heartbeat: PIEZO: BEAT DETECTED interval=540 ms[0m
+[0;32mI (91971) piezo_heartbeat: PIEZO: BPM=105[0m
+[0;32mI (92001) app_mqtt: MQTT published, msg_id=6183[0m
+[0;32mI (92031) app: SpO2: 91%[0m
+[0;32mI (92031) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (92091) app_mqtt: MQTT published, msg_id=29310[0m
+[0;32mI (92131) app_mqtt: MQTT published, msg_id=25547[0m
+[0;32mI (92131) app_mqtt: MQTT published, msg_id=41689[0m
+[0;32mI (92211) piezo_heartbeat: PIEZO: ADC=4095 min=3823 max=4095 avg=4094 p2p=272 noise=0 thr=12[0m
+[0;32mI (92211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (92251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (92251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (92251) task_wdt: Tasks currently running:[0m
+[1;31mE (92251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (92251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (92251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40084271:0x3FFBF640 0x4017E862:0x3FFBF660 0x400DEB5F:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (92451) piezo_heartbeat: PIEZO: BEAT DETECTED interval=474 ms[0m
+[0;32mI (92451) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (92471) app_mqtt: MQTT published, msg_id=9755[0m
+[0;32mI (92821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177008[0m
+[0;32mI (93211) piezo_heartbeat: PIEZO: ADC=4095 min=3923 max=4095 avg=4094 p2p=172 noise=0 thr=12[0m
+[0;32mI (93211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (93471) piezo_heartbeat: PIEZO: BEAT DETECTED interval=590 ms[0m
+[0;32mI (93481) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (93501) app_mqtt: MQTT published, msg_id=21955[0m
+[0;32mI (93821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (93881) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=112[0m
+[0;32mI (93941) piezo_heartbeat: PIEZO: BEAT DETECTED interval=469 ms[0m
+[0;32mI (93941) piezo_heartbeat: PIEZO: BPM=113[0m
+[0;32mI (93971) app_mqtt: MQTT published, msg_id=32846[0m
+[0;32mI (94001) app: SpO2: 91%[0m
+[0;32mI (94001) app: MAX30102 Temperature: 30.00 C[0m
+[0;32mI (94091) app_mqtt: MQTT published, msg_id=27265[0m
+[0;32mI (94091) app_mqtt: MQTT published, msg_id=3411[0m
+[0;32mI (94091) app_mqtt: MQTT published, msg_id=10304[0m
+[0;32mI (94211) piezo_heartbeat: PIEZO: ADC=4095 min=3743 max=4095 avg=4094 p2p=352 noise=0 thr=12[0m
+[0;32mI (94211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (94481) piezo_heartbeat: PIEZO: BEAT DETECTED interval=531 ms[0m
+[0;32mI (94481) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (94501) app_mqtt: MQTT published, msg_id=29991[0m
+[0;32mI (94821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (95211) piezo_heartbeat: PIEZO: ADC=4095 min=3831 max=4095 avg=4094 p2p=264 noise=0 thr=12[0m
+[0;32mI (95211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (95401) piezo_heartbeat: PIEZO: BEAT DETECTED interval=482 ms[0m
+[0;32mI (95401) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;32mI (95421) app_mqtt: MQTT published, msg_id=64408[0m
+[0;32mI (95821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (95871) piezo_heartbeat: PIEZO: BEAT DETECTED interval=471 ms[0m
+[0;32mI (95871) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;32mI (95891) app_mqtt: MQTT published, msg_id=19618[0m
+[0;32mI (96091) app: SpO2: 91%[0m
+[0;32mI (96091) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (96151) app_mqtt: MQTT published, msg_id=22856[0m
+[0;32mI (96161) app_mqtt: MQTT published, msg_id=60659[0m
+[0;32mI (96161) app_mqtt: MQTT published, msg_id=38284[0m
+[0;32mI (96211) piezo_heartbeat: PIEZO: ADC=4095 min=3927 max=4095 avg=4094 p2p=168 noise=0 thr=12[0m
+[0;32mI (96211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (96581) app_mqtt: MQTT published, msg_id=41616[0m
+[0;32mI (96821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (96841) piezo_heartbeat: PIEZO: BEAT DETECTED interval=521 ms[0m
+[0;32mI (96841) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (96871) app_mqtt: MQTT published, msg_id=47530[0m
+[0;32mI (96981) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=121[0m
+[0;32mI (97211) piezo_heartbeat: PIEZO: ADC=4095 min=3959 max=4095 avg=4094 p2p=136 noise=0 thr=12[0m
+[0;32mI (97211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (97251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (97251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (97251) task_wdt: Tasks currently running:[0m
+[1;31mE (97251) task_wdt: CPU 0: local_ui[0m
+[1;31mE (97251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (97251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFC19B0 0x4008AC56:0x3FFC19C0 0x40178D21:0x3FFC19E0 0x401793D3:0x3FFC1A50 0x4017962C:0x3FFC1A80 0x401796DB:0x3FFC1AC0 0x4017A217:0x3FFC1AE0 0x4017A2AA:0x3FFC1C10 0x400DF366:0x3FFC1C50 0x400DF382:0x3FFC1C80 0x400DF420:0x3FFC1D30 0x400E1341:0x3FFC1D50 0x4017D1AA:0x3FFC1EB0
+
+[0;32mI (97361) piezo_heartbeat: PIEZO: BEAT DETECTED interval=520 ms[0m
+[0;32mI (97361) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;32mI (97381) app_mqtt: MQTT published, msg_id=35907[0m
+[0;32mI (97821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (97861) piezo_heartbeat: PIEZO: BEAT DETECTED interval=496 ms[0m
+[0;32mI (97861) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (97881) app_mqtt: MQTT published, msg_id=61686[0m
+[0;32mI (98011) app: SpO2: 91%[0m
+[0;32mI (98011) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (98071) app_mqtt: MQTT published, msg_id=7456[0m
+[0;32mI (98081) app_mqtt: MQTT published, msg_id=35628[0m
+[0;32mI (98081) app_mqtt: MQTT published, msg_id=41431[0m
+[0;32mI (98211) piezo_heartbeat: PIEZO: ADC=4095 min=3903 max=4095 avg=4094 p2p=192 noise=0 thr=12[0m
+[0;32mI (98211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (98351) piezo_heartbeat: PIEZO: BEAT DETECTED interval=486 ms[0m
+[0;32mI (98351) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (98371) app_mqtt: MQTT published, msg_id=13885[0m
+[0;32mI (98821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (99211) piezo_heartbeat: PIEZO: ADC=4095 min=3791 max=4095 avg=4094 p2p=304 noise=0 thr=12[0m
+[0;32mI (99211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (99821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (100021) app: SpO2: 91%[0m
+[0;32mI (100021) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (100041) piezo_heartbeat: PIEZO: BEAT DETECTED interval=528 ms[0m
+[0;32mI (100131) app_mqtt: MQTT published, msg_id=12979[0m
+[0;32mI (100131) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=120[0m
+[0;32mI (100131) app_mqtt: MQTT published, msg_id=55861[0m
+[0;32mI (100141) app_mqtt: MQTT published, msg_id=27435[0m
+[0;32mI (100211) piezo_heartbeat: PIEZO: ADC=4095 min=3921 max=4095 avg=4094 p2p=174 noise=0 thr=12[0m
+[0;32mI (100211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (100521) piezo_heartbeat: PIEZO: BEAT DETECTED interval=472 ms[0m
+[0;32mI (100821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (101211) piezo_heartbeat: PIEZO: ADC=4095 min=3827 max=4095 avg=4094 p2p=268 noise=0 thr=12[0m
+[0;32mI (101211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (101581) app_mqtt: MQTT published, msg_id=1329[0m
+[0;32mI (101821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (102051) app: SpO2: 91%[0m
+[0;32mI (102051) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (102171) app_mqtt: MQTT published, msg_id=19588[0m
+[0;32mI (102181) app_mqtt: MQTT published, msg_id=60825[0m
+[0;32mI (102181) app_mqtt: MQTT published, msg_id=57481[0m
+[0;32mI (102211) piezo_heartbeat: PIEZO: ADC=4095 min=3825 max=4095 avg=4094 p2p=270 noise=0 thr=12[0m
+[0;32mI (102211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (102251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (102251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (102251) task_wdt: Tasks currently running:[0m
+[1;31mE (102251) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (102251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (102251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4015A7DF:0x3FFBF600 0x40105A90:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (102381) piezo_heartbeat: PIEZO: BEAT DETECTED interval=513 ms[0m
+[0;32mI (102821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (102851) piezo_heartbeat: PIEZO: BEAT DETECTED interval=470 ms[0m
+[0;32mI (102851) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (102871) app_mqtt: MQTT published, msg_id=2076[0m
+[0;32mI (103211) piezo_heartbeat: PIEZO: ADC=4095 min=4015 max=4095 avg=4094 p2p=80 noise=0 thr=12[0m
+[0;32mI (103211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (103261) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=120[0m
+[0;32mI (103311) piezo_heartbeat: PIEZO: BEAT DETECTED interval=461 ms[0m
+[0;32mI (103311) piezo_heartbeat: PIEZO: BPM=122[0m
+[0;32mI (103331) app_mqtt: MQTT published, msg_id=10150[0m
+[0;32mI (103821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (104021) app: SpO2: 91%[0m
+[0;32mI (104021) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (104121) app_mqtt: MQTT published, msg_id=52845[0m
+[0;32mI (104121) app_mqtt: MQTT published, msg_id=968[0m
+[0;32mI (104131) app_mqtt: MQTT published, msg_id=30892[0m
+[0;32mI (104211) piezo_heartbeat: PIEZO: ADC=4095 min=3798 max=4095 avg=4094 p2p=297 noise=0 thr=12[0m
+[0;32mI (104211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (104701) piezo_heartbeat: PIEZO: BEAT DETECTED interval=470 ms[0m
+[0;32mI (104701) piezo_heartbeat: PIEZO: BPM=125[0m
+[0;32mI (104721) app_mqtt: MQTT published, msg_id=44111[0m
+[0;32mI (104821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (105211) piezo_heartbeat: PIEZO: ADC=0 min=0 max=4095 avg=2149 p2p=4095 noise=4094 thr=10646[0m
+[0;33mW (105211) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (105231) app_mqtt: MQTT published, msg_id=60502[0m
+[0;32mI (105821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (106091) app: SpO2: 91%[0m
+[0;32mI (106091) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (106211) piezo_heartbeat: PIEZO: ADC=4095 min=0 max=4095 avg=3645 p2p=4095 noise=0 thr=12[0m
+[0;33mW (106211) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (106271) app_mqtt: MQTT published, msg_id=63902[0m
+[0;32mI (106271) app_mqtt: MQTT published, msg_id=43831[0m
+[0;32mI (106281) app_mqtt: MQTT published, msg_id=47870[0m
+[0;32mI (106281) app_mqtt: MQTT published, msg_id=62379[0m
+[0;32mI (106361) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (106581) app_mqtt: MQTT published, msg_id=39756[0m
+[0;32mI (106821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (107211) piezo_heartbeat: PIEZO: ADC=4095 min=3875 max=4095 avg=4094 p2p=220 noise=0 thr=12[0m
+[0;32mI (107211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[1;31mE (107251) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (107251) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (107251) task_wdt: Tasks currently running:[0m
+[1;31mE (107251) task_wdt: CPU 0: local_ui[0m
+[1;31mE (107251) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (107251) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFC1A00 0x4008AC56:0x3FFC1A10 0x4017D420:0x3FFC1A30 0x401792CA:0x3FFC1A50 0x4017962C:0x3FFC1A80 0x401796DB:0x3FFC1AC0 0x4017A217:0x3FFC1AE0 0x4017A2AA:0x3FFC1C10 0x400DF366:0x3FFC1C50 0x400DF38A:0x3FFC1C80 0x400DF420:0x3FFC1D30 0x400E1341:0x3FFC1D50 0x4017D1AA:0x3FFC1EB0
+
+[0;32mI (107781) piezo_heartbeat: PIEZO: BEAT DETECTED interval=478 ms[0m
+[0;32mI (107821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (108041) app: SpO2: 91%[0m
+[0;32mI (108041) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (108101) app_mqtt: MQTT published, msg_id=11278[0m
+[0;32mI (108111) app_mqtt: MQTT published, msg_id=21421[0m
+[0;32mI (108111) app_mqtt: MQTT published, msg_id=28418[0m
+[0;32mI (108211) piezo_heartbeat: PIEZO: ADC=4095 min=3791 max=4095 avg=4094 p2p=304 noise=0 thr=12[0m
+[0;32mI (108211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (108811) piezo_heartbeat: PIEZO: BEAT DETECTED interval=598 ms[0m
+[0;32mI (108821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (109211) piezo_heartbeat: PIEZO: ADC=4095 min=3895 max=4095 avg=4094 p2p=200 noise=0 thr=12[0m
+[0;32mI (109211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (109291) piezo_heartbeat: PIEZO: BEAT DETECTED interval=480 ms[0m
+[0;32mI (109511) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (109821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (110141) app: SpO2: 91%[0m
+[0;32mI (110141) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (110201) app_mqtt: MQTT published, msg_id=9867[0m
+[0;32mI (110211) app_mqtt: MQTT published, msg_id=28276[0m
+[0;32mI (110211) piezo_heartbeat: PIEZO: ADC=4095 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (110211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (110211) app_mqtt: MQTT published, msg_id=34921[0m
+[0;32mI (110371) piezo_heartbeat: PIEZO: BEAT DETECTED interval=631 ms[0m
+[0;32mI (110371) piezo_heartbeat: PIEZO: BPM=111[0m
+[0;32mI (110391) app_mqtt: MQTT published, msg_id=21808[0m
+[0;32mI (110821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (111071) piezo_heartbeat: PIEZO: BEAT DETECTED interval=698 ms[0m
+[0;32mI (111071) piezo_heartbeat: PIEZO: BPM=106[0m
+[0;32mI (111091) app_mqtt: MQTT published, msg_id=30219[0m
+[0;32mI (111211) piezo_heartbeat: PIEZO: ADC=4095 min=3855 max=4095 avg=4094 p2p=240 noise=0 thr=12[0m
+[0;32mI (111211) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (111581) app_mqtt: MQTT published, msg_id=6204[0m
+[0;32mI (111631) piezo_heartbeat: PIEZO: BEAT DETECTED interval=564 ms[0m
+[0;32mI (111631) piezo_heartbeat: PIEZO: BPM=102[0m
+[0;32mI (111651) app_mqtt: MQTT published, msg_id=23405[0m
+[0;32mI (111821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (112051) app: SpO2: 91%[0m
+[0;32mI (112051) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (112211) app_mqtt: MQTT published, msg_id=20256[0m
+[0;32mI (112211) app_mqtt: MQTT published, msg_id=16021[0m
+[0;32mI (112221) app_mqtt: MQTT published, msg_id=27731[0m
+[0;32mI (112221) piezo_heartbeat: PIEZO: ADC=4095 min=3859 max=4095 avg=4094 p2p=236 noise=0 thr=12[0m
+[0;32mI (112221) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (112611) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=102[0m
+[0;32mI (112821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (112971) piezo_heartbeat: PIEZO: BEAT DETECTED interval=466 ms[0m
+[0;32mI (112971) piezo_heartbeat: PIEZO: BPM=107[0m
+[0;32mI (112991) app_mqtt: MQTT published, msg_id=42839[0m
+[0;32mI (113221) piezo_heartbeat: PIEZO: ADC=4095 min=3795 max=4095 avg=4094 p2p=300 noise=0 thr=12[0m
+[0;32mI (113221) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (113441) piezo_heartbeat: PIEZO: BEAT DETECTED interval=470 ms[0m
+[0;32mI (113441) piezo_heartbeat: PIEZO: BPM=108[0m
+[0;32mI (113461) app_mqtt: MQTT published, msg_id=50363[0m
+[0;32mI (113821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (113951) piezo_heartbeat: PIEZO: BEAT DETECTED interval=502 ms[0m
+[0;32mI (113951) piezo_heartbeat: PIEZO: BPM=113[0m
+[0;32mI (113971) app_mqtt: MQTT published, msg_id=63029[0m
+[0;32mI (114051) app: SpO2: 91%[0m
+[0;32mI (114051) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (114151) app_mqtt: MQTT published, msg_id=49239[0m
+[0;32mI (114161) app_mqtt: MQTT published, msg_id=41998[0m
+[0;32mI (114161) app_mqtt: MQTT published, msg_id=60495[0m
+[0;32mI (114221) piezo_heartbeat: PIEZO: ADC=4095 min=3839 max=4095 avg=4094 p2p=256 noise=0 thr=12[0m
+[0;32mI (114221) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (114421) piezo_heartbeat: PIEZO: BEAT DETECTED interval=472 ms[0m
+[0;32mI (114421) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (114441) app_mqtt: MQTT published, msg_id=25870[0m
+[0;32mI (114821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (114901) piezo_heartbeat: PIEZO: BEAT DETECTED interval=477 ms[0m
+[0;32mI (114901) piezo_heartbeat: PIEZO: BPM=125[0m
+[0;32mI (114921) app_mqtt: MQTT published, msg_id=20926[0m
+[1;31mE (115101) i2c.master: I2C software timeout[0m
+[0;33mW (115101) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (115101) i2c.common: GPIO 21 is not uable, mabe conflict with others[0m
+[1;31mE (115211) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (115211) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (115211) task_wdt: Tasks currently running:[0m
+[1;31mE (115211) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (115211) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (115211) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4008256C:0x3FFBF540 0x4008AC56:0x3FFBF550 0x4017DA07:0x3FFBF570 0x40082E31:0x3FFBF5B0 0x40082F41:0x3FFBF5E0 0x4015A7DF:0x3FFBF600 0x40105A90:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (115251) piezo_heartbeat: PIEZO: ADC=4095 min=3922 max=4095 avg=4094 p2p=173 noise=0 thr=12[0m
+[0;32mI (115261) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (115711) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=125[0m
+[0;32mI (115821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (116101) app: SpO2: 91%[0m
+[0;32mI (116101) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (116201) app_mqtt: MQTT published, msg_id=14092[0m
+[0;32mI (116211) app_mqtt: MQTT published, msg_id=26584[0m
+[0;32mI (116211) app_mqtt: MQTT published, msg_id=50151[0m
+[0;32mI (116251) piezo_heartbeat: PIEZO: BEAT DETECTED interval=487 ms[0m
+[0;32mI (116251) piezo_heartbeat: PIEZO: BPM=124[0m
+[0;32mI (116261) piezo_heartbeat: PIEZO: ADC=4095 min=3948 max=4095 avg=4094 p2p=147 noise=0 thr=12[0m
+[0;32mI (116271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (116281) app_mqtt: MQTT published, msg_id=32420[0m
+[0;32mI (116581) app_mqtt: MQTT published, msg_id=42468[0m
+[0;32mI (116821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (117261) piezo_heartbeat: PIEZO: ADC=4095 min=3806 max=4095 avg=4094 p2p=289 noise=0 thr=12[0m
+[0;32mI (117261) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (117691) piezo_heartbeat: PIEZO: BEAT DETECTED interval=534 ms[0m
+[0;32mI (117691) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (117711) app_mqtt: MQTT published, msg_id=41779[0m
+[0;32mI (117821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (118171) piezo_heartbeat: PIEZO: BEAT DETECTED interval=482 ms[0m
+[0;32mI (118171) piezo_heartbeat: PIEZO: BPM=122[0m
+[0;32mI (118191) app_mqtt: MQTT published, msg_id=25043[0m
+[0;32mI (118201) app: SpO2: 91%[0m
+[0;32mI (118211) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (118261) piezo_heartbeat: PIEZO: ADC=4095 min=3884 max=4095 avg=4094 p2p=211 noise=0 thr=12[0m
+[0;32mI (118271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (118351) app_mqtt: MQTT published, msg_id=19494[0m
+[0;32mI (118391) app_mqtt: MQTT published, msg_id=5759[0m
+[0;32mI (118401) app_mqtt: MQTT published, msg_id=17791[0m
+[0;32mI (118631) piezo_heartbeat: PIEZO: BEAT DETECTED interval=460 ms[0m
+[0;32mI (118631) piezo_heartbeat: PIEZO: BPM=122[0m
+[0;32mI (118651) app_mqtt: MQTT published, msg_id=57153[0m
+[0;32mI (118811) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=122[0m
+[0;32mI (118821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (119251) piezo_heartbeat: PIEZO: BEAT DETECTED interval=620 ms[0m
+[0;32mI (119251) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (119261) piezo_heartbeat: PIEZO: ADC=4095 min=3954 max=4095 avg=4094 p2p=141 noise=0 thr=12[0m
+[0;32mI (119271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (119271) app_mqtt: MQTT published, msg_id=60028[0m
+[0;32mI (119821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (120111) app: SpO2: 91%[0m
+[0;32mI (120111) app: MAX30102 Temperature: 31.94 C[0m
+[0;32mI (120181) app_mqtt: MQTT published, msg_id=25257[0m
+[0;32mI (120191) app_mqtt: MQTT published, msg_id=27498[0m
+[0;32mI (120191) app_mqtt: MQTT published, msg_id=34327[0m
+[1;31mE (120211) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (120211) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (120211) task_wdt: Tasks currently running:[0m
+[1;31mE (120211) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (120211) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (120211) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (120251) piezo_heartbeat: PIEZO: BEAT DETECTED interval=544 ms[0m
+[0;32mI (120251) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (120261) piezo_heartbeat: PIEZO: ADC=4095 min=3827 max=4095 avg=4094 p2p=268 noise=0 thr=12[0m
+[0;32mI (120271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (120281) app_mqtt: MQTT published, msg_id=42213[0m
+[0;32mI (120751) piezo_heartbeat: PIEZO: BEAT DETECTED interval=497 ms[0m
+[0;32mI (120751) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (120771) app_mqtt: MQTT published, msg_id=12373[0m
+[0;32mI (120821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (121221) piezo_heartbeat: PIEZO: BEAT DETECTED interval=472 ms[0m
+[0;32mI (121221) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (121241) app_mqtt: MQTT published, msg_id=62804[0m
+[0;32mI (121261) piezo_heartbeat: PIEZO: ADC=4095 min=3889 max=4095 avg=4094 p2p=206 noise=0 thr=12[0m
+[0;32mI (121261) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (121581) app_mqtt: MQTT published, msg_id=38340[0m
+[0;32mI (121791) piezo_heartbeat: PIEZO: BEAT DETECTED interval=564 ms[0m
+[0;32mI (121791) piezo_heartbeat: PIEZO: BPM=111[0m
+[0;32mI (121811) app_mqtt: MQTT published, msg_id=8513[0m
+[0;32mI (121821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (121911) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=111[0m
+[0;32mI (122111) app: SpO2: 91%[0m
+[0;32mI (122111) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (122241) app_mqtt: MQTT published, msg_id=50517[0m
+[0;32mI (122251) app_mqtt: MQTT published, msg_id=40267[0m
+[0;32mI (122251) app_mqtt: MQTT published, msg_id=18051[0m
+[0;32mI (122261) piezo_heartbeat: PIEZO: ADC=4095 min=3842 max=4095 avg=4094 p2p=253 noise=0 thr=12[0m
+[0;32mI (122261) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (122281) piezo_heartbeat: PIEZO: BEAT DETECTED interval=496 ms[0m
+[0;32mI (122281) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (122311) app_mqtt: MQTT published, msg_id=16137[0m
+[0;32mI (122821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[1;31mE (123161) i2c.master: I2C software timeout[0m
+[0;33mW (123161) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (123161) i2c.common: GPIO 21 is not usale, maybe conflict with others[0m
+[0;32mI (123261) piezo_heartbeat: PIEZO: ADC=4095 min=3821 max=4095 avg=4094 p2p=274 noise=0 thr=12[0m
+[0;32mI (123271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (123341) piezo_heartbeat: PIEZO: BEAT DETECTED interval=606 ms[0m
+[0;32mI (123341) piezo_heartbeat: PIEZO: BPM=114[0m
+[0;32mI (123361) app_mqtt: MQTT published, msg_id=42193[0m
+[0;32mI (123821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (123871) piezo_heartbeat: PIEZO: BEAT DETECTED interval=530 ms[0m
+[0;32mI (123871) piezo_heartbeat: PIEZO: BPM=113[0m
+[0;32mI (123891) app_mqtt: MQTT published, msg_id=10091[0m
+[0;32mI (124161) app: SpO2: 91%[0m
+[0;32mI (124161) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (124261) piezo_heartbeat: PIEZO: ADC=4095 min=3831 max=4095 avg=4094 p2p=264 noise=0 thr=12[0m
+[0;32mI (124271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (124301) app_mqtt: MQTT published, msg_id=46894[0m
+[0;32mI (124301) app_mqtt: MQTT published, msg_id=60222[0m
+[0;32mI (124311) app_mqtt: MQTT published, msg_id=7081[0m
+[0;32mI (124361) piezo_heartbeat: PIEZO: BEAT DETECTED interval=485 ms[0m
+[0;32mI (124361) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (124381) app_mqtt: MQTT published, msg_id=15605[0m
+[0;32mI (124821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (125001) piezo_heartbeat: PIEZO: BEAT DETECTED interval=641 ms[0m
+[0;32mI (125001) piezo_heartbeat: PIEZO: BPM=109[0m
+[0;32mI (125011) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=112[0m
+[0;32mI (125021) app_mqtt: MQTT published, msg_id=65268[0m
+[1;31mE (125211) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (125211) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (125211) task_wdt: Tasks currently running:[0m
+[1;31mE (125211) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (125211) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (125211) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (125261) piezo_heartbeat: PIEZO: ADC=4095 min=3967 max=4095 avg=4094 p2p=128 noise=0 thr=12[0m
+[0;32mI (125271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (125641) piezo_heartbeat: PIEZO: BEAT DETECTED interval=643 ms[0m
+[0;32mI (125641) piezo_heartbeat: PIEZO: BPM=104[0m
+[0;32mI (125671) app_mqtt: MQTT published, msg_id=51723[0m
+[0;32mI (125821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (126151) piezo_heartbeat: PIEZO: BEAT DETECTED interval=505 ms[0m
+[0;32mI (126151) piezo_heartbeat: PIEZO: BPM=108[0m
+[0;32mI (126161) app: SpO2: 91%[0m
+[0;32mI (126161) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (126261) piezo_heartbeat: PIEZO: ADC=4095 min=3922 max=4095 avg=4094 p2p=173 noise=0 thr=12[0m
+[0;32mI (126271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (126341) app_mqtt: MQTT published, msg_id=7951[0m
+[0;32mI (126351) app_mqtt: MQTT published, msg_id=35630[0m
+[0;32mI (126351) app_mqtt: MQTT published, msg_id=28715[0m
+[0;32mI (126351) app_mqtt: MQTT published, msg_id=10977[0m
+[0;32mI (126581) app_mqtt: MQTT published, msg_id=7708[0m
+[0;32mI (126791) piezo_heartbeat: PIEZO: BEAT DETECTED interval=642 ms[0m
+[0;32mI (126791) piezo_heartbeat: PIEZO: BPM=104[0m
+[0;32mI (126811) app_mqtt: MQTT published, msg_id=11646[0m
+[0;32mI (126821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[1;31mE (126921) i2c.master: I2C software timeout[0m
+[0;33mW (126941) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (126941) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (127261) piezo_heartbeat: PIEZO: ADC=4095 min=3888 max=4095 avg=4094 p2p=207 noise=0 thr=12[0m
+[0;32mI (127271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (127311) piezo_heartbeat: PIEZO: BEAT DETECTED interval=521 ms[0m
+[0;32mI (127311) piezo_heartbeat: PIEZO: BPM=102[0m
+[0;32mI (127331) app_mqtt: MQTT published, msg_id=8340[0m
+[0;32mI (127821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (127841) piezo_heartbeat: PIEZO: BEAT DETECTED interval=530 ms[0m
+[0;32mI (127841) piezo_heartbeat: PIEZO: BPM=106[0m
+[0;32mI (127861) app_mqtt: MQTT published, msg_id=8323[0m
+[0;32mI (128151) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=106[0m
+[0;32mI (128211) app: SpO2: 91%[0m
+[0;32mI (128211) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (128261) piezo_heartbeat: PIEZO: ADC=4095 min=3861 max=4095 avg=4094 p2p=234 noise=0 thr=12[0m
+[0;32mI (128271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (128281) app_mqtt: MQTT published, msg_id=30906[0m
+[0;32mI (128281) app_mqtt: MQTT published, msg_id=6002[0m
+[0;32mI (128281) app_mqtt: MQTT published, msg_id=9225[0m
+[0;32mI (128331) piezo_heartbeat: PIEZO: BEAT DETECTED interval=492 ms[0m
+[0;32mI (128331) piezo_heartbeat: PIEZO: BPM=112[0m
+[0;32mI (128351) app_mqtt: MQTT published, msg_id=64845[0m
+[0;32mI (128821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (128861) piezo_heartbeat: PIEZO: BEAT DETECTED interval=527 ms[0m
+[0;32mI (128861) piezo_heartbeat: PIEZO: BPM=111[0m
+[0;32mI (128881) app_mqtt: MQTT published, msg_id=42386[0m
+[0;32mI (129261) piezo_heartbeat: PIEZO: ADC=4095 min=3874 max=4095 avg=4094 p2p=221 noise=0 thr=12[0m
+[0;32mI (129271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (129771) piezo_heartbeat: PIEZO: BEAT DETECTED interval=465 ms[0m
+[0;32mI (129771) piezo_heartbeat: PIEZO: BPM=118[0m
+[0;32mI (129791) app_mqtt: MQTT published, msg_id=17696[0m
+[0;32mI (129821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (130221) app: SpO2: 91%[0m
+[0;32mI (130221) app: MAX30102 Temperature: 31.81 C[0m
+[0;32mI (130261) piezo_heartbeat: PIEZO: ADC=4095 min=4004 max=4095 avg=4094 p2p=91 noise=0 thr=12[0m
+[0;32mI (130271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (130341) app_mqtt: MQTT published, msg_id=43453[0m
+[0;32mI (130341) app_mqtt: MQTT published, msg_id=32099[0m
+[0;32mI (130341) app_mqtt: MQTT published, msg_id=15374[0m
+[0;32mI (130361) piezo_heartbeat: PIEZO: BEAT DETECTED interval=589 ms[0m
+[0;32mI (130361) piezo_heartbeat: PIEZO: BPM=115[0m
+[0;32mI (130381) app_mqtt: MQTT published, msg_id=65171[0m
+[0;32mI (130821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (130871) piezo_heartbeat: PIEZO: BEAT DETECTED interval=509 ms[0m
+[0;32mI (130871) piezo_heartbeat: PIEZO: BPM=116[0m
+[0;32mI (130891) app_mqtt: MQTT published, msg_id=40228[0m
+[1;31mE (131151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (131151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (131151) task_wdt: Tasks currently running:[0m
+[1;31mE (131151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (131151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (131151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (131261) piezo_heartbeat: PIEZO: ADC=4095 min=3911 max=4095 avg=4094 p2p=184 noise=0 thr=12[0m
+[0;32mI (131271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (131281) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=116[0m
+[0;32mI (131331) piezo_heartbeat: PIEZO: BEAT DETECTED interval=462 ms[0m
+[0;32mI (131331) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (131351) app_mqtt: MQTT published, msg_id=40998[0m
+[0;32mI (131581) app_mqtt: MQTT published, msg_id=63968[0m
+[0;32mI (131821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (132251) app: SpO2: 91%[0m
+[0;32mI (132251) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (132251) piezo_heartbeat: PIEZO: BEAT DETECTED interval=463 ms[0m
+[0;32mI (132251) piezo_heartbeat: PIEZO: BPM=121[0m
+[0;32mI (132261) piezo_heartbeat: PIEZO: ADC=4095 min=3891 max=4095 avg=4094 p2p=204 noise=1 thr=12[0m
+[0;32mI (132271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (132381) app_mqtt: MQTT published, msg_id=27212[0m
+[0;32mI (132391) app_mqtt: MQTT published, msg_id=14995[0m
+[0;32mI (132391) app_mqtt: MQTT published, msg_id=47531[0m
+[0;32mI (132401) app_mqtt: MQTT published, msg_id=59839[0m
+[0;32mI (132791) piezo_heartbeat: PIEZO: BEAT DETECTED interval=532 ms[0m
+[0;32mI (132791) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (132811) app_mqtt: MQTT published, msg_id=57109[0m
+[0;32mI (132821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (133261) piezo_heartbeat: PIEZO: ADC=4095 min=3967 max=4095 avg=4094 p2p=128 noise=0 thr=12[0m
+[0;32mI (133271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (133381) piezo_heartbeat: PIEZO: BEAT DETECTED interval=590 ms[0m
+[0;32mI (133381) piezo_heartbeat: PIEZO: BPM=117[0m
+[0;32mI (133401) app_mqtt: MQTT published, msg_id=8244[0m
+[0;32mI (133821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (134231) app: SpO2: 91%[0m
+[0;32mI (134231) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (134261) piezo_heartbeat: PIEZO: ADC=4095 min=3859 max=4095 avg=4094 p2p=236 noise=0 thr=12[0m
+[0;32mI (134271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (134271) piezo_heartbeat: PIEZO: BEAT DETECTED interval=464 ms[0m
+[0;32mI (134271) piezo_heartbeat: PIEZO: BPM=120[0m
+[0;32mI (134331) app_mqtt: MQTT published, msg_id=61171[0m
+[0;32mI (134331) app_mqtt: MQTT published, msg_id=28843[0m
+[0;32mI (134341) app_mqtt: MQTT published, msg_id=25694[0m
+[0;32mI (134341) app_mqtt: MQTT published, msg_id=35046[0m
+[0;32mI (134381) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=117[0m
+[0;32mI (134821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (135261) piezo_heartbeat: PIEZO: ADC=0 min=0 max=4095 avg=625 p2p=4095 noise=4094 thr=10646[0m
+[0;33mW (135271) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (135291) app_mqtt: MQTT published, msg_id=27898[0m
+[0;32mI (135821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[1;31mE (136151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (136151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (136151) task_wdt: Tasks currently running:[0m
+[1;31mE (136151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (136151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (136151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF5F0 0x4008AC56:0x3FFBF600 0x40105AB9:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (136261) piezo_heartbeat: PIEZO: ADC=0 min=0 max=84 avg=0 p2p=84 noise=0 thr=12[0m
+[0;32mI (136271) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (136321) app: SpO2: 91%[0m
+[0;32mI (136321) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (136391) app_mqtt: MQTT published, msg_id=21252[0m
+[0;32mI (136391) app_mqtt: MQTT published, msg_id=25808[0m
+[0;32mI (136391) app_mqtt: MQTT published, msg_id=4015[0m
+[0;32mI (136581) app_mqtt: MQTT published, msg_id=14685[0m
+[0;32mI (136821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (137101) piezo_heartbeat: PIEZO: BEAT DETECTED interval=595 ms[0m
+[0;32mI (137261) piezo_heartbeat: PIEZO: ADC=0 min=0 max=73 avg=0 p2p=73 noise=0 thr=12[0m
+[0;32mI (137271) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (137511) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (137771) piezo_heartbeat: PIEZO: BEAT DETECTED interval=661 ms[0m
+[0;32mI (137821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (138231) app: SpO2: 91%[0m
+[0;32mI (138231) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (138261) piezo_heartbeat: PIEZO: ADC=0 min=0 max=80 avg=0 p2p=80 noise=0 thr=12[0m
+[0;32mI (138271) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (138321) app_mqtt: MQTT published, msg_id=38710[0m
+[0;32mI (138331) app_mqtt: MQTT published, msg_id=17793[0m
+[0;32mI (138331) app_mqtt: MQTT published, msg_id=64247[0m
+[0;32mI (138821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (139271) piezo_heartbeat: PIEZO: ADC=0 min=0 max=86 avg=0 p2p=86 noise=0 thr=12[0m
+[0;32mI (139271) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (139821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (139821) piezo_heartbeat: PIEZO: BEAT DETECTED interval=868 ms[0m
+[0;32mI (140271) piezo_heartbeat: PIEZO: ADC=0 min=0 max=45 avg=0 p2p=45 noise=0 thr=12[0m
+[0;32mI (140271) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (140341) app: SpO2: 91%[0m
+[0;32mI (140341) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (140401) app_mqtt: MQTT published, msg_id=9558[0m
+[0;32mI (140401) app_mqtt: MQTT published, msg_id=8798[0m
+[0;32mI (140411) app_mqtt: MQTT published, msg_id=49533[0m
+[0;32mI (140611) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (140821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (140981) piezo_heartbeat: PIEZO: BEAT DETECTED interval=1160 ms[0m
+[1;31mE (141151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (141151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (141151) task_wdt: Tasks currently running:[0m
+[1;31mE (141151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (141151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (141151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x40084271:0x3FFBF640 0x4017E862:0x3FFBF660 0x400DEB5F:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (141271) piezo_heartbeat: PIEZO: ADC=0 min=0 max=40 avg=0 p2p=40 noise=0 thr=12[0m
+[0;33mW (141271) piezo_heartbeat: PIEZO: NO SIGNAL[0m
+[0;32mI (141291) app_mqtt: MQTT published, msg_id=35926[0m
+[0;32mI (141581) app_mqtt: MQTT published, msg_id=16158[0m
+[0;32mI (141821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (142231) app: SpO2: 91%[0m
+[0;32mI (142231) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (142271) piezo_heartbeat: PIEZO: ADC=0 min=0 max=64 avg=0 p2p=64 noise=0 thr=12[0m
+[0;32mI (142271) piezo_heartbeat: PIEZO: low-biased pulse signal detected[0m
+[0;32mI (142321) app_mqtt: MQTT published, msg_id=36288[0m
+[0;32mI (142321) app_mqtt: MQTT published, msg_id=53898[0m
+[0;32mI (142331) app_mqtt: MQTT published, msg_id=35656[0m
+[0;32mI (142821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[0;32mI (143271) piezo_heartbeat: PIEZO: ADC=4095 min=0 max=4095 avg=1326 p2p=4095 noise=4094 thr=10646[0m
+[0;33mW (143271) piezo_heartbeat: PIEZO: ADC rail-to-rail clipping - check conditioning[0m
+[0;32mI (143291) app_mqtt: MQTT published, msg_id=51962[0m
+[0;32mI (143741) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=91 piezo HR=0[0m
+[0;32mI (143821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177048[0m
+[0;32mI (144251) app: SpO2: 91%[0m
+[0;32mI (144251) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (144271) piezo_heartbeat: PIEZO: ADC=4095 min=3856 max=4095 avg=4094 p2p=239 noise=0 thr=12[0m
+[0;32mI (144271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (144361) app_mqtt: MQTT published, msg_id=60992[0m
+[0;32mI (144371) app_mqtt: MQTT published, msg_id=27342[0m
+[0;32mI (144371) app_mqtt: MQTT published, msg_id=11628[0m
+[0;32mI (144821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177040[0m
+[0;32mI (145121) piezo_heartbeat: PIEZO: BEAT DETECTED interval=650 ms[0m
+[0;32mI (145271) piezo_heartbeat: PIEZO: ADC=4095 min=3875 max=4095 avg=4094 p2p=220 noise=0 thr=12[0m
+[0;32mI (145271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (145591) piezo_heartbeat: PIEZO: BEAT DETECTED interval=464 ms[0m
+[0;32mI (145821) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177040[0m
+[0;32mI (146151) piezo_heartbeat: PIEZO: BEAT DETECTED interval=557 ms[0m
+[1;31mE (146151) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (146151) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (146151) task_wdt: Tasks currently running:[0m
+[1;31mE (146151) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (146151) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (146151) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E911E:0x3FFB2280 0x400E94FC:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF540 0x4008AC56:0x3FFBF550 0x4017DA07:0x3FFBF570 0x40082E31:0x3FFBF5B0 0x40082F41:0x3FFBF5E0 0x4015A7DF:0x3FFBF600 0x40105A90:0x3FFBF620 0x400DE313:0x3FFBF650 0x400DE3DD:0x3FFBF680 0x4017D1AA:0x3FFBF760
+
+[0;32mI (146271) piezo_heartbeat: PIEZO: ADC=4095 min=3870 max=4095 avg=4094 p2p=225 noise=0 thr=12[0m
+[0;32mI (146271) piezo_heartbeat: PIEZO: high-biased pulse signal detected[0m
+[0;32mI (146311) app: SpO2: 91%[0m
+[0;32mI (146311) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (146411) app_mqtt: MQTT published, msg_id=15329[0m
+[0;32mI (146411) app_mqtt: M
