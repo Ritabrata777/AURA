@@ -6,7 +6,7 @@
 #include "freertos/task.h"
 #include "esp_adc/adc_oneshot.h"
 
-#define ECG_SAMPLE_RATE 250
+#define ECG_SAMPLE_RATE 125
 #define ECG_BUFFER_SIZE 500
 #define ECG_CHUNK_SIZE 50
 #define ECG_SESSION_ID_LENGTH 37

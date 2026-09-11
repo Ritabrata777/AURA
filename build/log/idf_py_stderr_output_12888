@@ -1,0 +1,177 @@
+Command: C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe C:\esp\v6.1\esp-idf\tools/idf_monitor.py -p COM8 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 C:\Users\LENOVO\Desktop\AURA\AURA\build\esp32-health-device.elf C:\Users\LENOVO\Desktop\AURA\AURA\build\bootloader\bootloader.elf --force-color -m 'C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe' 'C:\esp\v6.1\esp-idf\tools\idf.py'
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM8 instead...[0m
+[0;33m--- esp-idf-monitor 1.9.0 on \\.\COM8 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x40080400: [0;33m_invalid_pc_placeholder[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m2259[0m
+[0m--- 0x40080644: [0;33mcall_start_cpu0[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x40080400: [0;33m_invalid_pc_placeholder[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m2259[0m
+[0m--- 0x40080644: [0;33mcall_start_cpu0[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x40080400: [0;33m_invalid_pc_placeholder[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m2259[0m
+[0m--- 0x40080644: [0;33mcall_start_cpu0[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x40084271: [0;33mesp_crosscore_int_send_yield[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/crosscore_int.c[0m[0m:[1;31m125[0m
+[0m--- 0x4017efb2: [0;33mvTaskDelay[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c[0m[0m:[1;31m1611[0m
+[0m--- 0x400debff: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m291[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x40084271: [0;33mesp_crosscore_int_send_yield[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/crosscore_int.c[0m[0m:[1;31m125[0m
+[0m--- 0x4017efb2: [0;33mvTaskDelay[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c[0m[0m:[1;31m1611[0m
+[0m--- 0x400debff: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m291[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x4017efa6: [0;33mvTaskDelay[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c[0m[0m:[1;31m1600[0m
+[0m--- 0x400e022d: [0;33mbuttons_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/buttons.c[0m[0m:[1;31m77[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x40084271: [0;33mesp_crosscore_int_send_yield[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/crosscore_int.c[0m[0m:[1;31m125[0m
+[0m--- 0x4017efb2: [0;33mvTaskDelay[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c[0m[0m:[1;31m1611[0m
+[0m--- 0x400debff: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m291[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x40084271: [0;33mesp_crosscore_int_send_yield[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/crosscore_int.c[0m[0m:[1;31m125[0m
+[0m--- 0x4017efb2: [0;33mvTaskDelay[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c[0m[0m:[1;31m1611[0m
+[0m--- 0x400debff: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m291[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x400873ab: [0;33mphy_exit_critical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_phy/src/phy_init.c[0m[0m:[1;31m256[0m
+[0m--- 0x40084fb1: [0;33mphy_close_rf[0m[0m at [0;32m/home/lxf/gittree/chip7.1_phy/chip_7.1/board_code/app_test/pp/phy/phy_chip_v7.c[0m[0m:[1;31m4235[0m
+[0m--- 0x4015b2c0: [0;33mesp_phy_disable[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_phy/src/phy_init.c[0m[0m:[1;31m436[0m
+[0m--- 0x4017d0a1: [0;33mesp_phy_disable_wrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_wifi/esp32/esp_adapter.c[0m[0m:[1;31m620[0m
+[0m--- 0x4008f34d: [0;33mwifi_rf_phy_disable[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40092a1a: [0;33mpm_sleep[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40151275: [0;33mpm_sleep_delay_timeout_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40158cea: [0;33mRC_GetBlockAckTime[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40178c06: [0;33mpp_timer_do_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4009059d: [0;33mppTask[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x400873ab: [0;33mphy_exit_critical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_phy/src/phy_init.c[0m[0m:[1;31m256[0m
+[0m--- 0x40084fb1: [0;33mphy_close_rf[0m[0m at [0;32m/home/lxf/gittree/chip7.1_phy/chip_7.1/board_code/app_test/pp/phy/phy_chip_v7.c[0m[0m:[1;31m4235[0m
+[0m--- 0x4015b2c0: [0;33mesp_phy_disable[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_phy/src/phy_init.c[0m[0m:[1;31m436[0m
+[0m--- 0x4017d0a1: [0;33mesp_phy_disable_wrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_wifi/esp32/esp_adapter.c[0m[0m:[1;31m620[0m
+[0m--- 0x4008f34d: [0;33mwifi_rf_phy_disable[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40092a1a: [0;33mpm_sleep[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40151275: [0;33mpm_sleep_delay_timeout_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40158cea: [0;33mRC_GetBlockAckTime[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40178c06: [0;33mpp_timer_do_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4009059d: [0;33mppTask[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x400e981e: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x400e9bfc: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x400835d5: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4000bfed: [0;33m_xtos_set_intlevel[0m[0m in [0;32mROM[0m
+[0m--- 0x4008ac56: [0;33mvPortClearInterruptMaskFromISR[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m547[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m528[0m
+[0m--- 0x401061c5: [0;33madc_oneshot_read[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/esp_adc/adc_oneshot.c[0m[0m:[1;31m247[0m
+[0m--- 0x400de3b3: [0;33mpiezo_adc_read[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m58[0m
+[0m--- 0x400de47d: [0;33mpiezo_task[0m[0m at [0;32mC:/Users/LENOVO/Desktop/AURA/AURA/main/piezo_heartbeat.c[0m[0m:[1;31m111[0m
+[0m--- 0x4017d8fa: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[1;31m--- Error: GetOverlappedResult failed (PermissionError(13, 'Access is denied.', None, 5))[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m[0m
+[1;31m--- Error: GetOverlappedResult failed (PermissionError(13, 'Access is denied.', None, 5))[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m[0m
+[0m

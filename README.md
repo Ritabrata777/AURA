@@ -179,7 +179,16 @@ The web app reads `NEXT_PUBLIC_API_URL`, defaulting to `http://localhost:3001`.
 
 ```bash
 npm run build          # protocol, then API and web
-npm run typecheck      # protocol build + tsc --noEmit across workspaces
+npm run typecheck      # protI (18119) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=190148
+I (19119) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=190148
+E (19629) esp-tls: [sock=54] select() timeout
+E (19629) transport_base: Failed to open a new connection: 32774
+E (19629) mqtt_client: Error transport connect
+E (19629) app_mqtt: MQTT error
+W (19629) app_mqtt: MQTT disconnected
+W (19629) app: MQTT disconnected
+I (20119) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=190808
+I (21119) device_status: hearocol build + tsc --noEmit across workspaces
 npm run dev:api        # API in watch mode
 npm run dev:web        # Next.js dev server
 ```

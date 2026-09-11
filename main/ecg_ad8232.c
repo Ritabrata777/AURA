@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
 #include "adc_bus.h"
 #include "esp_log.h"
 #include "esp_err.h"
@@ -15,10 +16,14 @@
 static const char *TAG = "ecg_ad8232";
 
 #define ECG_SAMPLE_INTERVAL_US (1000000 / ECG_SAMPLE_RATE)
+#define ECG_RAW_CENTER 2048
+#define ECG_DIAG_INTERVAL_S 5
+#define ECG_FILTER_SETTLE_SAMPLES 13
+#define ECG_SPECTRUM_SIZE ECG_SAMPLE_RATE
 // Hold up to 10 chunks. RINGBUF_TYPE_NOSPLIT stores an 8-byte header per item
 // and rounds each item up to a 4-byte boundary, so the previous flat +32 slack
 // was short by ~48 bytes and the buffer silently held only nine chunks.
-#define ECG_RING_ITEM_SIZE (((sizeof(ecg_chunk_t) + 3) & ~((size_t)3)) + 8)
+#define ECG_RING_ITEM_SIZE (((sizeof(ecg_raw_chunk_t) + 3) & ~((size_t)3)) + 8)
 #define ECG_RING_BUFFER_SIZE (ECG_RING_ITEM_SIZE * 10)
 
 static adc_oneshot_unit_handle_t s_adc_handle = NULL;
@@ -31,8 +36,16 @@ static ecg_session_t s_session = {
     .samples_since_start = 0
 };
 
+typedef struct {
+    int16_t samples[ECG_CHUNK_SIZE];
+    uint32_t timestamp;
+    uint16_t sequence;
+} ecg_raw_chunk_t;
+
 static int16_t s_raw_buffer[ECG_BUFFER_SIZE] = {0};
+static int16_t s_filtered_buffer[ECG_BUFFER_SIZE] = {0};
 static size_t s_buffer_head = 0;
+static size_t s_filtered_buffer_head = 0;
 
 static ecg_data_callback_t s_data_callback = NULL;
 static void *s_callback_arg = NULL;
@@ -50,6 +63,275 @@ static bool s_ready = false;
 
 // Why the current recording is ending, reported in ECG_SESSION_END.
 static ecg_stop_reason_t s_stop_reason = ECG_STOP_REASON_STOPPED;
+
+typedef struct {
+    float b0;
+    float b1;
+    float b2;
+    float a1;
+    float a2;
+    float z1;
+    float z2;
+} ecg_biquad_t;
+
+// RBJ cookbook biquads designed for fs=125 Hz.
+// Primary ECG chain:
+//   HP 0.5 Hz Q=0.7071 -> LP 40 Hz 4th-order cascade -> notch 50 Hz Q=30.
+//
+// The lower 125 Hz acquisition rate reduces live trace point density while the
+// 40 Hz two-section low-pass keeps QRS edges readable. This does not fabricate
+// morphology; it only limits the frequency content sent downstream.
+// Samples are relative ADC counts centered around mid-scale, not calibrated mV.
+static ecg_biquad_t s_hp_filter = {
+    .b0 = 0.982385439f,
+    .b1 = -1.964770877f,
+    .b2 = 0.982385439f,
+    .a1 = -1.964460580f,
+    .a2 = 0.965081174f,
+};
+static ecg_biquad_t s_lp_filter_a = {
+    .b0 = 0.388294443f,
+    .b1 = 0.776588885f,
+    .b2 = 0.388294443f,
+    .a1 = 0.463824194f,
+    .a2 = 0.089353577f,
+};
+static ecg_biquad_t s_lp_filter_b = {
+    .b0 = 0.529532498f,
+    .b1 = 1.059064996f,
+    .b2 = 0.529532498f,
+    .a1 = 0.632535409f,
+    .a2 = 0.485594584f,
+};
+static ecg_biquad_t s_notch_filter = {
+    .b0 = 0.990298618f,
+    .b1 = 1.602336823f,
+    .b2 = 0.990298618f,
+    .a1 = 1.602336823f,
+    .a2 = 0.980597236f,
+};
+static uint32_t s_dropped_chunks = 0;
+static uint32_t s_sent_chunks = 0;
+static int s_diag_raw_min = INT_MAX;
+static int s_diag_raw_max = INT_MIN;
+static int64_t s_diag_raw_sum = 0;
+static int s_diag_filtered_min = INT_MAX;
+static int s_diag_filtered_max = INT_MIN;
+static int64_t s_diag_filtered_sum = 0;
+static uint32_t s_diag_samples = 0;
+static int64_t s_next_diag_time_us = 0;
+static int64_t s_diag_window_start_us = 0;
+static int64_t s_last_sample_time_us = 0;
+static int32_t s_diag_interval_min_us = INT_MAX;
+static int32_t s_diag_interval_max_us = 0;
+static uint32_t s_filter_settle_remaining = 0;
+static bool s_filter_primed = false;
+static int16_t s_spectrum_raw[ECG_SPECTRUM_SIZE] = {0};
+static int16_t s_spectrum_filtered[ECG_SPECTRUM_SIZE] = {0};
+static size_t s_spectrum_count = 0;
+
+static void reset_biquad(ecg_biquad_t *filter)
+{
+    filter->z1 = 0.0f;
+    filter->z2 = 0.0f;
+}
+
+static void reset_filter_state(void)
+{
+    reset_biquad(&s_hp_filter);
+    reset_biquad(&s_lp_filter_a);
+    reset_biquad(&s_lp_filter_b);
+    reset_biquad(&s_notch_filter);
+    s_filter_settle_remaining = ECG_FILTER_SETTLE_SAMPLES;
+    s_filter_primed = false;
+}
+
+static int16_t clamp_i16(float value)
+{
+    if (value > 32767.0f) {
+        return 32767;
+    }
+    if (value < -32768.0f) {
+        return -32768;
+    }
+    return (int16_t)value;
+}
+
+static float run_biquad(ecg_biquad_t *filter, float input)
+{
+    float output = (filter->b0 * input) + filter->z1;
+    filter->z1 = (filter->b1 * input) - (filter->a1 * output) + filter->z2;
+    filter->z2 = (filter->b2 * input) - (filter->a2 * output);
+    return output;
+}
+
+static int16_t process_ecg_sample(int raw_sample)
+{
+    if (!s_filter_primed) {
+        const float baseline = (float)raw_sample;
+        s_hp_filter.z1 = -s_hp_filter.b0 * baseline;
+        s_hp_filter.z2 = s_hp_filter.b2 * baseline;
+        s_filter_primed = true;
+    }
+
+    float sample = (float)raw_sample;
+    sample = run_biquad(&s_hp_filter, sample);
+    sample = run_biquad(&s_lp_filter_a, sample);
+    sample = run_biquad(&s_lp_filter_b, sample);
+    sample = run_biquad(&s_notch_filter, sample);
+
+    if (s_filter_settle_remaining > 0) {
+        s_filter_settle_remaining--;
+        sample = 0.0f;
+    }
+
+    return clamp_i16(sample);
+}
+
+static float goertzel_power(const int16_t *samples, size_t count, float coeff)
+{
+    float q0 = 0.0f;
+    float q1 = 0.0f;
+    float q2 = 0.0f;
+
+    for (size_t i = 0; i < count; i++) {
+        q0 = (coeff * q1) - q2 + (float)samples[i];
+        q2 = q1;
+        q1 = q0;
+    }
+
+    return ((q1 * q1) + (q2 * q2) - (coeff * q1 * q2)) / ((float)count * (float)count);
+}
+
+static void update_spectrum(int raw_sample, int filtered_sample)
+{
+    s_spectrum_raw[s_spectrum_count] = (int16_t)raw_sample;
+    s_spectrum_filtered[s_spectrum_count] = (int16_t)filtered_sample;
+    s_spectrum_count++;
+
+    if (s_spectrum_count < ECG_SPECTRUM_SIZE) {
+        return;
+    }
+
+    // 1 Hz bin spacing at fs=125 Hz and N=125. Values are normalized power,
+    // useful for before/after comparison rather than calibrated amplitude.
+    const float raw30 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 0.125581039f);
+    const float raw35 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -0.374762629f);
+    const float raw40 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -0.851558583f);
+    const float raw50 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -1.618033989f);
+    const float raw60 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -1.984229403f);
+    const float filt30 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 0.125581039f);
+    const float filt35 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -0.374762629f);
+    const float filt40 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -0.851558583f);
+    const float filt50 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -1.618033989f);
+    const float filt60 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -1.984229403f);
+
+    ESP_LOGI(TAG,
+             "ECG spectrum 1s raw_pwr[30=%.1f 35=%.1f 40=%.1f 50=%.1f 60=%.1f] "
+             "filt_pwr[30=%.1f 35=%.1f 40=%.1f 50=%.1f 60=%.1f]",
+             raw30, raw35, raw40, raw50, raw60,
+             filt30, filt35, filt40, filt50, filt60);
+
+    s_spectrum_count = 0;
+}
+
+static void reset_diagnostics(void)
+{
+    s_dropped_chunks = 0;
+    s_sent_chunks = 0;
+    s_diag_raw_min = INT_MAX;
+    s_diag_raw_max = INT_MIN;
+    s_diag_raw_sum = 0;
+    s_diag_filtered_min = INT_MAX;
+    s_diag_filtered_max = INT_MIN;
+    s_diag_filtered_sum = 0;
+    s_diag_samples = 0;
+    s_diag_window_start_us = esp_timer_get_time();
+    s_next_diag_time_us = s_diag_window_start_us + ((int64_t)ECG_DIAG_INTERVAL_S * 1000000);
+    s_last_sample_time_us = 0;
+    s_diag_interval_min_us = INT_MAX;
+    s_diag_interval_max_us = 0;
+    s_spectrum_count = 0;
+}
+
+static void update_diagnostics(int raw_adc, int raw_sample, int filtered_sample)
+{
+    const int64_t now = esp_timer_get_time();
+
+    if (raw_sample < s_diag_raw_min) {
+        s_diag_raw_min = raw_sample;
+    }
+    if (raw_sample > s_diag_raw_max) {
+        s_diag_raw_max = raw_sample;
+    }
+    s_diag_raw_sum += raw_sample;
+
+    if (filtered_sample < s_diag_filtered_min) {
+        s_diag_filtered_min = filtered_sample;
+    }
+    if (filtered_sample > s_diag_filtered_max) {
+        s_diag_filtered_max = filtered_sample;
+    }
+    s_diag_filtered_sum += filtered_sample;
+    s_diag_samples++;
+
+    if (now >= s_next_diag_time_us && s_diag_samples > 0) {
+        const int raw_avg = (int)(s_diag_raw_sum / s_diag_samples);
+        const int filtered_avg = (int)(s_diag_filtered_sum / s_diag_samples);
+        const int64_t elapsed_us = now - s_diag_window_start_us;
+        const int measured_rate = elapsed_us > 0 ?
+                                  (int)((s_diag_samples * 1000000LL + (elapsed_us / 2)) / elapsed_us) :
+                                  0;
+        const int interval_min = s_diag_interval_min_us == INT_MAX ? 0 : s_diag_interval_min_us;
+        ESP_LOGI(TAG,
+                 "ECG: fs=%dHz target=%dHz dt_min=%dus dt_max=%dus adc=%d "
+                 "raw=%d raw_min=%d raw_max=%d raw_avg=%d raw_p2p=%d "
+                 "filt=%d filt_min=%d filt_max=%d filt_avg=%d filt_p2p=%d sent=%lu dropped=%lu",
+                 measured_rate,
+                 ECG_SAMPLE_RATE,
+                 interval_min,
+                 s_diag_interval_max_us,
+                 raw_adc,
+                 raw_sample,
+                 s_diag_raw_min,
+                 s_diag_raw_max,
+                 raw_avg,
+                 s_diag_raw_max - s_diag_raw_min,
+                 filtered_sample,
+                 s_diag_filtered_min,
+                 s_diag_filtered_max,
+                 filtered_avg,
+                 s_diag_filtered_max - s_diag_filtered_min,
+                 (unsigned long)s_sent_chunks,
+                 (unsigned long)s_dropped_chunks);
+
+        s_diag_raw_min = INT_MAX;
+        s_diag_raw_max = INT_MIN;
+        s_diag_raw_sum = 0;
+        s_diag_filtered_min = INT_MAX;
+        s_diag_filtered_max = INT_MIN;
+        s_diag_filtered_sum = 0;
+        s_diag_samples = 0;
+        s_diag_window_start_us = now;
+        s_diag_interval_min_us = INT_MAX;
+        s_diag_interval_max_us = 0;
+        s_next_diag_time_us = now + ((int64_t)ECG_DIAG_INTERVAL_S * 1000000);
+    }
+}
+
+static void update_sample_timing_diagnostics(int64_t now)
+{
+    if (s_last_sample_time_us != 0) {
+        const int64_t delta_us = now - s_last_sample_time_us;
+        if (delta_us > 0 && delta_us < s_diag_interval_min_us) {
+            s_diag_interval_min_us = (int32_t)delta_us;
+        }
+        if (delta_us > s_diag_interval_max_us && delta_us <= INT_MAX) {
+            s_diag_interval_max_us = (int32_t)delta_us;
+        }
+    }
+    s_last_sample_time_us = now;
+}
 
 // Generate an RFC-4122-style UUID string. Used as the ECG session identifier so
 // it is unique across reboots and safe to persist as a session key.
@@ -86,18 +368,17 @@ static void sample_timer_cb(void *arg)
     int adc_value = 0;
 
     if (s_adc_initialized && adc_oneshot_read(s_adc_handle, ECG_ADC_CHANNEL, &adc_value) == ESP_OK) {
-        // Convert 12-bit ADC to millivolts and center around 0
-        int voltage_mv = (adc_value * 3300) >> 12;
-        int16_t sample = (int16_t)(voltage_mv - 1650);
+        update_sample_timing_diagnostics(esp_timer_get_time());
+        int16_t raw_sample = (int16_t)(adc_value - ECG_RAW_CENTER);
 
-        s_raw_buffer[s_buffer_head] = sample;
+        s_raw_buffer[s_buffer_head] = raw_sample;
         s_buffer_head = (s_buffer_head + 1) % ECG_BUFFER_SIZE;
 
         s_session.samples_since_start++;
 
         // When we have a full chunk of samples, copy and send via ring buffer.
         if (s_session.samples_since_start % ECG_CHUNK_SIZE == 0) {
-            ecg_chunk_t chunk = {
+            ecg_raw_chunk_t chunk = {
                 .sequence = s_session.sequence_counter++,
                 .timestamp = (uint32_t)(esp_timer_get_time() / 1000),
                 .samples = {0}
@@ -111,11 +392,40 @@ static void sample_timer_cb(void *arg)
                 chunk.samples[i] = s_raw_buffer[(read_pos + i) % ECG_BUFFER_SIZE];
             }
 
-            // Blocking send: called from task context. Non-blocking fallback if
-            // full so we never stall sampling; the dropped-chunk restart the
-            // backend detects via missing sequence and can request a resend.
-            xRingbufferSend(s_chunk_ringbuf, &chunk, sizeof(ecg_chunk_t), pdMS_TO_TICKS(1));
+            if (xRingbufferSend(s_chunk_ringbuf, &chunk, sizeof(ecg_raw_chunk_t), 0) != pdTRUE) {
+                s_dropped_chunks++;
+                ESP_LOGW(TAG, "ECG: dropped raw chunk sequence=%u", chunk.sequence);
+            }
         }
+    }
+}
+
+static void process_raw_chunk(const ecg_raw_chunk_t *raw_chunk)
+{
+    if (raw_chunk == NULL) {
+        return;
+    }
+
+    ecg_chunk_t filtered_chunk = {
+        .sequence = raw_chunk->sequence,
+        .timestamp = raw_chunk->timestamp,
+        .samples = {0}
+    };
+
+    for (int i = 0; i < ECG_CHUNK_SIZE; i++) {
+        const int raw_sample = raw_chunk->samples[i];
+        const int filtered_sample = process_ecg_sample(raw_sample);
+        filtered_chunk.samples[i] = filtered_sample;
+        s_filtered_buffer[s_filtered_buffer_head] = (int16_t)filtered_sample;
+        s_filtered_buffer_head = (s_filtered_buffer_head + 1) % ECG_BUFFER_SIZE;
+        update_diagnostics(raw_sample + ECG_RAW_CENTER, raw_sample, filtered_sample);
+        update_spectrum(raw_sample, filtered_sample);
+    }
+
+    s_sent_chunks++;
+
+    if (s_data_callback != NULL) {
+        s_data_callback(&filtered_chunk, s_callback_arg);
     }
 }
 
@@ -129,16 +439,16 @@ static void ecg_processing_task(void *arg)
         // has already been cancelled, so no further chunk ever arrives and the
         // STOPPING → IDLE transition below would never run. The session then
         // stayed "running" forever and a restart was refused.
-        ecg_chunk_t *chunk = (ecg_chunk_t *)xRingbufferReceive(s_chunk_ringbuf, &chunk_size,
-                                                               pdMS_TO_TICKS(200));
+        ecg_raw_chunk_t *chunk = (ecg_raw_chunk_t *)xRingbufferReceive(s_chunk_ringbuf, &chunk_size,
+                                                                       pdMS_TO_TICKS(200));
 
         // STOPPING must also deliver: the last chunk enqueued by the sample
         // timer before it was cancelled often arrives here after the state has
         // flipped, and dropping it lost the final 200 ms of the recording even
         // though the drain loop below was written to preserve exactly that tail.
-        if (chunk != NULL && s_data_callback != NULL &&
+        if (chunk != NULL &&
             (s_session.state == ECG_STATE_RUNNING || s_session.state == ECG_STATE_STOPPING)) {
-            s_data_callback(chunk, s_callback_arg);
+            process_raw_chunk(chunk);
         }
 
         if (chunk != NULL) {
@@ -150,9 +460,7 @@ static void ecg_processing_task(void *arg)
             // the tail of the recording is not thrown away.
             void *pending = xRingbufferReceive(s_chunk_ringbuf, &chunk_size, 0);
             while (pending != NULL) {
-                if (s_data_callback != NULL) {
-                    s_data_callback((ecg_chunk_t *)pending, s_callback_arg);
-                }
+                process_raw_chunk((ecg_raw_chunk_t *)pending);
                 vRingbufferReturnItem(s_chunk_ringbuf, pending);
                 pending = xRingbufferReceive(s_chunk_ringbuf, &chunk_size, 0);
             }
@@ -244,6 +552,11 @@ bool ecg_ad8232_start(void)
     s_session.sequence_counter = 0;
     s_session.samples_since_start = 0;
     s_buffer_head = 0;
+    s_filtered_buffer_head = 0;
+    memset(s_raw_buffer, 0, sizeof(s_raw_buffer));
+    memset(s_filtered_buffer, 0, sizeof(s_filtered_buffer));
+    reset_filter_state();
+    reset_diagnostics();
     s_stop_reason = ECG_STOP_REASON_STOPPED;
     s_session.state = ECG_STATE_RUNNING;
 
