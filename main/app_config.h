@@ -8,7 +8,7 @@
 #define APP_LED_GPIO GPIO_NUM_2
 #define APP_STATUS_PERIOD_MS 1000
 #ifndef HEARTBEAT_GPIO
-#define HEARTBEAT_GPIO GPIO_NUM_17
+#define HEARTBEAT_GPIO GPIO_NUM_35
 #endif
 
 // ─── I2C Bus (shared by OLED and MAX30102) ──────────────────────

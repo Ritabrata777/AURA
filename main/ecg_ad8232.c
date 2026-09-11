@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "adc_bus.h"
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_random.h"
@@ -178,11 +179,8 @@ void ecg_ad8232_init(void)
 {
     ESP_LOGI(TAG, "Initializing AD8232 ECG sensor");
 
-    adc_oneshot_unit_init_cfg_t init_config = {
-        .unit_id = ADC_UNIT_1,
-        .ulp_mode = ADC_ULP_MODE_DISABLE,
-    };
-    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &s_adc_handle));
+    ESP_ERROR_CHECK(adc_bus_init());
+    s_adc_handle = adc_bus_get_handle();
 
     adc_oneshot_chan_cfg_t channel_config = {
         .atten = ECG_ATTEN,

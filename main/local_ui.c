@@ -4,6 +4,7 @@
 
 #include "buttons.h"
 #include "oled_ssd1306.h"
+#include "piezo_heartbeat.h"
 #include "sensor_state.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -80,7 +81,17 @@ static void local_ui_next_screen(void)
 
 static void local_ui_select_screen(void)
 {
-    s_active_mode = local_ui_mode_for_screen(s_screen);
+    local_active_mode_t next_mode = local_ui_mode_for_screen(s_screen);
+    if (s_active_mode == LOCAL_MODE_PIEZO && next_mode != LOCAL_MODE_PIEZO) {
+        piezo_heartbeat_stop();
+    }
+
+    s_active_mode = next_mode;
+    if (s_active_mode == LOCAL_MODE_PIEZO) {
+        ESP_LOGI(BUTTON_TAG, "PIEZO: mode selected");
+        piezo_heartbeat_start();
+    }
+
     ESP_LOGI(BUTTON_TAG, "BUTTON2: SHORT PRESS - SELECT");
     ESP_LOGI(BUTTON_TAG, "Selected mode -> %s", local_ui_screen_name(s_screen));
     ESP_LOGI(BUTTON_TAG, "ACTIVE MODE: %s", local_ui_mode_name(s_active_mode));
@@ -88,6 +99,9 @@ static void local_ui_select_screen(void)
 
 static void local_ui_return_home(void)
 {
+    if (s_active_mode == LOCAL_MODE_PIEZO) {
+        piezo_heartbeat_stop();
+    }
     s_active_mode = LOCAL_MODE_NONE;
     s_screen = LOCAL_SCREEN_HOME;
     ESP_LOGI(BUTTON_TAG, "BUTTON2: LONG HOLD - HOME");
@@ -172,19 +186,21 @@ static void draw_piezo(const sensor_state_t *st)
 {
     char line[16];
 
-    if (st->piezo_valid && st->piezo_hr > 0) {
-        snprintf(line, sizeof(line), "%d", st->piezo_hr);
-    } else {
-        snprintf(line, sizeof(line), "--");
-    }
-    oled_draw_text(5, 14, line, 3);
-    oled_draw_text(5, 44, "BPM", 1);
+    oled_draw_text(5, 12, "PIEZO HEART RATE", 1);
 
-    oled_draw_text(74, 20, "STATUS", 1);
-    if (st->piezo_valid) {
-        oled_draw_text(74, 32, "ACTIVE", 1);
+    if (st->piezo_valid && st->piezo_hr > 0) {
+        snprintf(line, sizeof(line), "BPM: %d", st->piezo_hr);
     } else {
-        oled_draw_text(74, 32, "NO SIG", 1);
+        snprintf(line, sizeof(line), "BPM: --");
+    }
+    oled_draw_text(5, 25, line, 1);
+
+    if (s_active_mode == LOCAL_MODE_PIEZO) {
+        oled_draw_text(5, 37, st->piezo_valid ? "Signal: OK" : "Signal: WAITING", 1);
+        oled_draw_text(5, 47, "Hold gently", 1);
+    } else {
+        oled_draw_text(5, 37, "Press SELECT", 1);
+        oled_draw_text(5, 47, "to measure", 1);
     }
 }
 

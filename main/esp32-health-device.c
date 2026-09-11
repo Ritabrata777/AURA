@@ -1,4 +1,5 @@
 #include "app_config.h"
+#include "adc_bus.h"
 #include "device_identity.h"
 #include "device_status_task.h"
 #include "wifi_manager.h"
@@ -357,6 +358,7 @@ void app_main(void)
     // 3. One-time hardware initialization. None of this is ever called
     //    again — screen changes, button presses and reconnects only drive
     //    the already-running tasks.
+    ESP_ERROR_CHECK(adc_bus_init());
     oled_ssd1306_set_bus_handle(i2c_bus_get_handle());
     oled_ssd1306_init();
     max30102_set_bus_handle(i2c_bus_get_handle());
@@ -365,7 +367,7 @@ void app_main(void)
     buzzer_init();
     buzzer_beep(120);
     buttons_init();
-    piezo_heartbeat_init();
+    ESP_ERROR_CHECK(piezo_heartbeat_init());
     piezo_heartbeat_set_callback(piezo_heartbeat_callback, NULL);
 
     ecg_ad8232_init();
@@ -409,7 +411,6 @@ void app_main(void)
     //    independent of the OLED UI, the buttons, and MQTT state.
     max30102_set_callback(spo2_data_callback, NULL);
     max30102_start();
-    piezo_heartbeat_start();
 
     // Everything downstream of a connection is now wired up.
     wifi_manager_start();
