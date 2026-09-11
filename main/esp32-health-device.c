@@ -12,6 +12,7 @@
 #include "local_ui.h"
 #include "device_comm.h"
 #include "piezo_heartbeat.h"
+#include "sensor_state.h"
 #include "esp_log.h"
 #include "esp_sntp.h"
 #include "esp_timer.h"
@@ -42,21 +43,32 @@ static void sntp_sync_init(void)
     s_sntp_started = true;
 }
 
-// ─── Sensor Callbacks → MQTT ─────────────────────────────────────
+// ─── Sensor Callbacks → shared state + MQTT ───────────────────────
+//
+// Every callback updates the shared sensor_state (which the OLED UI reads)
+// and then publishes over MQTT exactly as before. The two paths are
+// independent: MQTT being down never affects the OLED, and the OLED being
+// on any screen never affects acquisition or publishing.
 
 static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *metrics, void *arg)
 {
     (void)arg;
     (void)sample;
-    if (metrics != NULL) {
-        local_ui_set_spo2(metrics);
-        local_ui_set_max30102_heart_rate(metrics->heart_rate, metrics->hr_valid);
+    if (metrics == NULL) {
+        return;
     }
+
+    // OLED path: publish the latest readings into shared state.
+    sensor_state_set_max30102(metrics->heart_rate, metrics->hr_valid,
+                              metrics->spo2, metrics->spo2_valid,
+                              metrics->temperature_c, metrics->temp_valid);
+
+    // MQTT path: unchanged cadence and payloads.
     static uint32_t publish_counter = 0;
     publish_counter++;
 
     // Publish every ~2 seconds (50 samples at the 25 Hz effective FIFO rate)
-    if (publish_counter % 50 == 0 && metrics != NULL) {
+    if (publish_counter % 50 == 0) {
         if (sample != NULL) device_comm_publish_spo2_raw(sample, NULL);
         if (metrics->hr_valid && metrics->heart_rate > 0) {
             ESP_LOGI(TAG, "MAX30102 Heart Rate: %d bpm", metrics->heart_rate);
@@ -80,7 +92,11 @@ static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *me
 static void piezo_heartbeat_callback(int bpm, bool valid, void *arg)
 {
     (void)arg;
-    local_ui_set_piezo_heart_rate(bpm, valid);
+
+    // OLED path — completely separate from the MAX30102 heart rate above.
+    sensor_state_set_piezo(bpm, valid);
+
+    // MQTT path.
     if (valid) {
         device_comm_publish_measurement("PIEZO_HEART_RATE", (float)bpm, "bpm", "VALID", NULL);
     } else {
@@ -92,6 +108,10 @@ static void ecg_data_callback(ecg_chunk_t *chunk, void *arg)
 {
     (void)arg;
     if (chunk != NULL) {
+        // OLED path: append to the rolling waveform the UI renders.
+        sensor_state_ecg_append(chunk->samples, ECG_CHUNK_SIZE);
+
+        // MQTT path.
         const char *session_id = ecg_ad8232_get_current_session();
         device_comm_publish_ecg_chunk(session_id, chunk->sequence, ECG_SAMPLE_RATE, chunk->samples, ECG_CHUNK_SIZE);
     }
@@ -109,6 +129,8 @@ static void ecg_session_end_callback(const char *session_id, uint32_t total_samp
     } else if (reason == ECG_STOP_REASON_ERROR) {
         reason_name = "ERROR";
     }
+
+    sensor_state_set_ecg_running(false);
 
     device_comm_publish_ecg_session_end(session_id, total_samples, reason_name);
     device_identity_set_active_session(NULL);
@@ -152,6 +174,7 @@ static const char *ecg_start_with_duration(int duration_seconds)
     if (!ecg_ad8232_start()) {
         return ecg_ad8232_is_running() ? "BUSY" : "SENSOR_UNAVAILABLE";
     }
+    sensor_state_set_ecg_running(true);
 
     const char *session_id = ecg_ad8232_get_current_session();
     if (session_id != NULL && session_id[0] != '\0') {
@@ -182,6 +205,9 @@ static const char *ecg_start_with_duration(int duration_seconds)
 }
 
 // ─── Device Command Handler ─────────────────────────────────────
+//
+// Commands come from the website only. The OLED buttons are NOT part of
+// this path — they never start or stop anything.
 
 static void handle_device_command(device_command_received_t *cmd, void *arg)
 {
@@ -289,12 +315,12 @@ static void mqtt_event_callback(mqtt_event_type_t event, void *data, void *arg)
 
     switch (event) {
         case APP_MQTT_EVENT_CONNECTED:
-            ESP_LOGI(TAG, "MQTT connected — subscribing to commands, starting sensors");
+            ESP_LOGI(TAG, "MQTT connected — subscribing to commands");
             device_comm_subscribe_to_commands();
             device_comm_start_periodic_status();
 
-            // Auto-start MAX30102 for development convenience. It publishes
-            // heart rate, SpO2, and the MAX30102 internal temperature.
+            // Idempotent: acquisition already runs from boot, but this makes
+            // a reconnect self-healing if a remote command stopped it.
             max30102_set_callback(spo2_data_callback, NULL);
             max30102_start();
             break;
@@ -319,33 +345,35 @@ void app_main(void)
 {
     ESP_LOGI(TAG, "=== Health Device Starting ===");
 
-    // 1. Device identity (MAC-based IDs)
+    // 1. Device identity (MAC-based IDs) and shared sensor state.
     device_identity_init();
+    sensor_state_init();
 
     // 2. ONE shared I2C bus (SSD1306 + MAX30102), then scan it so the boot
     //    log shows exactly which devices answered.
     i2c_bus_init();
     i2c_bus_scan();
 
-    // 3. I2C peripherals attach to the shared bus handle — neither driver
-    //    recreates the bus or touches GPIO21/GPIO22 itself.
+    // 3. One-time hardware initialization. None of this is ever called
+    //    again — screen changes, button presses and reconnects only drive
+    //    the already-running tasks.
     oled_ssd1306_set_bus_handle(i2c_bus_get_handle());
     oled_ssd1306_init();
     max30102_set_bus_handle(i2c_bus_get_handle());
     max30102_init();
 
-    // 4. Remaining peripherals
     buzzer_init();
     buzzer_beep(120);
     buttons_init();
-    local_ui_init(device_identity_status()->pairing_code);
     piezo_heartbeat_init();
     piezo_heartbeat_set_callback(piezo_heartbeat_callback, NULL);
 
     ecg_ad8232_init();
     ecg_ad8232_set_callback(ecg_data_callback, NULL);
     ecg_ad8232_set_session_end_callback(ecg_session_end_callback, NULL);
-    // MAX30102 callback is set when MQTT connects (in mqtt_event_callback)
+
+    // 4. OLED UI last: pure display + button handling, no sensor ownership.
+    local_ui_init(device_identity_status()->pairing_code);
 
     // 5. Networking.
     //
@@ -376,12 +404,17 @@ void app_main(void)
     device_comm_init();
     device_comm_set_device_id(status->device_id);
     device_comm_set_command_handler(handle_device_command, NULL);
+
+    // 7. Start continuous acquisition. These tasks then run forever,
+    //    independent of the OLED UI, the buttons, and MQTT state.
+    max30102_set_callback(spo2_data_callback, NULL);
+    max30102_start();
     piezo_heartbeat_start();
 
     // Everything downstream of a connection is now wired up.
     wifi_manager_start();
 
-    // 7. Status LED blinker
+    // 8. Status LED blinker
     device_status_task_start();
 
     ESP_LOGI(TAG, "=== Device Ready ===");

@@ -1,11 +1,10 @@
 #include "local_ui.h"
 
 #include <stdio.h>
-#include <string.h>
 
-#include "buzzer.h"
 #include "buttons.h"
 #include "oled_ssd1306.h"
+#include "sensor_state.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
@@ -13,11 +12,16 @@
 
 static const char *TAG = "local_ui";
 
+// Render cadence. Fast enough for live numbers and a scrolling ECG trace,
+// slow enough that the OLED flush (8 I2C page writes) leaves the shared
+// bus mostly free for the MAX30102 FIFO reads.
+#define LOCAL_UI_REFRESH_MS 200
+
 typedef enum {
-    LOCAL_SCREEN_HOME,
-    LOCAL_SCREEN_SPO2,
+    LOCAL_SCREEN_HOME = 0,
+    LOCAL_SCREEN_MAX30102,
+    LOCAL_SCREEN_PIEZO,
     LOCAL_SCREEN_ECG,
-    LOCAL_SCREEN_COLOR,
     LOCAL_SCREEN_COUNT,
 } local_screen_t;
 
@@ -27,42 +31,122 @@ typedef struct {
 
 static QueueHandle_t s_event_queue;
 static local_screen_t s_screen = LOCAL_SCREEN_HOME;
-static max30102_metrics_t s_spo2 = {0};
-static int16_t s_ecg_samples[SSD1306_WIDTH] = {0};
-static size_t s_ecg_count = 0;
-static tcs34725_reading_t s_color = {0};
-static bool s_spo2_running = false;
-static int s_piezo_bpm = 0;
-static bool s_piezo_valid = false;
-static int s_max30102_hr = 0;
-static bool s_max30102_hr_valid = false;
 
-static const char *local_ui_screen_name(void)
+static const char *local_ui_screen_name(local_screen_t screen)
 {
-    switch (s_screen) {
-        case LOCAL_SCREEN_SPO2: return "VITALS";
-        case LOCAL_SCREEN_ECG: return "ECG";
-        case LOCAL_SCREEN_COLOR: return "COLOR";
-        default: return "HOME";
+    switch (screen) {
+        case LOCAL_SCREEN_MAX30102: return "MAX30102";
+        case LOCAL_SCREEN_PIEZO:    return "PIEZO";
+        case LOCAL_SCREEN_ECG:      return "ECG";
+        default:                    return "HOME";
     }
 }
+
+// ─── Rendering (works only on the private state copy) ─────────────
 
 static void local_ui_draw_header(void)
 {
     char header[22];
-    snprintf(header, sizeof(header), "%s  %d/%d", local_ui_screen_name(),
+    snprintf(header, sizeof(header), "%s  %d/%d", local_ui_screen_name(s_screen),
              (int)s_screen + 1, (int)LOCAL_SCREEN_COUNT);
     oled_draw_text(2, 0, header, 1);
     oled_draw_line(0, 9, SSD1306_WIDTH - 1, 9);
 }
 
-static void local_ui_draw_footer(const char *action, bool running)
+static void local_ui_draw_footer(void)
 {
-    char footer[22];
-    snprintf(footer, sizeof(footer), "UP:NEXT  SEL:%s", running ? "STOP" : action);
     oled_draw_line(0, 55, SSD1306_WIDTH - 1, 55);
-    oled_draw_string_centered(57, footer, 1);
+    oled_draw_string_centered(57, "UP:NEXT  HOLD:HOME", 1);
 }
+
+static void draw_home(const sensor_state_t *st)
+{
+    char line[24];
+
+    oled_draw_string_centered(13, "PULSE LINK", 1);
+
+    if (st->max30102_hr_valid && st->max30102_hr > 0) {
+        snprintf(line, sizeof(line), "HR: %d BPM", st->max30102_hr);
+    } else {
+        snprintf(line, sizeof(line), "HR: --");
+    }
+    oled_draw_text(8, 24, line, 1);
+
+    if (st->max30102_spo2_valid && st->max30102_spo2 > 0) {
+        snprintf(line, sizeof(line), "SPO2: %d%%", st->max30102_spo2);
+    } else {
+        snprintf(line, sizeof(line), "SPO2: --");
+    }
+    oled_draw_text(8, 33, line, 1);
+
+    if (st->piezo_valid && st->piezo_hr > 0) {
+        snprintf(line, sizeof(line), "PIEZO: %d BPM", st->piezo_hr);
+    } else {
+        snprintf(line, sizeof(line), "PIEZO: --");
+    }
+    oled_draw_text(8, 42, line, 1);
+
+    snprintf(line, sizeof(line), "ECG: %s", st->ecg_running ? "ACTIVE" : "IDLE");
+    oled_draw_text(8, 51, line, 1);
+}
+
+static void draw_max30102(const sensor_state_t *st)
+{
+    char line[16];
+
+    if (st->max30102_hr_valid && st->max30102_hr > 0) {
+        snprintf(line, sizeof(line), "%d", st->max30102_hr);
+    } else {
+        snprintf(line, sizeof(line), "--");
+    }
+    oled_draw_text(5, 14, line, 3);
+    oled_draw_text(5, 44, "BPM", 1);
+
+    if (st->max30102_spo2_valid && st->max30102_spo2 > 0) {
+        snprintf(line, sizeof(line), "%d%%", st->max30102_spo2);
+    } else {
+        snprintf(line, sizeof(line), "--");
+    }
+    oled_draw_text(82, 18, line, 2);
+    oled_draw_text(80, 40, "SPO2", 1);
+
+    if (st->max30102_temp_valid) {
+        snprintf(line, sizeof(line), "%.1fC", st->max30102_temp_c);
+        oled_draw_text(78, 50, line, 1);
+    }
+}
+
+static void draw_piezo(const sensor_state_t *st)
+{
+    char line[16];
+
+    if (st->piezo_valid && st->piezo_hr > 0) {
+        snprintf(line, sizeof(line), "%d", st->piezo_hr);
+    } else {
+        snprintf(line, sizeof(line), "--");
+    }
+    oled_draw_text(5, 14, line, 3);
+    oled_draw_text(5, 44, "BPM", 1);
+
+    oled_draw_text(74, 20, "STATUS", 1);
+    if (st->piezo_valid) {
+        oled_draw_text(74, 32, "ACTIVE", 1);
+    } else {
+        oled_draw_text(74, 32, "NO SIG", 1);
+    }
+}
+
+static void draw_ecg(const sensor_state_t *st)
+{
+    if (st->ecg_running && st->ecg_waveform_count > 0) {
+        oled_draw_ecg_waveform(st->ecg_waveform, st->ecg_waveform_count);
+    } else {
+        oled_draw_string_centered(24, "PLACE ELECTRODES", 1);
+        oled_draw_string_centered(36, "START ECG VIA WEB", 1);
+    }
+}
+
+// ─── UI task ──────────────────────────────────────────────────────
 
 static void local_ui_button_callback(button_event_t event, void *arg)
 {
@@ -74,142 +158,62 @@ static void local_ui_button_callback(button_event_t event, void *arg)
     (void)xQueueSend(s_event_queue, &message, 0);
 }
 
-static void local_ui_draw_full(void)
-{
-    char line[24];
-    oled_clear_framebuffer();
-    local_ui_draw_header();
-
-    switch (s_screen) {
-        case LOCAL_SCREEN_HOME:
-            oled_draw_string_centered(17, "Pulse Link", 1);
-            oled_draw_string_centered(36, "HEALTH MONITOR", 1);
-            local_ui_draw_footer("OPEN", false);
-            break;
-
-        case LOCAL_SCREEN_SPO2:
-            if (s_spo2.hr_valid) {
-                snprintf(line, sizeof(line), "%d", s_spo2.heart_rate);
-            } else {
-                snprintf(line, sizeof(line), "--");
-            }
-            oled_draw_text(5, 16, line, 3);
-            oled_draw_text(5, 43, "BPM", 1);
-
-            if (s_spo2.spo2_valid) {
-                snprintf(line, sizeof(line), "%d%%", s_spo2.spo2);
-            } else {
-                snprintf(line, sizeof(line), "--");
-            }
-            oled_draw_text(80, 20, line, 2);
-            oled_draw_text(76, 43, "SPO2", 1);
-            local_ui_draw_footer("START", s_spo2_running);
-            break;
-
-        case LOCAL_SCREEN_ECG:
-            if (s_ecg_count > 0) {
-                oled_draw_ecg_waveform(s_ecg_samples, s_ecg_count);
-            } else {
-                oled_draw_string_centered(19, "PLACE ELECTRODES", 1);
-                oled_draw_string_centered(34, "THEN SELECT", 1);
-            }
-            local_ui_draw_footer("START", ecg_ad8232_is_running());
-            break;
-
-        case LOCAL_SCREEN_COLOR:
-            if (s_color.valid) {
-                snprintf(line, sizeof(line), "R:%u G:%u", s_color.red, s_color.green);
-                oled_draw_text(8, 16, line, 1);
-                snprintf(line, sizeof(line), "B:%u C:%u", s_color.blue, s_color.clear);
-                oled_draw_text(8, 28, line, 1);
-                oled_draw_string_centered(42, "COLOR READY", 1);
-            } else {
-                oled_draw_string_centered(25, "SENSOR OFFLINE", 1);
-            }
-            local_ui_draw_footer("READ", false);
-            break;
-
-        default:
-            break;
-    }
-
-    oled_flush();
-}
-
-static void local_ui_stop_measurement(void)
-{
-    if (ecg_ad8232_is_running()) {
-        ecg_ad8232_stop();
-    }
-    if (s_screen == LOCAL_SCREEN_SPO2) {
-        max30102_stop();
-        s_spo2_running = false;
-    }
-}
-
-static void local_ui_start_measurement(void)
-{
-    bool running = false;
-    if (s_screen == LOCAL_SCREEN_ECG) {
-        running = ecg_ad8232_is_running();
-    } else if (s_screen == LOCAL_SCREEN_SPO2) {
-        running = s_spo2_running;
-    }
-
-    if (running) {
-        local_ui_stop_measurement();
-        local_ui_draw_full();
-        return;
-    }
-
-    switch (s_screen) {
-        case LOCAL_SCREEN_SPO2:
-            max30102_start();
-            s_spo2_running = true;
-            break;
-        case LOCAL_SCREEN_ECG:
-            s_ecg_count = 0;
-            ecg_ad8232_start();
-            break;
-        default:
-            break;
-    }
-    local_ui_draw_full();
-}
-
 static void local_ui_task(void *arg)
 {
     (void)arg;
     local_ui_event_t message;
+    uint32_t refresh_count = 0;
 
     while (true) {
-        if (xQueueReceive(s_event_queue, &message, pdMS_TO_TICKS(250)) == pdTRUE) {
+        // Button events only select a screen; sensors are never touched.
+        if (xQueueReceive(s_event_queue, &message, pdMS_TO_TICKS(LOCAL_UI_REFRESH_MS)) == pdTRUE) {
             switch (message.event) {
                 case BUTTON_EVENT_UP_SHORT:
-                    local_ui_stop_measurement();
-                    s_screen = (local_screen_t)((s_screen + 1) % LOCAL_SCREEN_COUNT);
-                    local_ui_draw_full();
-                    break;
                 case BUTTON_EVENT_SELECT_SHORT:
-                    local_ui_start_measurement();
+                    s_screen = (local_screen_t)((s_screen + 1) % LOCAL_SCREEN_COUNT);
+                    ESP_LOGI(TAG, "Screen changed to %s", local_ui_screen_name(s_screen));
                     break;
+
                 case BUTTON_EVENT_UP_LONG:
                 case BUTTON_EVENT_SELECT_LONG:
-                    local_ui_stop_measurement();
                     s_screen = LOCAL_SCREEN_HOME;
-                    local_ui_draw_full();
+                    ESP_LOGI(TAG, "Screen changed to HOME");
                     break;
+
                 default:
                     break;
             }
         }
 
-        // Refresh only the changing numeric values; static labels and button
-        // hints stay untouched so the screen no longer flashes on every update.
-        if (s_screen == LOCAL_SCREEN_SPO2 || s_screen == LOCAL_SCREEN_COLOR) {
-            local_ui_draw_full();
-        } else if (s_screen == LOCAL_SCREEN_ECG && ecg_ad8232_is_running()) {
-            local_ui_draw_full();
+        // Snapshot the shared state under its lock, then render from the
+        // copy — no lock is held during the slow OLED I2C flush, so sensor
+        // tasks keep updating the state while the display draws.
+        sensor_state_t state;
+        sensor_state_get(&state);
+
+        oled_clear_framebuffer();
+        local_ui_draw_header();
+        switch (s_screen) {
+            case LOCAL_SCREEN_MAX30102: draw_max30102(&state); break;
+            case LOCAL_SCREEN_PIEZO:    draw_piezo(&state);    break;
+            case LOCAL_SCREEN_ECG:      draw_ecg(&state);      break;
+            case LOCAL_SCREEN_HOME:     draw_home(&state);     break;
+            default:                    draw_home(&state);     break;
+        }
+        if (s_screen != LOCAL_SCREEN_HOME) {
+            local_ui_draw_footer();
+        }
+        oled_flush();
+
+        // Heartbeat log (every ~2 s) proving the display keeps refreshing
+        // regardless of which screen is shown or which buttons are pressed.
+        refresh_count++;
+        if (refresh_count % 10 == 0) {
+            ESP_LOGI(TAG, "Displaying %s: MAX30102 HR=%d SpO2=%d piezo HR=%d",
+                     local_ui_screen_name(s_screen),
+                     state.max30102_hr_valid ? state.max30102_hr : 0,
+                     state.max30102_spo2_valid ? state.max30102_spo2 : 0,
+                     state.piezo_valid ? state.piezo_hr : 0);
         }
     }
 }
@@ -228,42 +232,7 @@ void local_ui_init(const char *pairing_code)
     }
 
     buttons_set_callback(local_ui_button_callback, NULL);
+    // Priority 4 keeps the UI below every sensor task (5+), so rendering
+    // can never delay acquisition.
     xTaskCreate(local_ui_task, "local_ui", 4096, NULL, 4, NULL);
-    local_ui_draw_full();
-}
-
-void local_ui_set_spo2(const max30102_metrics_t *metrics)
-{
-    if (metrics != NULL) {
-        s_spo2 = *metrics;
-    }
-}
-
-void local_ui_set_max30102_heart_rate(int heart_rate, bool valid)
-{
-    s_max30102_hr = heart_rate;
-    s_max30102_hr_valid = valid;
-}
-
-void local_ui_set_piezo_heart_rate(int bpm, bool valid)
-{
-    s_piezo_bpm = bpm;
-    s_piezo_valid = valid;
-}
-
-void local_ui_set_ecg_chunk(const ecg_chunk_t *chunk)
-{
-    if (chunk == NULL) {
-        return;
-    }
-    size_t count = ECG_CHUNK_SIZE < SSD1306_WIDTH ? ECG_CHUNK_SIZE : SSD1306_WIDTH;
-    memcpy(s_ecg_samples, chunk->samples, count * sizeof(s_ecg_samples[0]));
-    s_ecg_count = count;
-}
-
-void local_ui_set_color(const tcs34725_reading_t *reading)
-{
-    if (reading != NULL) {
-        s_color = *reading;
-    }
 }

@@ -153,7 +153,7 @@ esp_err_t oled_clear(void){oled_clear_framebuffer();return oled_flush();}
 esp_err_t oled_draw_text(int x,int y,const char*s,int z){if(!s)return ESP_ERR_INVALID_ARG;while(*s){glyph(*s,x,y,z);x+=6*z;s++;}return ESP_OK;}
 esp_err_t oled_draw_string_centered(int y,const char*s,int z){return oled_draw_text((128-(int)strlen(s)*6*z)/2,y,s,z);}
 void oled_draw_line(int x1,int y1,int x2,int y2){(void)x2;(void)y2;for(int x=x1;x<=x2;x++)px(x,y1);}
-void oled_draw_ecg_waveform(int16_t*s,size_t n){for(size_t i=0;i<n&&i<128;i++){int y=32+s[i]/20;if(y<10)y=10;if(y>54)y=54;px((int)i,y);}}
+void oled_draw_ecg_waveform(const int16_t*s,size_t n){for(size_t i=0;i<n&&i<128;i++){int y=32+s[i]/20;if(y<10)y=10;if(y>54)y=54;px((int)i,y);}}
 void oled_show_device_id_with_countdown(const char*id,int seconds){for(int i=seconds;i>0;i--){char b[32];oled_clear_framebuffer();oled_draw_string_centered(0,"PULSE LINK",1);oled_draw_string_centered(18,"DEVICE ID",1);oled_draw_string_centered(30,id,1);snprintf(b,sizeof(b),"STARTING IN %d",i);oled_draw_string_centered(55,b,1);oled_flush();vTaskDelay(pdMS_TO_TICKS(1000));}oled_clear();}
 esp_err_t oled_show_home_screen(const oled_display_state_t*s){(void)s;oled_clear_framebuffer();oled_draw_string_centered(20,"PULSE LINK",1);return oled_flush();}
 void oled_show_ecg_screen(const oled_display_state_t*s,int16_t*a,size_t n){(void)s;oled_clear_framebuffer();oled_draw_ecg_waveform(a,n);oled_flush();}

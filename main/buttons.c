@@ -36,7 +36,7 @@ static void buttons_task(void *arg)
             bool current_state = gpio_get_level(s_buttons[i].gpio);
             
             if (current_state == 0 && s_buttons[i].last_state == 1) {
-                ESP_LOGI(TAG, "Button %d pressed", i + 1);
+                ESP_LOGI(TAG, "%s pressed", (i == 0) ? "UP" : "SELECT");
                 buzzer_beep(60);
                 s_buttons[i].is_pressed = true;
                 s_buttons[i].press_start_time = current_time;
