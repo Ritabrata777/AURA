@@ -23,6 +23,8 @@ enum RelationshipState {
 
 enum MeasurementType {
   HEART_RATE
+  PIEZO_HEART_RATE
+  MAX30102_HEART_RATE
   SPO2
   TEMPERATURE
 }
