@@ -11,6 +11,7 @@
 #include "freertos/task.h"
 
 static const char *TAG = "local_ui";
+static const char *BUTTON_TAG = "buttons";
 
 // Render cadence. Fast enough for live numbers and a scrolling ECG trace,
 // slow enough that the OLED flush (8 I2C page writes) leaves the shared
@@ -25,12 +26,20 @@ typedef enum {
     LOCAL_SCREEN_COUNT,
 } local_screen_t;
 
+typedef enum {
+    LOCAL_MODE_NONE = 0,
+    LOCAL_MODE_MAX30102,
+    LOCAL_MODE_PIEZO,
+    LOCAL_MODE_ECG,
+} local_active_mode_t;
+
 typedef struct {
     button_event_t event;
 } local_ui_event_t;
 
 static QueueHandle_t s_event_queue;
 static local_screen_t s_screen = LOCAL_SCREEN_HOME;
+static local_active_mode_t s_active_mode = LOCAL_MODE_NONE;
 
 static const char *local_ui_screen_name(local_screen_t screen)
 {
@@ -40,6 +49,49 @@ static const char *local_ui_screen_name(local_screen_t screen)
         case LOCAL_SCREEN_ECG:      return "ECG";
         default:                    return "HOME";
     }
+}
+
+static const char *local_ui_mode_name(local_active_mode_t mode)
+{
+    switch (mode) {
+        case LOCAL_MODE_MAX30102: return "SPO2";
+        case LOCAL_MODE_PIEZO:    return "PIEZO";
+        case LOCAL_MODE_ECG:      return "ECG";
+        default:                  return "NONE";
+    }
+}
+
+static local_active_mode_t local_ui_mode_for_screen(local_screen_t screen)
+{
+    switch (screen) {
+        case LOCAL_SCREEN_MAX30102: return LOCAL_MODE_MAX30102;
+        case LOCAL_SCREEN_PIEZO:    return LOCAL_MODE_PIEZO;
+        case LOCAL_SCREEN_ECG:      return LOCAL_MODE_ECG;
+        default:                    return LOCAL_MODE_NONE;
+    }
+}
+
+static void local_ui_next_screen(void)
+{
+    s_screen = (local_screen_t)((s_screen + 1) % LOCAL_SCREEN_COUNT);
+    ESP_LOGI(BUTTON_TAG, "BUTTON1: NEXT PAGE");
+    ESP_LOGI(BUTTON_TAG, "Next page -> %s", local_ui_screen_name(s_screen));
+}
+
+static void local_ui_select_screen(void)
+{
+    s_active_mode = local_ui_mode_for_screen(s_screen);
+    ESP_LOGI(BUTTON_TAG, "BUTTON2: SHORT PRESS - SELECT");
+    ESP_LOGI(BUTTON_TAG, "Selected mode -> %s", local_ui_screen_name(s_screen));
+    ESP_LOGI(BUTTON_TAG, "ACTIVE MODE: %s", local_ui_mode_name(s_active_mode));
+}
+
+static void local_ui_return_home(void)
+{
+    s_active_mode = LOCAL_MODE_NONE;
+    s_screen = LOCAL_SCREEN_HOME;
+    ESP_LOGI(BUTTON_TAG, "BUTTON2: LONG HOLD - HOME");
+    ESP_LOGI(BUTTON_TAG, "ACTIVE MODE: NONE");
 }
 
 // ─── Rendering (works only on the private state copy) ─────────────
@@ -165,19 +217,23 @@ static void local_ui_task(void *arg)
     uint32_t refresh_count = 0;
 
     while (true) {
-        // Button events only select a screen; sensors are never touched.
+        // Button events only control the displayed screen; sensors are never touched.
         if (xQueueReceive(s_event_queue, &message, pdMS_TO_TICKS(LOCAL_UI_REFRESH_MS)) == pdTRUE) {
             switch (message.event) {
                 case BUTTON_EVENT_UP_SHORT:
+                    local_ui_next_screen();
+                    break;
+
                 case BUTTON_EVENT_SELECT_SHORT:
-                    s_screen = (local_screen_t)((s_screen + 1) % LOCAL_SCREEN_COUNT);
-                    ESP_LOGI(TAG, "Screen changed to %s", local_ui_screen_name(s_screen));
+                    local_ui_select_screen();
                     break;
 
                 case BUTTON_EVENT_UP_LONG:
+                    local_ui_next_screen();
+                    break;
+
                 case BUTTON_EVENT_SELECT_LONG:
-                    s_screen = LOCAL_SCREEN_HOME;
-                    ESP_LOGI(TAG, "Screen changed to HOME");
+                    local_ui_return_home();
                     break;
 
                 default:

@@ -10,15 +10,16 @@ static const char *TAG = "buttons";
 
 typedef struct {
     gpio_num_t gpio;
-    bool last_state;
+    bool stable_level;
+    bool raw_level;
+    uint32_t raw_changed_time;
     uint32_t press_start_time;
-    bool is_pressed;
     bool long_press_sent;
 } button_state_t;
 
 static button_state_t s_buttons[2] = {
-    {.gpio = BUTTON_UP_GPIO, .last_state = true, .press_start_time = 0, .is_pressed = false, .long_press_sent = false},
-    {.gpio = BUTTON_SELECT_GPIO, .last_state = true, .press_start_time = 0, .is_pressed = false, .long_press_sent = false}
+    {.gpio = BUTTON_UP_GPIO, .stable_level = true, .raw_level = true, .raw_changed_time = 0, .press_start_time = 0, .long_press_sent = false},
+    {.gpio = BUTTON_SELECT_GPIO, .stable_level = true, .raw_level = true, .raw_changed_time = 0, .press_start_time = 0, .long_press_sent = false}
 };
 
 static button_event_callback_t s_callback = NULL;
@@ -28,53 +29,52 @@ static void buttons_task(void *arg)
 {
     (void)arg;
     uint32_t current_time = 0;
-    
+
     while (true) {
         current_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
-        
+
         for (int i = 0; i < 2; i++) {
-            bool current_state = gpio_get_level(s_buttons[i].gpio);
-            
-            if (current_state == 0 && s_buttons[i].last_state == 1) {
-                ESP_LOGI(TAG, "%s pressed", (i == 0) ? "UP" : "SELECT");
-                buzzer_beep(60);
-                s_buttons[i].is_pressed = true;
-                s_buttons[i].press_start_time = current_time;
-                s_buttons[i].long_press_sent = false;
-            } else if (current_state == 1 && s_buttons[i].last_state == 0) {
-                if (s_buttons[i].is_pressed) {
-                    uint32_t press_duration = current_time - s_buttons[i].press_start_time;
-                    button_event_t event = BUTTON_EVENT_NONE;
-                    
-                    if (press_duration >= BUTTON_LONG_PRESS_MS && !s_buttons[i].long_press_sent) {
-                        event = (i == 0) ? BUTTON_EVENT_UP_LONG : BUTTON_EVENT_SELECT_LONG;
-                    } else if (press_duration < BUTTON_LONG_PRESS_MS && press_duration >= BUTTON_DEBOUNCE_MS) {
-                        event = (i == 0) ? BUTTON_EVENT_UP_SHORT : BUTTON_EVENT_SELECT_SHORT;
-                    }
-                    
-                    if (event != BUTTON_EVENT_NONE && s_callback != NULL) {
-                        s_callback(event, s_callback_arg);
-                    }
-                }
-                s_buttons[i].is_pressed = false;
-                s_buttons[i].long_press_sent = false;
+            bool current_level = gpio_get_level(s_buttons[i].gpio) != 0;
+
+            if (current_level != s_buttons[i].raw_level) {
+                s_buttons[i].raw_level = current_level;
+                s_buttons[i].raw_changed_time = current_time;
+                continue;
             }
-            
-            if (s_buttons[i].is_pressed && !s_buttons[i].long_press_sent) {
-                uint32_t press_duration = current_time - s_buttons[i].press_start_time;
-                if (press_duration >= BUTTON_LONG_PRESS_MS) {
-                    s_buttons[i].long_press_sent = true;
-                    button_event_t event = (i == 0) ? BUTTON_EVENT_UP_LONG : BUTTON_EVENT_SELECT_LONG;
-                    if (s_callback != NULL) {
-                        s_callback(event, s_callback_arg);
+
+            if (current_level != s_buttons[i].stable_level &&
+                current_time - s_buttons[i].raw_changed_time >= BUTTON_DEBOUNCE_MS) {
+                s_buttons[i].stable_level = current_level;
+
+                if (!current_level) {
+                    s_buttons[i].press_start_time = current_time;
+                    s_buttons[i].long_press_sent = false;
+                    ESP_LOGI(TAG, "Button %d pressed", i + 1);
+                    buzzer_beep(60);
+                } else {
+                    if (!s_buttons[i].long_press_sent) {
+                        button_event_t event = (i == 0) ? BUTTON_EVENT_UP_SHORT : BUTTON_EVENT_SELECT_SHORT;
+                        if (s_callback != NULL) {
+                            s_callback(event, s_callback_arg);
+                        }
                     }
+                    s_buttons[i].press_start_time = 0;
+                    s_buttons[i].long_press_sent = false;
                 }
             }
-            
-            s_buttons[i].last_state = current_state;
+
+            if (!s_buttons[i].stable_level && !s_buttons[i].long_press_sent &&
+                s_buttons[i].press_start_time != 0 &&
+                current_time - s_buttons[i].press_start_time >= BUTTON_LONG_PRESS_MS) {
+                button_event_t event = (i == 0) ? BUTTON_EVENT_UP_LONG : BUTTON_EVENT_SELECT_LONG;
+                s_buttons[i].long_press_sent = true;
+                if (s_callback != NULL) {
+                    s_callback(event, s_callback_arg);
+                }
+            }
         }
-        
-        vTaskDelay(pdMS_TO_TICKS(BUTTON_DEBOUNCE_MS / 2));
+
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
@@ -90,6 +90,15 @@ void buttons_init(void)
         .intr_type = GPIO_INTR_DISABLE
     };
     gpio_config(&io_conf);
+
+    for (int i = 0; i < 2; i++) {
+        bool level = gpio_get_level(s_buttons[i].gpio) != 0;
+        s_buttons[i].stable_level = level;
+        s_buttons[i].raw_level = level;
+        s_buttons[i].raw_changed_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
+        s_buttons[i].press_start_time = 0;
+        s_buttons[i].long_press_sent = false;
+    }
     
     xTaskCreate(buttons_task, "buttons_task", 3072, NULL, 5, NULL);
     
