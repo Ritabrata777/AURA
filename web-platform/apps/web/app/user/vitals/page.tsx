@@ -18,10 +18,13 @@ const TYPE_LABELS: Record<Measurement["type"], string> = {
   HEART_RATE: "Heart Rate",
   SPO2: "Blood Oxygen",
   TEMPERATURE: "Temperature",
+  PIEZO_HEART_RATE: "Piezo Heart Rate",
+  MAX30102_HEART_RATE: "MAX30102 Heart Rate",
 };
 
 function formatVitalValue(type: Measurement["type"], value: number | null | undefined) {
   if (value === null || value === undefined || !Number.isFinite(value)) return "--";
+  // Temperature needs 1 decimal place, heart rates need 0
   return value.toFixed(type === "TEMPERATURE" ? 1 : 0);
 }
 

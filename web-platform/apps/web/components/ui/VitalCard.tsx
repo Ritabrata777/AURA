@@ -19,24 +19,32 @@ const icons: Record<MeasurementType, typeof Heart> = {
   HEART_RATE: Heart,
   SPO2: Activity,
   TEMPERATURE: Thermometer,
+  PIEZO_HEART_RATE: Heart,
+  MAX30102_HEART_RATE: Heart,
 };
 
 const labels: Record<MeasurementType, string> = {
   HEART_RATE: "Heart Rate",
   SPO2: "Blood Oxygen",
   TEMPERATURE: "Temperature",
+  PIEZO_HEART_RATE: "Piezo Heart Rate",
+  MAX30102_HEART_RATE: "MAX30102 Heart Rate",
 };
 
 const colors: Record<MeasurementType, string> = {
   HEART_RATE: "text-red-400",
   SPO2: "text-teal-300",
   TEMPERATURE: "text-orange-300",
+  PIEZO_HEART_RATE: "text-pink-400",
+  MAX30102_HEART_RATE: "text-rose-400",
 };
 
 const bgGradients: Record<MeasurementType, string> = {
   HEART_RATE: "from-red-500/10 to-pink-500/5",
   SPO2: "from-teal-500/10 to-cyan-500/5",
   TEMPERATURE: "from-orange-500/10 to-amber-500/5",
+  PIEZO_HEART_RATE: "from-pink-500/10 to-fuchsia-500/5",
+  MAX30102_HEART_RATE: "from-rose-500/10 to-red-500/5",
 };
 
 export function VitalCard({ type, latest, baseline, deviation }: VitalCardProps) {

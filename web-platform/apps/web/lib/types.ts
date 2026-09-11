@@ -1,6 +1,6 @@
 /** Response shapes returned by the API, mirrored for the client. */
 
-export type MeasurementType = "HEART_RATE" | "SPO2" | "TEMPERATURE";
+export type MeasurementType = "HEART_RATE" | "SPO2" | "TEMPERATURE" | "PIEZO_HEART_RATE" | "MAX30102_HEART_RATE";
 export type MeasurementQuality = "VALID" | "INVALID" | "UNAVAILABLE";
 export type UserRole = "PATIENT" | "DOCTOR" | "ADMIN" | "INDIVIDUAL_USER";
 export type RelationshipState = "PENDING" | "ACCEPTED" | "REJECTED" | "REVOKED";
