@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "cJSON.h"
 #include "app_mqtt.h"
+#include "max30102.h"
 
 #define DEVICE_COMM_STATUS_PERIOD_MS 5000
 
@@ -46,6 +47,7 @@ bool device_comm_handle_mqtt_data(mqtt_event_data_t *mqtt_data);
 bool device_comm_is_time_synced(void);
 void device_comm_publish_status(void);
 void device_comm_publish_measurement(const char *type, float value, const char *unit, const char *quality, const char *session_id);
+void device_comm_publish_spo2_raw(const max30102_sample_t *sample, const char *session_id);
 void device_comm_publish_ecg_chunk(const char *session_id, uint16_t sequence, uint16_t sample_rate, int16_t *samples, size_t count);
 void device_comm_publish_ecg_session_end(const char *session_id, uint32_t total_samples, const char *reason);
 void device_comm_publish_event(const char *severity, const char *code, const char *message);

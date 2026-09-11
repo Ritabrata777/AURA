@@ -3,14 +3,13 @@
 
 #include <string.h>
 #include "esp_log.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 static const char *TAG = "mlx90614";
 
-// I2C bus is initialized once in app_main
-#define I2C_MASTER_NUM APP_I2C_MASTER_NUM
+static i2c_master_dev_handle_t s_device;
 
 #define MLX90614_REG_TA 0x06
 #define MLX90614_REG_TOBJ1 0x07
@@ -34,11 +33,24 @@ typedef struct {
 
 static mlx90614_driver_t s_driver = {0};
 
+void mlx90614_set_bus_handle(void *bus_handle)
+{
+    i2c_master_bus_handle_t bus = (i2c_master_bus_handle_t)bus_handle;
+
+    i2c_device_config_t dev_cfg = {
+        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
+        .device_address = MLX90614_I2C_ADDRESS,
+        .scl_speed_hz = 100000,
+    };
+
+    ESP_ERROR_CHECK(i2c_master_bus_add_device(bus, &dev_cfg, &s_device));
+    ESP_LOGI(TAG, "MLX90614 device added to I2C bus");
+}
+
 static esp_err_t mlx90614_read_word(uint8_t reg, uint16_t *value)
 {
     uint8_t buffer[3];
-    esp_err_t ret = i2c_master_write_read_device(I2C_MASTER_NUM, MLX90614_I2C_ADDRESS,
-                                                  &reg, 1, buffer, 3, pdMS_TO_TICKS(100));
+    esp_err_t ret = i2c_master_transmit_receive(s_device, &reg, 1, buffer, 3, pdMS_TO_TICKS(100));
     if (ret != ESP_OK) {
         return ret;
     }

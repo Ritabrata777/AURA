@@ -28,6 +28,7 @@ typedef enum {
 typedef void (*spo2_data_callback_t)(max30102_sample_t *sample, max30102_metrics_t *metrics, void *arg);
 
 void max30102_init(void);
+void max30102_set_bus_handle(void *bus_handle);
 esp_err_t max30102_start(void);
 void max30102_stop(void);
 bool max30102_is_running(void);

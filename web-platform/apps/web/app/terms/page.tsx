@@ -11,7 +11,7 @@ export default function TermsPage() {
       </p>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-white/70">
         <p>
-          AURA is currently an engineering prototype. Measurements are provided for
+          Pulse Link is currently an engineering prototype. Measurements are provided for
           monitoring and development purposes and are not a medical diagnosis.
         </p>
         <p>

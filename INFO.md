@@ -42,6 +42,23 @@ Accounts are split into **patients**, **doctors**, and **individual users**.
 
 ## Change Log
 
+### 2026-09-11 - Pulse Link dashboard, history, ECG, and sensor updates
+Renamed the visible web brand from AURA to Pulse Link. Added date-based vital
+history, min/max/average summaries, ECG session history with waveform viewing,
+historical AI context for stored readings, and clearer paired/online device
+status in the dashboard.
+
+Added the hemoglobin estimate workflow. The web card accepts age and gender and
+keeps Red/IR values read-only; the firmware now publishes raw MAX30102 Red/IR
+samples through MQTT live events for the model request. Rebuild and flash the
+firmware before using this flow. The estimate remains research-only and is not a
+diagnosis.
+
+Sensor commands now stop conflicting I2C sensor streams before starting another
+mode. Added deterministic seven-day demo vital and ECG seeding for
+2026-09-03 through 2026-09-09, plus `start-pulse-link.bat` for Docker, MQTT,
+Prisma, API, and web startup.
+
 ### 2026-09-10 — OLED partial refresh (uncommitted)
 Firmware: OLED driver now composes into a framebuffer with dirty-page tracking and
 flushes once (`oled_flush` / `oled_flush_dirty`). Local UI redraws only the numeric
