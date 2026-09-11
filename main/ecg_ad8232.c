@@ -131,7 +131,12 @@ static void ecg_processing_task(void *arg)
         ecg_chunk_t *chunk = (ecg_chunk_t *)xRingbufferReceive(s_chunk_ringbuf, &chunk_size,
                                                                pdMS_TO_TICKS(200));
 
-        if (chunk != NULL && s_data_callback != NULL && s_session.state == ECG_STATE_RUNNING) {
+        // STOPPING must also deliver: the last chunk enqueued by the sample
+        // timer before it was cancelled often arrives here after the state has
+        // flipped, and dropping it lost the final 200 ms of the recording even
+        // though the drain loop below was written to preserve exactly that tail.
+        if (chunk != NULL && s_data_callback != NULL &&
+            (s_session.state == ECG_STATE_RUNNING || s_session.state == ECG_STATE_STOPPING)) {
             s_data_callback(chunk, s_callback_arg);
         }
 

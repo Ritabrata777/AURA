@@ -14,18 +14,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  applicationName: "AURA Health",
+  applicationName: "Pulse Link",
   title: {
-    default: "AURA — Remote Vitals & ECG Monitoring",
-    template: "%s · AURA",
+    default: "Pulse Link — Remote Vitals & ECG Monitoring",
+    template: "%s · Pulse Link",
   },
   description:
     "Remote vitals and ECG monitoring for connected health devices. Engineering-prototype measurements for monitoring purposes — not a medical diagnosis.",
   keywords: ["ECG", "vitals", "remote monitoring", "ESP32", "telehealth"],
   openGraph: {
     type: "website",
-    siteName: "AURA Health",
-    title: "AURA — Remote Vitals & ECG Monitoring",
+    siteName: "Pulse Link",
+    title: "Pulse Link — Remote Vitals & ECG Monitoring",
     description:
       "Live vitals and ECG streaming from your connected health monitor.",
   },

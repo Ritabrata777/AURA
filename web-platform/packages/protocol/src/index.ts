@@ -97,6 +97,8 @@ export interface MeasurementMessage extends ProtocolEnvelope {
   unit: string;
   quality: MeasurementQuality;
   sessionId: string;
+  red?: number;
+  ir?: number;
 }
 
 export interface EcgDataMessage extends ProtocolEnvelope {
@@ -201,7 +203,9 @@ export function isMeasurementMessage(value: unknown): value is MeasurementMessag
     Number.isFinite(m.value) &&
     typeof m.unit === "string" &&
     (["VALID", "INVALID", "UNAVAILABLE"] as const).includes(m.quality as MeasurementQuality) &&
-    typeof m.sessionId === "string"
+    typeof m.sessionId === "string" &&
+    (m.red === undefined || typeof m.red === "number") &&
+    (m.ir === undefined || typeof m.ir === "number")
   );
 }
 

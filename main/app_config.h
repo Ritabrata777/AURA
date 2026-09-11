@@ -10,9 +10,9 @@
 
 // ─── I2C Bus (shared by OLED, MAX30102, MLX90614) ───────────────
 #define APP_I2C_MASTER_NUM    I2C_NUM_0
-#define APP_I2C_SDA_IO        GPIO_NUM_21
-#define APP_I2C_SCL_IO        GPIO_NUM_22
-#define APP_I2C_FREQ_HZ       400000
+#define APP_I2C_SDA_IO        GPIO_NUM_22
+#define APP_I2C_SCL_IO        GPIO_NUM_21
+#define APP_I2C_FREQ_HZ       100000
 
 // ─── MQTT Broker ─────────────────────────────────────────────────
 #ifndef CONFIG_MQTT_BROKER_URI
@@ -21,8 +21,8 @@
 
 // ─── Wi-Fi (fallback when NVS is empty) ──────────────────────────
 #ifndef CONFIG_WIFI_SSID
-#define CONFIG_WIFI_SSID ""
+#define CONFIG_WIFI_SSID "zxc"
 #endif
 #ifndef CONFIG_WIFI_PASSWORD
-#define CONFIG_WIFI_PASSWORD ""
+#define CONFIG_WIFI_PASSWORD "12345678"
 #endif

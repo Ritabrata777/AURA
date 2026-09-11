@@ -185,6 +185,8 @@ export interface LiveMeasurement {
   unit: string;
   quality: MeasurementQuality;
   measuredAt: string;
+  red?: number;
+  ir?: number;
 }
 
 export interface LiveEcgChunk {

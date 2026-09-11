@@ -62,7 +62,7 @@ export function LoginScreen() {
         </motion.div>
 
         <motion.h1 layout className="mb-2 text-center text-2xl font-bold tracking-tight sm:text-3xl">
-          AURA
+          Pulse Link
         </motion.h1>
         <motion.p layout className="mb-6 text-center text-xs text-white/50 sm:mb-8 sm:text-sm">
           Select your role to continue
