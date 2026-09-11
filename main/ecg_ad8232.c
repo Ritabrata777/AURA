@@ -18,8 +18,8 @@ static const char *TAG = "ecg_ad8232";
 #define ECG_SAMPLE_INTERVAL_US (1000000 / ECG_SAMPLE_RATE)
 #define ECG_RAW_CENTER 2048
 #define ECG_DIAG_INTERVAL_S 5
-#define ECG_FILTER_SETTLE_SAMPLES 13
-#define ECG_SPECTRUM_SIZE ECG_SAMPLE_RATE
+#define ECG_FILTER_SETTLE_SAMPLES 25
+#define ECG_SPECTRUM_SIZE 250
 // Hold up to 10 chunks. RINGBUF_TYPE_NOSPLIT stores an 8-byte header per item
 // and rounds each item up to a 4-byte boundary, so the previous flat +32 slack
 // was short by ~48 bytes and the buffer silently held only nine chunks.
@@ -74,41 +74,43 @@ typedef struct {
     float z2;
 } ecg_biquad_t;
 
-// RBJ cookbook biquads designed for fs=125 Hz.
+// RBJ cookbook biquads designed for fs=250 Hz.
 // Primary ECG chain:
-//   HP 0.5 Hz Q=0.7071 -> LP 40 Hz 4th-order cascade -> notch 50 Hz Q=30.
+//   HP 0.5 Hz Q=0.7071 -> LP 30 Hz 4th-order cascade -> notch 50 Hz Q=30.
 //
-// The lower 125 Hz acquisition rate reduces live trace point density while the
-// 40 Hz two-section low-pass keeps QRS edges readable. This does not fabricate
-// morphology; it only limits the frequency content sent downstream.
+// The 30 Hz two-section low-pass is deliberately steeper than one biquad, so
+// small fast spikes are reduced without pushing the cutoff down into the
+// 10-15 Hz range where QRS morphology would become rounded. The 50 Hz notch
+// remains for mains pickup; the spectrum log still reports 30 Hz so the
+// interference can be verified from raw ADC data.
 // Samples are relative ADC counts centered around mid-scale, not calibrated mV.
 static ecg_biquad_t s_hp_filter = {
-    .b0 = 0.982385439f,
-    .b1 = -1.964770877f,
-    .b2 = 0.982385439f,
-    .a1 = -1.964460580f,
-    .a2 = 0.965081174f,
+    .b0 = 0.991153595f,
+    .b1 = -1.982307190f,
+    .b2 = 0.991153595f,
+    .a1 = -1.982228930f,
+    .a2 = 0.982385451f,
 };
 static ecg_biquad_t s_lp_filter_a = {
-    .b0 = 0.388294443f,
-    .b1 = 0.776588885f,
-    .b2 = 0.388294443f,
-    .a1 = 0.463824194f,
-    .a2 = 0.089353577f,
+    .b0 = 0.083014239f,
+    .b1 = 0.166028478f,
+    .b2 = 0.083014239f,
+    .a1 = -0.893103633f,
+    .a2 = 0.225160589f,
 };
 static ecg_biquad_t s_lp_filter_b = {
-    .b0 = 0.529532498f,
-    .b1 = 1.059064996f,
-    .b2 = 0.529532498f,
-    .a1 = 0.632535409f,
-    .a2 = 0.485594584f,
+    .b0 = 0.107384678f,
+    .b1 = 0.214769355f,
+    .b2 = 0.107384678f,
+    .a1 = -1.155291512f,
+    .a2 = 0.584830222f,
 };
 static ecg_biquad_t s_notch_filter = {
-    .b0 = 0.990298618f,
-    .b1 = 1.602336823f,
-    .b2 = 0.990298618f,
-    .a1 = 1.602336823f,
-    .a2 = 0.980597236f,
+    .b0 = 0.984396390f,
+    .b1 = -0.608390427f,
+    .b2 = 0.984396390f,
+    .a1 = -0.608390427f,
+    .a2 = 0.968792780f,
 };
 static uint32_t s_dropped_chunks = 0;
 static uint32_t s_sent_chunks = 0;
@@ -213,24 +215,26 @@ static void update_spectrum(int raw_sample, int filtered_sample)
         return;
     }
 
-    // 1 Hz bin spacing at fs=125 Hz and N=125. Values are normalized power,
+    // 1 Hz bin spacing at fs=250 Hz and N=250. Values are normalized power,
     // useful for before/after comparison rather than calibrated amplitude.
-    const float raw30 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 0.125581039f);
-    const float raw35 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -0.374762629f);
-    const float raw40 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -0.851558583f);
-    const float raw50 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -1.618033989f);
-    const float raw60 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -1.984229403f);
-    const float filt30 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 0.125581039f);
-    const float filt35 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -0.374762629f);
-    const float filt40 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -0.851558583f);
-    const float filt50 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -1.618033989f);
-    const float filt60 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -1.984229403f);
+    const float raw30 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 1.457937255f);
+    const float raw35 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 1.274847979f);
+    const float raw40 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 1.071653590f);
+    const float raw50 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 0.618033989f);
+    const float raw60 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, 0.125581039f);
+    const float raw100 = goertzel_power(s_spectrum_raw, ECG_SPECTRUM_SIZE, -1.618033989f);
+    const float filt30 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 1.457937255f);
+    const float filt35 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 1.274847979f);
+    const float filt40 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 1.071653590f);
+    const float filt50 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 0.618033989f);
+    const float filt60 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, 0.125581039f);
+    const float filt100 = goertzel_power(s_spectrum_filtered, ECG_SPECTRUM_SIZE, -1.618033989f);
 
     ESP_LOGI(TAG,
-             "ECG spectrum 1s raw_pwr[30=%.1f 35=%.1f 40=%.1f 50=%.1f 60=%.1f] "
-             "filt_pwr[30=%.1f 35=%.1f 40=%.1f 50=%.1f 60=%.1f]",
-             raw30, raw35, raw40, raw50, raw60,
-             filt30, filt35, filt40, filt50, filt60);
+             "ECG spectrum 1s raw_pwr[30=%.1f 35=%.1f 40=%.1f 50=%.1f 60=%.1f 100=%.1f] "
+             "filt_pwr[30=%.1f 35=%.1f 40=%.1f 50=%.1f 60=%.1f 100=%.1f]",
+             raw30, raw35, raw40, raw50, raw60, raw100,
+             filt30, filt35, filt40, filt50, filt60, filt100);
 
     s_spectrum_count = 0;
 }
