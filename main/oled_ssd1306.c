@@ -1,5 +1,7 @@
 #include "oled_ssd1306.h"
 #include "app_config.h"
+#include "i2c_bus.h"
+#include <stdint.h>
 #include <string.h>
 #include <stdio.h>
 #include "driver/i2c_master.h"
@@ -125,6 +127,7 @@ void oled_ssd1306_init(void)
         ESP_LOGE(TAG, "OLED: not found at 0x3C or 0x3D (no ACK on either address)");
         return;
     }
+    ESP_LOGI(TAG, "I2C: OLED device registered");
     ESP_LOGI(TAG, "OLED: Found at 0x%02X", found_addr);
 
     // Datasheet bring-up sequence, including the charge-pump enable (0x8D,
@@ -147,7 +150,7 @@ void oled_ssd1306_init(void)
 }
 void oled_clear_framebuffer(void){memset(fb,0,sizeof(fb));}
 void oled_clear_area(int x,int y,int w,int h){for(int j=y;j<y+h;j++)for(int i=x;i<x+w;i++)if(i>=0&&i<128&&j>=0&&j<64)fb[j/8*128+i]&=~(1u<<(j%8));}
-esp_err_t oled_flush(void){if(!dev||!mutex)return ESP_ERR_INVALID_STATE;xSemaphoreTake(mutex,portMAX_DELAY);esp_err_t e=pages();xSemaphoreGive(mutex);return e;}
+esp_err_t oled_flush(void){if(!dev||!mutex)return ESP_ERR_INVALID_STATE;xSemaphoreTake(mutex,portMAX_DELAY);esp_err_t e=i2c_bus_lock(UINT32_MAX);if(e==ESP_OK){e=pages();i2c_bus_unlock();}xSemaphoreGive(mutex);return e;}
 esp_err_t oled_flush_dirty(void){return oled_flush();}
 esp_err_t oled_clear(void){oled_clear_framebuffer();return oled_flush();}
 esp_err_t oled_draw_text(int x,int y,const char*s,int z){if(!s)return ESP_ERR_INVALID_ARG;while(*s){glyph(*s,x,y,z);x+=6*z;s++;}return ESP_OK;}

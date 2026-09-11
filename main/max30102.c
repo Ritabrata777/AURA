@@ -1,5 +1,6 @@
 #include "max30102.h"
 #include "app_config.h"
+#include "i2c_bus.h"
 
 #include <string.h>
 #include <math.h>
@@ -82,20 +83,37 @@ static max30102_driver_t s_driver = {0};
 static esp_err_t max30102_write_reg(uint8_t reg, uint8_t value)
 {
     uint8_t buffer[2] = {reg, value};
-    return i2c_master_transmit(s_device, buffer, sizeof(buffer), pdMS_TO_TICKS(100));
+    esp_err_t err = i2c_bus_lock(200);
+    if (err != ESP_OK) {
+        return err;
+    }
+    err = i2c_master_transmit(s_device, buffer, sizeof(buffer), pdMS_TO_TICKS(100));
+    i2c_bus_unlock();
+    return err;
 }
 
 static esp_err_t max30102_read_reg(uint8_t reg, uint8_t *value)
 {
-    return i2c_master_transmit_receive(s_device, &reg, 1, value, 1, pdMS_TO_TICKS(100));
+    esp_err_t err = i2c_bus_lock(200);
+    if (err != ESP_OK) {
+        return err;
+    }
+    err = i2c_master_transmit_receive(s_device, &reg, 1, value, 1, pdMS_TO_TICKS(100));
+    i2c_bus_unlock();
+    return err;
 }
 
 static esp_err_t max30102_read_fifo_data(uint32_t *ir, uint32_t *red)
 {
     uint8_t buffer[6];
     uint8_t reg = MAX30102_REG_FIFO_DATA;
-    esp_err_t ret = i2c_master_transmit_receive(s_device, &reg, 1, buffer, sizeof(buffer),
-                                                pdMS_TO_TICKS(100));
+    esp_err_t ret = i2c_bus_lock(200);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+    ret = i2c_master_transmit_receive(s_device, &reg, 1, buffer, sizeof(buffer),
+                                      pdMS_TO_TICKS(100));
+    i2c_bus_unlock();
     if (ret == ESP_OK) {
         *red = ((uint32_t)buffer[0] << 16) | ((uint32_t)buffer[1] << 8) | buffer[2];
         *ir  = ((uint32_t)buffer[3] << 16) | ((uint32_t)buffer[4] << 8) | buffer[5];
@@ -302,6 +320,7 @@ void max30102_init(void)
         s_driver.state = SPO2_STATE_ERROR;
         return;
     }
+    ESP_LOGI(TAG, "I2C: MAX30102 device registered");
 
     uint8_t chip_id = 0;
     esp_err_t ret = max30102_read_reg(MAX30102_REG_CHIP_ID, &chip_id);

@@ -1,0 +1,621 @@
+Command: C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe C:\esp\v6.1\esp-idf\tools/idf_monitor.py -p COM8 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 C:\Users\LENOVO\Desktop\AURA\AURA\build\esp32-health-device.elf C:\Users\LENOVO\Desktop\AURA\AURA\build\bootloader\bootloader.elf --force-color -m 'C:\Espressif\tools\python\v6.1\venv\Scripts\python.exe' 'C:\esp\v6.1\esp-idf\tools\idf.py'
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET)ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0040,len:6272
+load:0x40078000,len:15824
+load:0x40080400,len:3988
+entry 0x40080644
+[0;32mI (27) boot: ESP-IDF v6.1-dirty 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Sep 11 2026 18:20:11[0m
+[0;32mI (28) boot: Multicore bootloader[0m
+[0;32mI (29) boot: chip revision: v3.1[0m
+[0;32mI (32) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (36) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (39) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (43) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (50) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (56) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (63) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (69) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (76) boot: End of partition table[0m
+[0;32mI (79) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=246c0h (149184) map[0m
+[0;32mI (140) esp_image: segment 1: paddr=000346e8 vaddr=3ffb0000 size=046e4h ( 18148) load[0m
+[0;32mI (147) esp_image: segment 2: paddr=00038dd4 vaddr=40080000 size=07244h ( 29252) load[0m
+[0;32mI (159) esp_image: segment 3: paddr=00040020 vaddr=400d0020 size=b0c7ch (724092) map[0m
+[0;32mI (417) esp_image: segment 4: paddr=000f0ca4 vaddr=40087244 size=0f4b4h ( 62644) load[0m
+[0;32mI (443) esp_image: segment 5: paddr=00100160 vaddr=50000000 size=00028h (    40) load[0m
+[0;32mI (455) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (455) boot: Disabling RNG early entropy source...[0m
+[0;32mI (466) cpu_start: Multicore app[0m
+[0;32mI (474) cpu_start: GPIO 3 and 1 are used as console UART I/O pins[0m
+[0;32mI (474) cpu_start: Pro cpu start user code[0m
+[0;32mI (474) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (476) app_init: Application information:[0m
+[0;32mI (480) app_init: Project name:     esp32-health-device[0m
+[0;32mI (485) app_init: App version:      22c6346-dirty[0m
+[0;32mI (489) app_init: Compile time:     Sep 11 2026 22:21:41[0m
+[0;32mI (494) app_init: ELF file SHA256:  0caf66ce7...[0m
+[0;32mI (499) app_init: ESP-IDF:          v6.1-dirty[0m
+[0;32mI (503) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (507) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (510) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (515) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (521) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (526) heap_init: At 3FFBA670 len 00025990 (150 KiB): DRAM[0m
+[0;32mI (531) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (536) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (542) heap_init: At 400966F8 len 00009908 (38 KiB): IRAM[0m
+[0;33mW (549) spi_flash: Detected boya flash chip but using generic driver. For optimal functionality, enable `SPI_FLASH_SUPPORT_BOYA_CHIP` in menuconfig[0m
+[0;32mI (560) spi_flash: detected chip: generic[0m
+[0;32mI (564) spi_flash: flash io: dio[0m
+[0;33mW (567) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (581) main_task: Started on CPU0[0m
+[0;32mI (581) main_task: Calling app_main()[0m
+[0;32mI (581) app: === Health Device Starting ===[0m
+[0;32mI (591) i2c: I2C: shared bus initialized SDA=22 SCL=21[0m
+[0;32mI (591) i2c: I2C SCAN: SDA=22 SCL=21[0m
+[0;32mI (591) i2c: I2C SCAN: Scanning addresses 0x08-0x77 ...[0m
+[0;32mI (621) i2c: I2C SCAN: 0x3C -> SSD1306 OLED[0m
+[0;32mI (631) i2c: I2C SCAN: 0x57 -> MAX30102[0m
+[0;32mI (651) i2c: I2C SCAN: 2 device(s) found[0m
+[0;32mI (651) adc_bus: ADC1 initialized[0m
+[0;32mI (651) oled_ssd1306: I2C: OLED device registered[0m
+[0;32mI (651) oled_ssd1306: OLED: Found at 0x3C[0m
+[0;32mI (771) oled_ssd1306: OLED: Initialization successful[0m
+[0;32mI (1881) max30102: Initializing MAX30102 sensor[0m
+[0;32mI (1881) max30102: I2C: MAX30102 device registered[0m
+[0;32mI (1881) max30102: MAX30102 found, chip ID: 0x15[0m
+[0;32mI (1881) max30102: MAX30102 configured for SpO2 and HR monitoring[0m
+[0;32mI (2001) buttons: Initializing buttons[0m
+[0;32mI (2001) buttons: Buttons initialized: UP=33, SELECT=32[0m
+[0;32mI (2001) piezo_heartbeat: PIEZO: ADC initialized GPIO=35 unit=0 channel=7 atten=3 sample_rate=200 Hz[0m
+[0;32mI (2001) ecg_ad8232: Initializing AD8232 ECG sensor[0m
+[0;32mI (2011) ecg_ad8232: AD8232 initialized: 250 Hz, 500 samples buffer[0m
+[0;32mI (2011) local_ui: Showing pairing code MED-149CAC for 5 seconds[0m
+[0;32mI (7691) wifi:wifi driver task: 3ffc6fb4, prio:23, stack:6656, core=0[0m
+[0;32mI (7711) wifi:wifi firmware version: e12a754[0m
+[0;32mI (7711) wifi:wifi certification version: v7.0[0m
+[0;32mI (7711) wifi:config NVS flash: enabled[0m
+[0;32mI (7711) wifi:config nano formatting: disabled[0m
+[0;32mI (7711) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (7721) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (7721) wifi:Init management short buffer num: 32[0m
+[0;32mI (7731) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (7731) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (7741) wifi:Init static rx buffer num: 10[0m
+[0;32mI (7741) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (7751) wifi_init: rx ba win: 6[0m
+[0;32mI (7751) wifi_init: accept mbox: 6[0m
+[0;32mI (7751) wifi_init: tcpip mbox: 32[0m
+[0;32mI (7751) wifi_init: udp mbox: 6[0m
+[0;32mI (7761) wifi_init: tcp mbox: 6[0m
+[0;32mI (7761) wifi_init: tcp tx win: 5760[0m
+[0;32mI (7761) wifi_init: tcp rx win: 5760[0m
+[0;32mI (7771) wifi_init: tcp mss: 1440[0m
+[0;32mI (7771) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (7771) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (7781) app_mqtt: MQTT client initialized[0m
+[0;32mI (7781) device_comm: Initializing device communication[0m
+[0;32mI (7781) device_comm: Device ID set: ECE334149CAC[0m
+[0;32mI (7791) max30102: Starting MAX30102 measurement[0m
+[0;32mI (7801) wifi_manager: No Wi-Fi credentials in NVS[0m
+[0;32mI (7801) wifi_manager: Using Kconfig Wi-Fi credentials: SSID=zxc[0m
+[0;32mI (7801) wifi_manager: Starting STA mode with credentials for SSID=zxc[0m
+[0;33mW (7811) wifi:Password length matches WPA2 standards, authmode threshold changes from OPEN to WPA2[0m
+[0;32mI (7821) phy_init: phy_version 4863,a3a4459,Oct 28 2025,14:30:06[0m
+[0;32mI (7911) wifi:mode : sta (ec:e3:34:14:9c:ac)[0m
+[0;32mI (7911) wifi:enable tsf[0m
+[0;32mI (7921) wifi_manager: STA started, attempting to connect[0m
+[0;32mI (7921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=191256[0m
+[0;32mI (7921) app: === Device Ready ===[0m
+[0;32mI (7921) app: firmware=0.1.0 protocol=1 hardware=ECE334149CAC pairing=MED-149CAC device_id=ECE334149CAC[0m
+[0;32mI (7931) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (8241) app: MQTT broker: mqtt://10.146.117.232:1883[0m
+[0;32mI (8531) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (8541) wifi:Association refused temporarily time 1000, comeback time 1100 (TUs)[0m
+[0;32mI (8921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=190136[0m
+[0;32mI (9661) wifi:state: assoc -> auth (0xb0)[0m
+[0;32mI (9841) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (9921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=186892[0m
+[0;32mI (10251) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (10291) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (10351) wifi:connected with zxc, aid = 9, channel 1, BW20, bssid = 76:a9:75:3a:1f:01[0m
+[0;32mI (10351) wifi:security: WPA3-SAE HUNT_AND_PECK, phy: bgn, rssi: -39, cipher(pairwise:0x3, group:0x3), pmf:1[0m
+[0;32mI (10361) wifi:pm start, type: 1[0m
+
+[0;32mI (10361) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (10391) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
+[0;32mI (10391) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
+[0;32mI (10411) wifi:<ba-add>idx:0 (ifx:0, 76:a9:75:3a:1f:01), tid:0, ssn:1, winSize:64[0m
+[0;32mI (10721) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=0 piezo HR=0[0m
+[0;32mI (10921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=189268[0m
+[0;32mI (11431) esp_netif_handlers: sta ip: 10.146.117.95, mask: 255.255.255.0, gw: 10.146.117.116[0m
+[0;32mI (11431) wifi_manager: STA got IP: 10.146.117.95[0m
+[0;32mI (11431) app: Wi-Fi connected, syncing time and starting MQTT[0m
+[0;32mI (11431) app: Initializing SNTP for time sync[0m
+[0;32mI (11441) app_mqtt: MQTT client started[0m
+[0;32mI (11841) app: SpO2: 93%[0m
+[0;32mI (11841) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (11921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=181580[0m
+[0;32mI (11941) app_mqtt: MQTT connected[0m
+[0;32mI (11941) app: MQTT connected — subscribing to commands[0m
+[0;32mI (11941) device_comm: Subscribing to devices/ECE334149CAC/commands[0m
+[0;32mI (11951) app_mqtt: Subscribed to devices/ECE334149CAC/commands, msg_id=38878[0m
+[0;32mI (11961) app_mqtt: MQTT subscribed, msg_id=38878[0m
+[0;32mI (11971) app_mqtt: MQTT published, msg_id=38218[0m
+[0;32mI (12921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177428[0m
+[0;32mI (13831) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (13871) app: SpO2: 93%[0m
+[0;32mI (13871) app: MAX30102 Temperature: 30.75 C[0m
+[0;32mI (13901) wifi:<ba-add>idx:1 (ifx:0, 76:a9:75:3a:1f:01), tid:6, ssn:2, winSize:64[0m
+[0;32mI (13921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173084[0m
+[0;32mI (13941) app_mqtt: MQTT published, msg_id=42984[0m
+[0;32mI (13951) app_mqtt: MQTT published, msg_id=43038[0m
+[0;32mI (13951) app_mqtt: MQTT published, msg_id=6140[0m
+[0;32mI (14921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177228[0m
+[0;32mI (15851) app: MAX30102 Heart Rate: 45 bpm[0m
+[0;32mI (15861) app: SpO2: 93%[0m
+[0;32mI (15861) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (15921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173084[0m
+[0;32mI (16021) app_mqtt: MQTT published, msg_id=13788[0m
+[0;32mI (16031) app_mqtt: MQTT published, msg_id=7234[0m
+[0;32mI (16031) app_mqtt: MQTT published, msg_id=44809[0m
+[0;32mI (16921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177240[0m
+[0;32mI (16931) local_ui: Displaying HOME: MAX30102 HR=72 SpO2=93 piezo HR=0[0m
+[0;32mI (16971) app_mqtt: MQTT published, msg_id=27334[0m
+[0;32mI (17891) app: MAX30102 Heart Rate: 61 bpm[0m
+[0;32mI (17901) app: SpO2: 93%[0m
+[0;32mI (17901) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (17921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173104[0m
+[0;32mI (17991) app_mqtt: MQTT published, msg_id=46142[0m
+[0;32mI (18001) app_mqtt: MQTT published, msg_id=34270[0m
+[0;32mI (18001) app_mqtt: MQTT published, msg_id=11881[0m
+[0;32mI (18921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (19871) app: MAX30102 Heart Rate: 61 bpm[0m
+[0;32mI (19881) app: SpO2: 93%[0m
+[0;32mI (19881) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (19921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173104[0m
+[0;32mI (20011) app_mqtt: MQTT published, msg_id=49296[0m
+[0;32mI (20011) app_mqtt: MQTT published, msg_id=61765[0m
+[0;32mI (20021) app_mqtt: MQTT published, msg_id=22051[0m
+[0;32mI (20031) local_ui: Displaying HOME: MAX30102 HR=61 SpO2=93 piezo HR=0[0m
+[0;32mI (20921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (21921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (21931) app: SpO2: 93%[0m
+[0;32mI (21931) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (22001) app_mqtt: MQTT published, msg_id=64826[0m
+[0;32mI (22001) app_mqtt: MQTT published, msg_id=12365[0m
+[0;32mI (22001) app_mqtt: MQTT published, msg_id=45437[0m
+[0;32mI (22011) app_mqtt: MQTT published, msg_id=34364[0m
+[0;32mI (22921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (23131) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (23891) app: SpO2: 93%[0m
+[0;32mI (23891) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (23921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173104[0m
+[0;32mI (24001) app_mqtt: MQTT published, msg_id=6845[0m
+[0;32mI (24011) app_mqtt: MQTT published, msg_id=24813[0m
+[0;32mI (24011) app_mqtt: MQTT published, msg_id=35713[0m
+[0;32mI (24921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (25921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (25951) app: MAX30102 Heart Rate: 81 bpm[0m
+[0;32mI (25961) app: SpO2: 93%[0m
+[0;32mI (25961) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (26051) app_mqtt: MQTT published, msg_id=19356[0m
+[0;32mI (26061) app_mqtt: MQTT published, msg_id=899[0m
+[0;32mI (26061) app_mqtt: MQTT published, msg_id=60466[0m
+[0;32mI (26231) local_ui: Displaying HOME: MAX30102 HR=68 SpO2=93 piezo HR=0[0m
+[0;32mI (26921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (26971) app_mqtt: MQTT published, msg_id=47400[0m
+[0;32mI (27891) app: MAX30102 Heart Rate: 68 bpm[0m
+[0;32mI (27901) app: SpO2: 93%[0m
+[0;32mI (27901) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (27921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173104[0m
+[0;32mI (28101) app_mqtt: MQTT published, msg_id=4718[0m
+[0;32mI (28101) app_mqtt: MQTT published, msg_id=31088[0m
+[0;32mI (28111) app_mqtt: MQTT published, msg_id=52672[0m
+[0;32mI (28921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (29331) local_ui: Displaying HOME: MAX30102 HR=68 SpO2=93 piezo HR=0[0m
+[0;32mI (29921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (29981) app: MAX30102 Heart Rate: 68 bpm[0m
+[0;32mI (29991) app: SpO2: 93%[0m
+[0;32mI (29991) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (30151) app_mqtt: MQTT published, msg_id=31836[0m
+[0;32mI (30151) app_mqtt: MQTT published, msg_id=12722[0m
+[0;32mI (30161) app_mqtt: MQTT published, msg_id=41729[0m
+[0;32mI (30921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (31901) app: SpO2: 93%[0m
+[0;32mI (31901) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (31921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173104[0m
+[0;32mI (31961) app_mqtt: MQTT published, msg_id=25731[0m
+[0;32mI (31971) app_mqtt: MQTT published, msg_id=21121[0m
+[0;32mI (31981) app_mqtt: MQTT published, msg_id=12806[0m
+[0;32mI (31981) app_mqtt: MQTT published, msg_id=44563[0m
+[0;32mI (32441) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (32921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (33921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177244[0m
+[0;32mI (34001) app: SpO2: 93%[0m
+[0;32mI (34001) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (34141) app_mqtt: MQTT published, msg_id=1314[0m
+[0;32mI (34141) app_mqtt: MQTT published, msg_id=7483[0m
+[0;32mI (34151) app_mqtt: MQTT published, msg_id=6965[0m
+[0;32mI (34921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (35541) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (35911) app: SpO2: 93%[0m
+[0;32mI (35911) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (35921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=173104[0m
+[0;32mI (35971) app_mqtt: MQTT published, msg_id=6530[0m
+[0;32mI (35971) app_mqtt: MQTT published, msg_id=55321[0m
+[0;32mI (35981) app_mqtt: MQTT published, msg_id=30967[0m
+[0;32mI (36921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (36981) app_mqtt: MQTT published, msg_id=22229[0m
+[0;32mI (37911) app: SpO2: 93%[0m
+[0;32mI (37911) app: MAX30102 Temperature: 31.88 C[0m
+[0;32mI (37921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=172208[0m
+[0;32mI (38141) app_mqtt: MQTT published, msg_id=17172[0m
+[0;32mI (38141) app_mqtt: MQTT published, msg_id=37617[0m
+[0;32mI (38151) app_mqtt: MQTT published, msg_id=56533[0m
+[0;32mI (38641) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (38921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (39921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=174104[0m
+[0;32mI (39921) app: SpO2: 93%[0m
+[0;32mI (39921) app: MAX30102 Temperature: 30.81 C[0m
+[0;32mI (40091) app_mqtt: MQTT published, msg_id=64128[0m
+[0;32mI (40091) app_mqtt: MQTT published, msg_id=47358[0m
+[0;32mI (40091) app_mqtt: MQTT published, msg_id=25635[0m
+[0;32mI (40921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (41741) local_ui: Displaying HOME: MAX30102 HR=0 SpO2=93 piezo HR=0[0m
+[0;32mI (41921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=174104[0m
+[0;32mI (41921) app: SpO2: 93%[0m
+[0;32mI (41921) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (41981) app_mqtt: MQTT published, msg_id=2168[0m
+[0;32mI (41991) app_mqtt: MQTT published, msg_id=9024[0m
+[0;32mI (41991) app_mqtt: MQTT published, msg_id=6009[0m
+[0;32mI (42001) app_mqtt: MQTT published, msg_id=38208[0m
+[0;32mI (42921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (43121) buttons: Button 1 pressed[0m
+[0;32mI (43311) buttons: BUTTON1: NEXT PAGE[0m
+[0;32mI (43311) buttons: Next page -> MAX30102[0m
+[0;32mI (43921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (43931) app: MAX30102 Heart Rate: 92 bpm[0m
+[0;32mI (43941) app: SpO2: 92%[0m
+[0;32mI (43941) app: MAX30102 Temperature: 30.88 C[0m
+[0;32mI (44081) app_mqtt: MQTT published, msg_id=60268[0m
+[0;32mI (44081) app_mqtt: MQTT published, msg_id=5020[0m
+[0;32mI (44091) app_mqtt: MQTT published, msg_id=56041[0m
+[0;32mI (44441) local_ui: Displaying MAX30102: MAX30102 HR=92 SpO2=92 piezo HR=0[0m
+[0;32mI (44921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (45921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (46021) app: MAX30102 Heart Rate: 92 bpm[0m
+[0;32mI (46031) app: SpO2: 92%[0m
+[0;32mI (46031) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (46231) app_mqtt: MQTT published, msg_id=41351[0m
+[0;32mI (46231) app_mqtt: MQTT published, msg_id=49186[0m
+[0;32mI (46231) app_mqtt: MQTT published, msg_id=56952[0m
+[0;32mI (46321) buttons: Button 1 pressed[0m
+[0;32mI (46611) buttons: BUTTON1: NEXT PAGE[0m
+[0;32mI (46611) buttons: Next page -> PIEZO[0m
+[0;32mI (46921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (46981) app_mqtt: MQTT published, msg_id=41186[0m
+[0;32mI (47341) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=92 piezo HR=0[0m
+[0;32mI (47921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177248[0m
+[0;32mI (48001) app: SpO2: 93%[0m
+[0;32mI (48001) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (48171) app_mqtt: MQTT published, msg_id=28061[0m
+[0;32mI (48171) app_mqtt: MQTT published, msg_id=48526[0m
+[0;32mI (48181) app_mqtt: MQTT published, msg_id=12990[0m
+[0;32mI (48511) buttons: Button 2 pressed[0m
+[1;31mE (48531) i2c.master: I2C transaction timeout detected[0m
+[0;33mW (48531) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (48531) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (48531) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (48541) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (48541) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (48571) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (48571) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;33mW (48571) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (48571) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[1;31mE (48581) i2c.master: I2C hardware timeout detected[0m
+[0;33mW (48611) i2c.common: GPIO 22 is not usable, maybe conflict with others[0m
+[0;33mW (48611) i2c.common: GPIO 21 is not usable, maybe conflict with others[0m
+[0;32mI (48711) buttons: PIEZO: mode selected[0m
+[0;32mI (48711) piezo_heartbeat: PIEZO: sampling started[0m
+[0;32mI (48711) buttons: BUTTON2: SHORT PRESS - SELECT[0m
+[0;32mI (48711) buttons: Selected mode -> PIEZO[0m
+[0;32mI (48711) buttons: ACTIVE MODE: PIEZO[0m
+[0;32mI (48751) piezo_heartbeat: PIEZO: ADC=4095 min=4095 max=4095 avg=4095[0m
+[0;33mW (48751) piezo_heartbeat: PIEZO: NO SIGNAL[0m
+[0;32mI (48771) app_mqtt: MQTT published, msg_id=27454[0m
+[0;32mI (48921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (49251) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (49561) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (49751) piezo_heartbeat: PIEZO: ADC=4095 min=3745 max=4095 avg=4094[0m
+[0;32mI (49911) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (49921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (49921) piezo_heartbeat: PIEZO: BPM=169[0m
+[0;32mI (49941) app: SpO2: 93%[0m
+[0;32mI (49941) app: MAX30102 Temperature: 30.06 C[0m
+[0;32mI (49961) app_mqtt: MQTT published, msg_id=58613[0m
+[0;32mI (49971) app_mqtt: MQTT published, msg_id=61928[0m
+[0;32mI (50011) app_mqtt: MQTT published, msg_id=17256[0m
+[0;32mI (50021) app_mqtt: MQTT published, msg_id=6577[0m
+[0;32mI (50381) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=93 piezo HR=169[0m
+[0;32mI (50551) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (50551) piezo_heartbeat: PIEZO: BPM=170[0m
+[0;32mI (50571) app_mqtt: MQTT published, msg_id=49523[0m
+[0;32mI (50751) piezo_heartbeat: PIEZO: ADC=4095 min=3727 max=4095 avg=4094[0m
+[0;32mI (50921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (50991) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (50991) piezo_heartbeat: PIEZO: BPM=163[0m
+[0;32mI (51011) app_mqtt: MQTT published, msg_id=48948[0m
+[0;32mI (51751) piezo_heartbeat: PIEZO: ADC=4095 min=3807 max=4095 avg=4094[0m
+[0;32mI (51891) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (51891) piezo_heartbeat: PIEZO: BPM=172[0m
+[0;32mI (51921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=176396[0m
+[0;32mI (51921) app_mqtt: MQTT published, msg_id=36495[0m
+[0;32mI (51961) app: SpO2: 93%[0m
+[0;32mI (51961) app: MAX30102 Temperature: 31.19 C[0m
+[0;32mI (52071) app_mqtt: MQTT published, msg_id=39945[0m
+[0;32mI (52081) app_mqtt: MQTT published, msg_id=2463[0m
+[0;32mI (52081) app_mqtt: MQTT published, msg_id=41970[0m
+[0;32mI (52091) app_mqtt: MQTT published, msg_id=44474[0m
+[0;32mI (52531) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (52531) piezo_heartbeat: PIEZO: BPM=169[0m
+[0;32mI (52551) app_mqtt: MQTT published, msg_id=4965[0m
+[0;32mI (52751) piezo_heartbeat: PIEZO: ADC=4095 min=3747 max=4095 avg=4094[0m
+[0;32mI (52921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (52941) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (52941) piezo_heartbeat: PIEZO: BPM=164[0m
+[0;32mI (52961) app_mqtt: MQTT published, msg_id=17901[0m
+[0;32mI (53451) local_ui: Displaying PIEZO: MAX30102 HR=95 SpO2=93 piezo HR=164[0m
+[0;32mI (53541) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (53541) piezo_heartbeat: PIEZO: BPM=169[0m
+[0;32mI (53561) app_mqtt: MQTT published, msg_id=59683[0m
+[1;31mE (53751) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (53751) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (53751) task_wdt: Tasks currently running:[0m
+[1;31mE (53751) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (53751) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (53751) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E8C32:0x3FFB2280 0x400E9010:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4016F940:0x3FFBF5B0 0x401707B3:0x3FFBF630 0x4008DCFF:0x3FFBF660 0x400DE5A9:0x3FFBF6C0 0x4017CCAA:0x3FFBF760
+
+[0;32mI (53751) piezo_heartbeat: PIEZO: ADC=4095 min=3778 max=4095 avg=4094[0m
+[0;32mI (53921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (53951) app: MAX30102 Heart Rate: 101 bpm[0m
+[0;32mI (53961) app: SpO2: 93%[0m
+[0;32mI (53961) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (54231) app_mqtt: MQTT published, msg_id=46513[0m
+[0;32mI (54231) app_mqtt: MQTT published, msg_id=30516[0m
+[0;32mI (54241) app_mqtt: MQTT published, msg_id=20078[0m
+[0;32mI (54751) piezo_heartbeat: PIEZO: ADC=4095 min=3851 max=4095 avg=4094[0m
+[0;32mI (54921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (55301) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (55301) piezo_heartbeat: PIEZO: BPM=178[0m
+[0;32mI (55331) app_mqtt: MQTT published, msg_id=57314[0m
+[0;32mI (55611) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (55611) piezo_heartbeat: PIEZO: BPM=178[0m
+[0;32mI (55631) app_mqtt: MQTT published, msg_id=59795[0m
+[0;32mI (55751) piezo_heartbeat: PIEZO: ADC=4095 min=3775 max=4095 avg=4094[0m
+[0;32mI (55921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (55941) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (55941) piezo_heartbeat: PIEZO: BPM=179[0m
+[0;32mI (55961) app_mqtt: MQTT published, msg_id=62303[0m
+[0;32mI (56011) app: MAX30102 Heart Rate: 115 bpm[0m
+[0;32mI (56021) app: SpO2: 92%[0m
+[0;32mI (56021) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (56161) app_mqtt: MQTT published, msg_id=2744[0m
+[0;32mI (56161) app_mqtt: MQTT published, msg_id=6674[0m
+[0;32mI (56171) app_mqtt: MQTT published, msg_id=17387[0m
+[0;32mI (56381) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (56381) piezo_heartbeat: PIEZO: BPM=177[0m
+[0;32mI (56401) app_mqtt: MQTT published, msg_id=38483[0m
+[0;32mI (56591) local_ui: Displaying PIEZO: MAX30102 HR=115 SpO2=92 piezo HR=177[0m
+[0;32mI (56751) piezo_heartbeat: PIEZO: ADC=4095 min=3799 max=4095 avg=4094[0m
+[0;32mI (56921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (56951) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (56951) piezo_heartbeat: PIEZO: BPM=159[0m
+[0;32mI (56971) app_mqtt: MQTT published, msg_id=52106[0m
+[0;32mI (56991) app_mqtt: MQTT published, msg_id=3981[0m
+[0;32mI (57511) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (57511) piezo_heartbeat: PIEZO: BPM=144[0m
+[0;32mI (57531) app_mqtt: MQTT published, msg_id=56879[0m
+[0;32mI (57751) piezo_heartbeat: PIEZO: ADC=4095 min=3779 max=4095 avg=4094[0m
+[0;32mI (57831) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (57831) piezo_heartbeat: PIEZO: BPM=143[0m
+[0;32mI (57861) app_mqtt: MQTT published, msg_id=22834[0m
+[0;32mI (57921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177032[0m
+[0;32mI (57961) app: MAX30102 Heart Rate: 115 bpm[0m
+[0;32mI (57971) app: SpO2: 92%[0m
+[0;32mI (57971) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (58111) app_mqtt: MQTT published, msg_id=15211[0m
+[0;32mI (58111) app_mqtt: MQTT published, msg_id=2593[0m
+[0;32mI (58111) app_mqtt: MQTT published, msg_id=30006[0m
+[0;32mI (58151) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (58151) piezo_heartbeat: PIEZO: BPM=144[0m
+[0;32mI (58171) app_mqtt: MQTT published, msg_id=19226[0m
+[0;32mI (58611) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (58611) piezo_heartbeat: PIEZO: BPM=143[0m
+[0;32mI (58631) app_mqtt: MQTT published, msg_id=45231[0m
+[1;31mE (58751) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (58751) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (58751) task_wdt: Tasks currently running:[0m
+[1;31mE (58751) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (58751) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (58751) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E8C32:0x3FFB2280 0x400E9010:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF560 0x4008AC56:0x3FFBF570 0x4017D507:0x3FFBF590 0x4008DD5D:0x3FFBF5D0 0x4017F4E9:0x3FFBF5F0 0x4008DE4E:0x3FFBF620 0x400D4E85:0x3FFBF640 0x4008DCED:0x3FFBF660 0x400DE5A9:0x3FFBF6C0 0x4017CCAA:0x3FFBF760
+
+[0;32mI (58751) piezo_heartbeat: PIEZO: ADC=4095 min=3663 max=4095 avg=4094[0m
+[0;32mI (58921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (59051) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (59051) piezo_heartbeat: PIEZO: BPM=149[0m
+[0;32mI (59081) app_mqtt: MQTT published, msg_id=12081[0m
+[0;32mI (59671) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (59671) piezo_heartbeat: PIEZO: BPM=163[0m
+[0;32mI (59701) app_mqtt: MQTT published, msg_id=29899[0m
+[0;32mI (59731) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=92 piezo HR=149[0m
+[0;32mI (59751) piezo_heartbeat: PIEZO: ADC=4095 min=3775 max=4095 avg=4094[0m
+[0;32mI (59921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (60011) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (60011) piezo_heartbeat: PIEZO: BPM=162[0m
+[0;32mI (60041) app_mqtt: MQTT published, msg_id=10743[0m
+[0;32mI (60081) app: SpO2: 92%[0m
+[0;32mI (60081) app: MAX30102 Temperature: 31.06 C[0m
+[0;32mI (60261) app_mqtt: MQTT published, msg_id=2959[0m
+[0;32mI (60271) app_mqtt: MQTT published, msg_id=47142[0m
+[0;32mI (60271) app_mqtt: MQTT published, msg_id=16737[0m
+[0;32mI (60481) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (60481) piezo_heartbeat: PIEZO: BPM=150[0m
+[0;32mI (60501) app_mqtt: MQTT published, msg_id=47965[0m
+[0;32mI (60751) piezo_heartbeat: PIEZO: ADC=4095 min=4015 max=4095 avg=4094[0m
+[0;32mI (60861) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (60861) piezo_heartbeat: PIEZO: BPM=156[0m
+[0;32mI (60881) app_mqtt: MQTT published, msg_id=62104[0m
+[0;32mI (60921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (61751) piezo_heartbeat: PIEZO: ADC=4095 min=3760 max=4095 avg=4094[0m
+[0;32mI (61921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (61971) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (61971) piezo_heartbeat: PIEZO: BPM=151[0m
+[0;32mI (61981) app: SpO2: 92%[0m
+[0;32mI (61991) app: MAX30102 Temperature: 30.00 C[0m
+[0;32mI (62011) app_mqtt: MQTT published, msg_id=16878[0m
+[0;32mI (62021) app_mqtt: MQTT published, msg_id=40274[0m
+[0;32mI (62021) app_mqtt: MQTT published, msg_id=34189[0m
+[0;32mI (62021) app_mqtt: MQTT published, msg_id=32270[0m
+[0;32mI (62031) app_mqtt: MQTT published, msg_id=1792[0m
+[0;32mI (62681) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (62681) piezo_heartbeat: PIEZO: BPM=144[0m
+[0;32mI (62701) app_mqtt: MQTT published, msg_id=55887[0m
+[0;32mI (62751) piezo_heartbeat: PIEZO: ADC=4095 min=3759 max=4095 avg=4094[0m
+[0;32mI (62831) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=92 piezo HR=144[0m
+[0;32mI (62921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (63021) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (63021) piezo_heartbeat: PIEZO: BPM=144[0m
+[0;32mI (63041) app_mqtt: MQTT published, msg_id=45929[0m
+[0;32mI (63381) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (63381) piezo_heartbeat: PIEZO: BPM=152[0m
+[0;32mI (63421) app_mqtt: MQTT published, msg_id=15873[0m
+[0;32mI (63751) piezo_heartbeat: PIEZO: ADC=4095 min=3760 max=4095 avg=4094[0m
+[0;32mI (63921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (64001) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (64001) piezo_heartbeat: PIEZO: BPM=156[0m
+[0;32mI (64031) app_mqtt: MQTT published, msg_id=36131[0m
+[0;32mI (64081) app: SpO2: 92%[0m
+[0;32mI (64081) app: MAX30102 Temperature: 31.12 C[0m
+[0;32mI (64251) app_mqtt: MQTT published, msg_id=48863[0m
+[0;32mI (64251) app_mqtt: MQTT published, msg_id=26355[0m
+[0;32mI (64251) app_mqtt: MQTT published, msg_id=14862[0m
+[0;32mI (64331) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (64331) piezo_heartbeat: PIEZO: BPM=169[0m
+[0;32mI (64361) app_mqtt: MQTT published, msg_id=52267[0m
+[0;32mI (64721) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (64721) piezo_heartbeat: PIEZO: BPM=170[0m
+[0;32mI (64741) app_mqtt: MQTT published, msg_id=13436[0m
+[0;32mI (64751) piezo_heartbeat: PIEZO: ADC=4095 min=3940 max=4095 avg=4094[0m
+[0;32mI (64921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (65131) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (65141) piezo_heartbeat: PIEZO: BPM=165[0m
+[0;32mI (65161) app_mqtt: MQTT published, msg_id=24482[0m
+[0;32mI (65461) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (65461) piezo_heartbeat: PIEZO: BPM=169[0m
+[0;32mI (65481) app_mqtt: MQTT published, msg_id=21220[0m
+[0;32mI (65751) piezo_heartbeat: PIEZO: ADC=4095 min=3799 max=4095 avg=4094[0m
+[0;32mI (65881) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (65881) piezo_heartbeat: PIEZO: BPM=161[0m
+[0;32mI (65901) app_mqtt: MQTT published, msg_id=42551[0m
+[0;32mI (65921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (65931) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=92 piezo HR=169[0m
+[0;32mI (65991) app: SpO2: 92%[0m
+[0;32mI (65991) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (66091) app_mqtt: MQTT published, msg_id=25904[0m
+[0;32mI (66101) app_mqtt: MQTT published, msg_id=62942[0m
+[0;32mI (66101) app_mqtt: MQTT published, msg_id=46539[0m
+[0;32mI (66291) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (66291) piezo_heartbeat: PIEZO: BPM=154[0m
+[0;32mI (66311) app_mqtt: MQTT published, msg_id=58986[0m
+[0;32mI (66751) piezo_heartbeat: PIEZO: ADC=4095 min=3750 max=4095 avg=4094[0m
+[0;32mI (66921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[1;31mE (66981) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (66981) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (66981) task_wdt: Tasks currently running:[0m
+[1;31mE (66981) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (66981) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (66981) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E8C32:0x3FFB2280 0x400E9010:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x400DE2D8:0x3FFBF690 0x400DE340:0x3FFBF6C0 0x4017CCAA:0x3FFBF760
+
+[0;32mI (67021) app_mqtt: MQTT published, msg_id=62740[0m
+[0;32mI (67071) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (67071) piezo_heartbeat: PIEZO: BPM=147[0m
+[0;32mI (67101) app_mqtt: MQTT published, msg_id=31504[0m
+[0;32mI (67391) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (67391) piezo_heartbeat: PIEZO: BPM=156[0m
+[0;32mI (67411) app_mqtt: MQTT published, msg_id=58413[0m
+[0;32mI (67751) piezo_heartbeat: PIEZO: ADC=4095 min=3824 max=4095 avg=4094[0m
+[0;32mI (67921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=176856[0m
+[0;32mI (67991) app: SpO2: 92%[0m
+[0;32mI (67991) app: MAX30102 Temperature: 31.06 C[0m
+[0;32mI (68101) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (68101) piezo_heartbeat: PIEZO: BPM=148[0m
+[0;32mI (68141) app_mqtt: MQTT published, msg_id=5821[0m
+[0;32mI (68151) app_mqtt: MQTT published, msg_id=46169[0m
+[0;32mI (68151) app_mqtt: MQTT published, msg_id=20214[0m
+[0;32mI (68151) app_mqtt: MQTT published, msg_id=33505[0m
+[0;32mI (68401) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (68401) piezo_heartbeat: PIEZO: BPM=159[0m
+[0;32mI (68431) app_mqtt: MQTT published, msg_id=12134[0m
+[0;32mI (68751) piezo_heartbeat: PIEZO: ADC=4095 min=3771 max=4095 avg=4094[0m
+[0;32mI (68831) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (68831) piezo_heartbeat: PIEZO: BPM=158[0m
+[0;32mI (68861) app_mqtt: MQTT published, msg_id=1518[0m
+[0;32mI (68921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (69031) local_ui: Displaying PIEZO: MAX30102 HR=0 SpO2=92 piezo HR=158[0m
+[0;32mI (69331) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (69331) piezo_heartbeat: PIEZO: BPM=158[0m
+[0;32mI (69351) app_mqtt: MQTT published, msg_id=799[0m
+[0;32mI (69751) piezo_heartbeat: PIEZO: ADC=4095 min=3822 max=4095 avg=4094[0m
+[0;32mI (69921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (70001) app: SpO2: 92%[0m
+[0;32mI (70001) app: MAX30102 Temperature: 30.94 C[0m
+[0;32mI (70201) app_mqtt: MQTT published, msg_id=14928[0m
+[0;32mI (70201) app_mqtt: MQTT published, msg_id=15411[0m
+[0;32mI (70201) app_mqtt: MQTT published, msg_id=11406[0m
+[0;32mI (70241) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (70241) piezo_heartbeat: PIEZO: BPM=156[0m
+[0;32mI (70271) app_mqtt: MQTT published, msg_id=40698[0m
+[0;32mI (70641) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (70641) piezo_heartbeat: PIEZO: BPM=158[0m
+[0;32mI (70661) app_mqtt: MQTT published, msg_id=10466[0m
+[0;32mI (70751) piezo_heartbeat: PIEZO: ADC=4095 min=3907 max=4095 avg=4094[0m
+[0;32mI (70921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177036[0m
+[0;32mI (71021) piezo_heartbeat: PIEZO: BEAT DETECTED[0m
+[0;32mI (71021) piezo_heartbeat: PIEZO: BPM=149[0m
+[0;32mI (71041) app_mqtt: MQTT published, msg_id=1096[0m
+[0;32mI (71751) piezo_heartbeat: PIEZO: ADC=4095 min=3779 max=4095 avg=4094[0m
+[0;32mI (71921) device_status: heartbeat hardware=ECE334149CAC pairing=MED-149CAC heap=177060[0m
+[1;31mE (71981) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:[0m
+[1;31mE (71981) task_wdt:  - IDLE0 (CPU 0)[0m
+[1;31mE (71981) task_wdt: Tasks currently running:[0m
+[1;31mE (71981) task_wdt: CPU 0: piezo_heartbeat[0m
+[1;31mE (71981) task_wdt: CPU 1: IDLE1[0m
+[1;31mE (71981) task_wdt: Print CPU 0 (current core) backtrace[0m
+
+
+Backtrace: 0x400E8C32:0x3FFB2280 0x400E9010:0x3FFB22A0 0x400835D5:0x3FFB22D0 0x4000BFED:0x3FFBF630 0x4008AC56:0x3FFBF640 0x401055C5:0x3FFBF660 0x400DE2CF:0x3FFBF690 0x400DE340:0x3FFBF6C0 0x4017CCAA:0x3FFBF760
+
+[0;32mI (72031) app_mqtt: MQTT published, msg_id=3326[0m
+[0;32mI (72041) app: SpO2: 92%[0m
+[0;32mI (72051) app: MAX30102 Temperature: 31.00 C[0m
+[0;32mI (72061) app_mqtt: MQTT published, msg_id=39616[0m
+[0;32mI (72071) app_mqtt: MQTT published, msg_id=57412[0m
+[0;32mI (72081) app_mqtt

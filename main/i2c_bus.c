@@ -5,11 +5,13 @@
 #include "esp_rom_sys.h"
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 #include "freertos/task.h"
 
 static const char *TAG = "i2c";
 
 static i2c_master_bus_handle_t s_bus = NULL;
+static SemaphoreHandle_t s_bus_mutex = NULL;
 
 // A slave left mid-transaction by a previous reset (reflash, reset button,
 // brownout) keeps driving SDA low and waits for SCL edges that never come.
@@ -59,8 +61,10 @@ static void i2c_bus_release_stuck_slave(void)
 
 void i2c_bus_init(void)
 {
-    ESP_LOGI(TAG, "I2C: Initializing shared bus");
-    ESP_LOGI(TAG, "I2C: SDA=%d SCL=%d", (int)APP_I2C_SDA_IO, (int)APP_I2C_SCL_IO);
+    if (s_bus != NULL) {
+        ESP_LOGW(TAG, "I2C: shared bus already initialized");
+        return;
+    }
 
     i2c_bus_release_stuck_slave();
 
@@ -77,12 +81,35 @@ void i2c_bus_init(void)
         },
     };
     ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &s_bus));
-    ESP_LOGI(TAG, "I2C: Bus initialized successfully");
+    s_bus_mutex = xSemaphoreCreateMutex();
+    ESP_ERROR_CHECK(s_bus_mutex == NULL ? ESP_ERR_NO_MEM : ESP_OK);
+    ESP_LOGI(TAG, "I2C: shared bus initialized SDA=%d SCL=%d",
+             (int)APP_I2C_SDA_IO, (int)APP_I2C_SCL_IO);
 }
 
 i2c_master_bus_handle_t i2c_bus_get_handle(void)
 {
     return s_bus;
+}
+
+esp_err_t i2c_bus_lock(uint32_t timeout_ms)
+{
+    if (s_bus_mutex == NULL) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    TickType_t timeout_ticks = timeout_ms == UINT32_MAX
+        ? portMAX_DELAY
+        : pdMS_TO_TICKS(timeout_ms);
+
+    return xSemaphoreTake(s_bus_mutex, timeout_ticks) == pdTRUE ? ESP_OK : ESP_ERR_TIMEOUT;
+}
+
+void i2c_bus_unlock(void)
+{
+    if (s_bus_mutex != NULL) {
+        xSemaphoreGive(s_bus_mutex);
+    }
 }
 
 // Devices we expect or recognise on this bus. The scanner reports unknown
