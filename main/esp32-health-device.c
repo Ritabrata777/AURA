@@ -8,15 +8,18 @@
 #include "mlx90614.h"
 #include "oled_ssd1306.h"
 #include "buttons.h"
+#include "buzzer.h"
+#include "local_ui.h"
 #include "device_comm.h"
 #include "esp_log.h"
 #include "esp_sntp.h"
 #include "esp_timer.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 static const char *TAG = "app";
+static i2c_master_bus_handle_t s_i2c_bus_handle = NULL;
 
 // ─── SNTP Time Sync ──────────────────────────────────────────────
 
@@ -43,18 +46,19 @@ static void sntp_sync_init(void)
 // ─── Centralized I2C Bus Init ────────────────────────────────────
 static void i2c_bus_init(void)
 {
-    i2c_config_t i2c_config = {
-        .mode = I2C_MODE_MASTER,
-        .sda_io_num = APP_I2C_SDA_IO,
+    i2c_master_bus_config_t bus_config = {
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .i2c_port = APP_I2C_MASTER_NUM,
         .scl_io_num = APP_I2C_SCL_IO,
-        .sda_pullup_en = GPIO_PULLUP_ENABLE,
-        .scl_pullup_en = GPIO_PULLUP_ENABLE,
-        .master = {
-            .clk_speed = APP_I2C_FREQ_HZ
+        .sda_io_num = APP_I2C_SDA_IO,
+        .glitch_ignore_cnt = 7,
+        .intr_priority = 0,
+        .trans_queue_depth = 0,
+        .flags = {
+            .enable_internal_pullup = true
         }
     };
-    ESP_ERROR_CHECK(i2c_param_config(APP_I2C_MASTER_NUM, &i2c_config));
-    ESP_ERROR_CHECK(i2c_driver_install(APP_I2C_MASTER_NUM, I2C_MODE_MASTER, 0, 0, 0));
+    ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &s_i2c_bus_handle));
     ESP_LOGI(TAG, "I2C bus initialized: SDA=%d SCL=%d", APP_I2C_SDA_IO, APP_I2C_SCL_IO);
 }
 
@@ -71,12 +75,14 @@ static void temperature_callback(mlx90614_temp_t *temp, void *arg)
     }
 
     if (!temp->valid) {
+        local_ui_set_temperature(temp);
         // Report the gap instead of dropping it silently, so a sensor that has
         // stopped responding is visible on the dashboard.
         device_comm_publish_measurement("TEMPERATURE", 0.0f, "C", "UNAVAILABLE", NULL);
         return;
     }
 
+    local_ui_set_temperature(temp);
     ESP_LOGI(TAG, "Temperature: %.2f C", temp->object_temp_c);
     device_comm_publish_measurement("TEMPERATURE", temp->object_temp_c, "C", "VALID", NULL);
 }
@@ -85,11 +91,15 @@ static void spo2_data_callback(max30102_sample_t *sample, max30102_metrics_t *me
 {
     (void)arg;
     (void)sample;
+    if (metrics != NULL) {
+        local_ui_set_spo2(metrics);
+    }
     static uint32_t publish_counter = 0;
     publish_counter++;
 
-    // Publish every ~2 seconds (100 samples at ~50Hz)
-    if (publish_counter % 100 == 0 && metrics != NULL) {
+    // Publish every ~2 seconds (50 samples at the 25 Hz effective FIFO rate)
+    if (publish_counter % 50 == 0 && metrics != NULL) {
+        if (sample != NULL) device_comm_publish_spo2_raw(sample, NULL);
         if (metrics->hr_valid && metrics->heart_rate > 0) {
             ESP_LOGI(TAG, "Heart Rate: %d bpm", metrics->heart_rate);
             device_comm_publish_measurement("HEART_RATE", (float)metrics->heart_rate, "bpm", "VALID", NULL);
@@ -202,6 +212,8 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
 
     switch (cmd->command) {
         case DEVICE_CMD_START_ECG: {
+            max30102_stop();
+            mlx90614_stop_continuous();
             int duration_seconds = (cmd->parameters[0] > 0) ? cmd->parameters[0] : 0;
             const char *error_code = ecg_start_with_duration(duration_seconds);
             // The ack now reports what actually happened. It previously always
@@ -224,6 +236,10 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
         }
 
         case DEVICE_CMD_START_SPO2: {
+            // MAX30102 and MLX90614 share the I2C bus. Keep one sensor mode
+            // active at a time so the selected test owns the bus and stale
+            // readings from another mode are not produced.
+            mlx90614_stop_continuous();
             esp_err_t err = max30102_start();
             device_comm_publish_command_ack(cmd->command_id, "START_SPO2",
                                             err == ESP_OK ? "ACCEPTED" : "REJECTED",
@@ -238,6 +254,7 @@ static void handle_device_command(device_command_received_t *cmd, void *arg)
         }
 
         case DEVICE_CMD_START_TEMPERATURE: {
+            max30102_stop();
             mlx90614_start_continuous(temperature_callback, NULL);
             bool started = mlx90614_is_running();
             device_comm_publish_command_ack(cmd->command_id, "START_TEMPERATURE",
@@ -337,8 +354,14 @@ void app_main(void)
     i2c_bus_init();
     
     // 3. Initialize peripherals (all use the shared I2C bus)
+    oled_ssd1306_set_bus_handle(s_i2c_bus_handle);
     oled_ssd1306_init();
+    max30102_set_bus_handle(s_i2c_bus_handle);
+    mlx90614_set_bus_handle(s_i2c_bus_handle);
+    buzzer_init();
+    buzzer_beep(120);
     buttons_init();
+    local_ui_init(device_identity_status()->pairing_code);
     
     // 4. Initialize sensors
     ecg_ad8232_init();

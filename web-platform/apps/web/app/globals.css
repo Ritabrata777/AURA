@@ -14,6 +14,183 @@
   }
 }
 
+/* Every screen is the dark kiosk surface; keep the document behind it dark so
+   rubber-band overscroll never flashes white. */
+html,
+body {
+  background-color: #121212;
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------
+ * Liquid Glass design system (components/landing/*)
+ * ------------------------------------------------------------------------- */
+
+/* Gradient rim: hairline border plus a top-left inner highlight so panels
+   read as lit glass rather than flat outlines. */
+.lg-border {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.05),
+    0 24px 60px -32px rgba(0, 0, 0, 0.8);
+}
+
+/* Real glass: translucent gradient body over a backdrop blur. Never stack
+   these — nested backdrop-filters are the main source of scroll jank. */
+.lg-surface {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(255, 255, 255, 0.09) 100%
+  );
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+/* Fill-only material for glass that sits on top of other glass (chips,
+   bubbles, slide imagery). Carries the frosted look on its own. */
+.lg-surface-quiet {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.11) 0%,
+    rgba(255, 255, 255, 0.04) 45%,
+    rgba(255, 255, 255, 0.07) 100%
+  );
+}
+
+/* Pointer-tracking specular highlight; LiquidGlass writes --lg-x/--lg-y on
+   pointer move when `interactive` is set. */
+.lg-specular {
+  position: relative;
+}
+
+.lg-specular::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(
+    420px circle at var(--lg-x, 25%) var(--lg-y, -20%),
+    rgba(255, 255, 255, 0.14),
+    transparent 45%
+  );
+}
+
+.lg-specular:hover::after {
+  opacity: 1;
+}
+
+/* --- Ambient motion ------------------------------------------------------ */
+
+/* Hero aurora blobs: slow drift so the backdrop feels alive. */
+.lg-anim-drift {
+  animation: lg-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes lg-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(60px, 40px, 0) scale(1.15);
+  }
+}
+
+/* Floating vitals chips. */
+.lg-anim-float {
+  animation: lg-float 7s ease-in-out infinite;
+}
+
+@keyframes lg-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Expanding pulse rings behind the BPM dial. */
+.lg-anim-pulse {
+  animation: lg-pulse 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes lg-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* ECG trace: draws itself in, holds, fades, restarts. 1400 approximates the
+   path length of the slide's waveform with headroom. */
+.lg-anim-ecg {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: lg-ecg 5s linear infinite;
+}
+
+@keyframes lg-ecg {
+  0% {
+    stroke-dashoffset: 1400;
+    opacity: 1;
+  }
+  70% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  85% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/* AI-companion typing indicator dots. */
+.lg-anim-typing {
+  animation: lg-typing 1.2s ease-in-out infinite;
+}
+
+@keyframes lg-typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-anim-drift,
+  .lg-anim-float,
+  .lg-anim-pulse,
+  .lg-anim-typing {
+    animation: none;
+  }
+
+  .lg-anim-ecg {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
 /* Seamless full-bleed look: scrollbars are hidden everywhere, but scrolling
    (wheel, touch, keyboard, auto-scroll) keeps working as before. */
 * {

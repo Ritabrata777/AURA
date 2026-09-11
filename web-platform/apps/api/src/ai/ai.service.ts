@@ -120,11 +120,14 @@ Your purpose is to make the user's health-monitoring data easier to understand â
         .filter(m => m.type === 'TEMPERATURE' && m.value !== null)
         .map(m => m.value);
 
-      // Determine device online status
+      // Online means the device heartbeat is recent, not that a sensor has
+      // produced a measurement in the last 30 seconds. A paired device can
+      // be online while idle between tests.
       const latestMeasurement = measurements[0];
-      const deviceOnline = latestMeasurement 
-        ? (Date.now() - latestMeasurement.measuredAt.getTime()) < 30000 // online if measurement within 30 seconds
-        : false;
+      const lastSeenAt = userDevice.device.lastSeenAt;
+      const deviceOnline = Boolean(
+        lastSeenAt && Date.now() - lastSeenAt.getTime() < 90_000,
+      );
 
       return {
         timeWindow: 'last_2_minutes',
@@ -138,7 +141,7 @@ Your purpose is to make the user's health-monitoring data easier to understand â
         },
         device: {
           online: deviceOnline,
-          lastSeen: latestMeasurement?.measuredAt?.toISOString() || null,
+          lastSeen: lastSeenAt?.toISOString() || null,
           deviceId: userDevice.device.hardwareId,
         },
       };
@@ -333,6 +336,7 @@ Your purpose is to make the user's health-monitoring data easier to understand â
       // Get health context
       const healthContext = await this.getHealthContext(individualUserId);
       const contextText = this.formatHealthContextForGemini(healthContext);
+      const historicalContext = await this.getHistoricalContext(individualUserId);
 
       // Build conversation history for Gemini
       const history = sanitizedHistory.map(msg => ({
@@ -370,7 +374,7 @@ Your purpose is to make the user's health-monitoring data easier to understand â
       });
 
       // Prepend health context to user message
-      const messageWithContext = `${contextText}\n\nUser Question: ${userMessage.trim()}`;
+      const messageWithContext = `${contextText}\n\n${historicalContext}\n\nUser Question: ${userMessage.trim()}`;
 
       // Send message with timeout (free-tier first calls can be slow)
       const timeoutPromise = new Promise((_, reject) => {
@@ -433,6 +437,46 @@ Your purpose is to make the user's health-monitoring data easier to understand â
       
       throw new BadRequestException('Sorry, I couldn\'t process that right now. Please try again.');
     }
+  }
+
+  /** Provide dated stored data so the assistant can answer history questions. */
+  private async getHistoricalContext(individualUserId: string): Promise<string> {
+    const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000);
+    const [measurements, sessions] = await Promise.all([
+      this.prisma.individualMeasurement.findMany({
+        where: { individualUserId, quality: "VALID", measuredAt: { gte: since } },
+        orderBy: { measuredAt: "asc" },
+        take: 1000,
+        select: { type: true, value: true, unit: true, measuredAt: true },
+      }),
+      this.prisma.individualEcgSession.findMany({
+        where: { individualUserId, startedAt: { gte: since } },
+        orderBy: { startedAt: "asc" },
+        take: 100,
+        select: { startedAt: true, endedAt: true, sampleRate: true },
+      }),
+    ]);
+
+    let text = "Stored historical data (use exact dates; dates are YYYY-MM-DD):\n";
+    if (measurements.length === 0) {
+      text += "- No stored vital measurements in the last 180 days.\n";
+    } else {
+      for (const measurement of measurements) {
+        text += `- ${measurement.measuredAt.toISOString()} ${measurement.type}: ${measurement.value} ${measurement.unit}\n`;
+      }
+    }
+    if (sessions.length > 0) {
+      text += "Stored ECG sessions:\n";
+      for (const session of sessions) {
+        const duration = session.endedAt
+          ? Math.round((session.endedAt.getTime() - session.startedAt.getTime()) / 1000)
+          : "in progress";
+        text += `- ${session.startedAt.toISOString()} duration=${duration}s sampleRate=${session.sampleRate}Hz\n`;
+      }
+    } else {
+      text += "- No stored ECG sessions in the last 180 days.\n";
+    }
+    return text;
   }
 
   /**

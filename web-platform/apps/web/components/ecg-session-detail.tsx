@@ -22,6 +22,8 @@ interface EcgSessionDetailProps {
   sessionId: string;
   /** Set for a doctor viewing a patient's recording; omitted for own data. */
   patientId?: string;
+  /** Use the individual-user endpoint when the owner is viewing their own ECG. */
+  individualUser?: boolean;
   onClose: () => void;
 }
 
@@ -32,16 +34,19 @@ interface EcgSessionDetailProps {
  * has pixels — so samples are decimated to roughly two per horizontal pixel,
  * keeping peaks visible without pushing an unreasonable path into the DOM.
  */
-export function EcgSessionDetail({ sessionId, patientId, onClose }: EcgSessionDetailProps) {
+export function EcgSessionDetail({ sessionId, patientId, individualUser, onClose }: EcgSessionDetailProps) {
   const api = useApi();
   const [session, setSession] = useState<EcgSessionDetailPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const endpointScope = individualUser ? "individual" : patientId ?? "self";
 
   useEffect(() => {
     const controller = new AbortController();
-    const path = patientId
-      ? `/measurements/patients/${patientId}/ecg-sessions/${sessionId}`
+    const path = endpointScope === "individual"
+      ? `/individual-users/measurements/ecg-sessions/${sessionId}`
+      : endpointScope !== "self"
+      ? `/measurements/patients/${endpointScope}/ecg-sessions/${sessionId}`
       : `/measurements/ecg-sessions/${sessionId}`;
 
     setLoading(true);
@@ -56,14 +61,14 @@ export function EcgSessionDetail({ sessionId, patientId, onClose }: EcgSessionDe
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, [api, sessionId, patientId]);
+  }, [api, sessionId, endpointScope]);
 
   return (
     <article className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 p-6 shadow-2xl backdrop-blur-md">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
       <div className="relative mb-4 flex items-start justify-between">
         <div>
-          <p className="text-[11px] font-bold tracking-wider text-white/50 uppercase">Recording</p>
+          <p className="text-[11px] font-bold tracking-wider text-white/50 uppercase">Recording · Simulated demo</p>
           <h2 className="text-lg font-bold">ECG session</h2>
         </div>
         <button className="text-sm font-bold text-green-400 hover:text-green-300" onClick={onClose}>

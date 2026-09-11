@@ -4,14 +4,14 @@
 #include <string.h>
 #include <math.h>
 #include "esp_log.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 static const char *TAG = "max30102";
 
-// I2C bus is initialized once in app_main — we only use it here.
-#define I2C_MASTER_NUM APP_I2C_MASTER_NUM
+static i2c_master_dev_handle_t s_device;
+static i2c_master_bus_handle_t s_bus;
 
 #define MAX30102_INT_PIN GPIO_NUM_34
 #define MAX30102_FIFO_SAMPLES 16
@@ -42,11 +42,18 @@ static const char *TAG = "max30102";
 #define MAX30102_CHIP_ID_VALUE 0x15
 
 // Simple peak detection for heart rate
-#define HR_BUFFER_SIZE 150    // ~3 seconds at 50 Hz effective rate
-#define HR_MIN_PEAK_INTERVAL 15  // Min 15 samples between peaks (~40bpm floor)
+// Effective FIFO rate this driver actually sees: SPO2_CONFIG 0x27 sets a
+// 100 sps sensor rate and FIFO_CONFIG 0x4F applies 4x on-chip averaging,
+// which decimates the stream to 25 samples/s. Every time-based calculation
+// below must use THIS rate — the old code assumed 50 Hz and reported heart
+// rates at exactly twice their true value.
+#define MAX30102_EFFECTIVE_SPS 25
+#define HR_BUFFER_SIZE 150    // ~6 s of IR signal at the effective rate
+// Refractory period between peaks: 8/25 s ≈ 0.32 s → detects up to ~190 bpm.
+#define HR_MIN_PEAK_INTERVAL 8
 #define HR_THRESHOLD_RATIO 0.6f
 // Beyond this many samples without a peak (~4 s) the last rate is stale.
-#define HR_STALE_AFTER_SAMPLES 200
+#define HR_STALE_AFTER_SAMPLES (4 * MAX30102_EFFECTIVE_SPS)
 // Peak-to-peak floor below which the trace is sensor noise, not a pulse.
 #define HR_MIN_AMPLITUDE 1000
 
@@ -75,23 +82,20 @@ static max30102_driver_t s_driver = {0};
 static esp_err_t max30102_write_reg(uint8_t reg, uint8_t value)
 {
     uint8_t buffer[2] = {reg, value};
-    return i2c_master_write_to_device(I2C_MASTER_NUM, MAX30102_I2C_ADDRESS, 
-                                       buffer, 2, pdMS_TO_TICKS(100));
+    return i2c_master_transmit(s_device, buffer, sizeof(buffer), pdMS_TO_TICKS(100));
 }
 
 static esp_err_t max30102_read_reg(uint8_t reg, uint8_t *value)
 {
-    return i2c_master_write_read_device(I2C_MASTER_NUM, MAX30102_I2C_ADDRESS,
-                                         &reg, 1, value, 1, pdMS_TO_TICKS(100));
+    return i2c_master_transmit_receive(s_device, &reg, 1, value, 1, pdMS_TO_TICKS(100));
 }
 
 static esp_err_t max30102_read_fifo_data(uint32_t *ir, uint32_t *red)
 {
     uint8_t buffer[6];
     uint8_t reg = MAX30102_REG_FIFO_DATA;
-    esp_err_t ret = i2c_master_write_read_device(I2C_MASTER_NUM, MAX30102_I2C_ADDRESS,
-                                                  &reg, 1, buffer, 6, 
-                                                  pdMS_TO_TICKS(100));
+    esp_err_t ret = i2c_master_transmit_receive(s_device, &reg, 1, buffer, sizeof(buffer),
+                                                pdMS_TO_TICKS(100));
     if (ret == ESP_OK) {
         *red = ((uint32_t)buffer[0] << 16) | ((uint32_t)buffer[1] << 8) | buffer[2];
         *ir  = ((uint32_t)buffer[3] << 16) | ((uint32_t)buffer[4] << 8) | buffer[5];
@@ -143,8 +147,8 @@ static void process_sample_for_hr(uint32_t ir_value, max30102_metrics_t *metrics
         uint32_t interval = s_driver.ir_buf_idx - s_driver.last_peak_idx;
         s_driver.last_peak_idx = s_driver.ir_buf_idx;
         
-        // Convert interval to BPM (assuming ~50 Hz effective sample rate)
-        float bpm = 60.0f * 50.0f / (float)interval;
+        // Convert interval to BPM using the effective (post-averaging) rate
+        float bpm = 60.0f * (float)MAX30102_EFFECTIVE_SPS / (float)interval;
         
         if (bpm > 30.0f && bpm < 220.0f) {
             // Simple IIR filter for smoothing
@@ -236,12 +240,31 @@ static void max30102_task(void *arg)
     vTaskDelete(NULL);
 }
 
+void max30102_set_bus_handle(void *bus_handle)
+{
+    s_bus = (i2c_master_bus_handle_t)bus_handle;
+}
+
 void max30102_init(void)
 {
     ESP_LOGI(TAG, "Initializing MAX30102 sensor");
-    
-    // I2C bus is already initialized in app_main — skip duplicate init
-    
+
+    if (s_bus == NULL) {
+        ESP_LOGE(TAG, "I2C bus handle not set");
+        return;
+    }
+
+    i2c_device_config_t config = {
+        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
+        .device_address = MAX30102_I2C_ADDRESS,
+        .scl_speed_hz = APP_I2C_FREQ_HZ,
+    };
+    if (i2c_master_bus_add_device(s_bus, &config, &s_device) != ESP_OK) {
+        ESP_LOGE(TAG, "Could not add MAX30102 device");
+        s_driver.state = SPO2_STATE_ERROR;
+        return;
+    }
+
     uint8_t chip_id = 0;
     esp_err_t ret = max30102_read_reg(MAX30102_REG_CHIP_ID, &chip_id);
     

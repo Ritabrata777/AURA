@@ -271,6 +271,23 @@ void device_comm_publish_measurement(const char *type, float value, const char *
     publish_json(topic, root, 1, 0);
 }
 
+void device_comm_publish_spo2_raw(const max30102_sample_t *sample, const char *session_id)
+{
+    if (sample == NULL || s_device_id[0] == '\0' || !mqtt_client_is_connected()) return;
+    char topic[MQTT_MAX_TOPIC_LENGTH];
+    snprintf(topic, sizeof(topic), "devices/%s/measurements", s_device_id);
+    cJSON *root = new_envelope("MEASUREMENT");
+    if (root == NULL) return;
+    cJSON_AddStringToObject(root, "measurementType", "SPO2");
+    cJSON_AddNumberToObject(root, "value", 0);
+    cJSON_AddStringToObject(root, "unit", "%");
+    cJSON_AddStringToObject(root, "quality", "UNAVAILABLE");
+    cJSON_AddStringToObject(root, "sessionId", session_id != NULL ? session_id : "");
+    cJSON_AddNumberToObject(root, "red", sample->red);
+    cJSON_AddNumberToObject(root, "ir", sample->ir);
+    publish_json(topic, root, 0, 0);
+}
+
 void device_comm_publish_ecg_chunk(const char *session_id, uint16_t sequence, uint16_t sample_rate, int16_t *samples, size_t count)
 {
     if (s_device_id[0] == '\0' || !mqtt_client_is_connected() ||

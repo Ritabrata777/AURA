@@ -47,7 +47,7 @@ const SLIDES = [
     Scene: TrendsScene,
   },
   {
-    kicker: "AURA Intelligence",
+    kicker: "Pulse Link Intelligence",
     title: "An AI that explains your numbers.",
     body: "Ask the built-in companion about last night's sleep or what a dip in HRV means — in your own language. It explains; it never diagnoses.",
     accent: "text-purple-300",
@@ -70,11 +70,12 @@ function StageSlide({
   const center = index * STEP;
 
   // Each slide is fully visible at its center and hands over to the neighbour
-  // across the middle 24% of the step, so the swap reads as one liquid move.
-  const range = [center - STEP * 0.5, center - STEP * 0.12, center + STEP * 0.12, center + STEP * 0.5];
+  // across a ±0.3-step window, so the outgoing and incoming opacities cross
+  // 50/50 exactly at the midpoint — the frame never goes momentarily empty.
+  const range = [center - STEP * 0.7, center - STEP * 0.3, center + STEP * 0.3, center + STEP * 0.7];
   const opacity = useTransform(progress, range, [0, 1, 1, 0]);
-  const scale = useTransform(progress, range, [0.82, 1, 1, 0.82]);
-  const y = useTransform(progress, range, [28, 0, 0, -28]);
+  const scale = useTransform(progress, range, [0.86, 1, 1, 0.86]);
+  const y = useTransform(progress, range, [24, 0, 0, -24]);
 
   const { Scene } = SLIDES[index];
 
@@ -167,7 +168,10 @@ export function StickyShowcase() {
       {/* Sticky stage: the pinned glass frame every slide lives in. */}
       <div className="pointer-events-none sticky top-0 flex h-screen items-center justify-center">
         <div className="absolute inset-0 bg-[radial-gradient(at_50%_45%,rgba(139,92,246,0.12)_0px,transparent_60%)]" />
-        <LiquidGlass className="relative aspect-[4/3] w-[min(84vw,540px)] -translate-y-[11vh] rounded-[32px] md:w-[min(44vw,540px)] md:translate-y-0">
+        {/* On phones the frame parks in the top third so the pinned scene
+            stays visible above the bottom-anchored text card; from md up both
+            share the viewport centre side by side. */}
+        <LiquidGlass className="relative aspect-[4/3] w-[min(88vw,540px)] -translate-y-[26vh] rounded-[32px] md:w-[min(44vw,540px)] md:translate-y-0">
           <div className="absolute inset-0">
             {SLIDES.map((_, index) => (
               <StageSlide key={index} index={index} progress={smooth} />

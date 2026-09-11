@@ -1,4 +1,5 @@
 #include "buttons.h"
+#include "buzzer.h"
 
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -23,11 +24,6 @@ static button_state_t s_buttons[2] = {
 static button_event_callback_t s_callback = NULL;
 static void *s_callback_arg = NULL;
 
-static void IRAM_ATTR button_isr_handler(void *arg)
-{
-    // Interrupt handler - just sets flag for task to process
-}
-
 static void buttons_task(void *arg)
 {
     (void)arg;
@@ -40,6 +36,8 @@ static void buttons_task(void *arg)
             bool current_state = gpio_get_level(s_buttons[i].gpio);
             
             if (current_state == 0 && s_buttons[i].last_state == 1) {
+                ESP_LOGI(TAG, "Button %d pressed", i + 1);
+                buzzer_beep(60);
                 s_buttons[i].is_pressed = true;
                 s_buttons[i].press_start_time = current_time;
                 s_buttons[i].long_press_sent = false;

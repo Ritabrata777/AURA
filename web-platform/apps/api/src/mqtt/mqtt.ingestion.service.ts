@@ -273,6 +273,8 @@ export class MqttIngestionService implements OnModuleInit, OnModuleDestroy {
         unit: measurement.unit,
         quality: measurement.quality,
         measuredAt: measurement.measuredAt,
+        red: message.red,
+        ir: message.ir,
       });
     } else if (individualUserId) {
       const measurement = await this.prisma.individualMeasurement.create({

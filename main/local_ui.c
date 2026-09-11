@@ -141,57 +141,6 @@ static void local_ui_draw_full(void)
     oled_flush();
 }
 
-static void local_ui_draw_values(void)
-{
-    char line[24];
-
-    switch (s_screen) {
-        case LOCAL_SCREEN_SPO2:
-            oled_clear_area(0, 8, SSD1306_WIDTH, 24);
-            if (s_spo2.hr_valid) {
-                snprintf(line, sizeof(line), "HR %d", s_spo2.heart_rate);
-            } else {
-                snprintf(line, sizeof(line), "HR --");
-            }
-            oled_draw_text(4, 13, line, 2);
-
-            if (s_spo2.spo2_valid) {
-                snprintf(line, sizeof(line), "O2 %d%%", s_spo2.spo2);
-            } else {
-                snprintf(line, sizeof(line), "O2 --");
-            }
-            oled_draw_text(68, 13, line, 2);
-            break;
-
-        case LOCAL_SCREEN_TEMP:
-            oled_clear_area(0, 16, SSD1306_WIDTH, 32);
-            if (s_temp.valid) {
-                snprintf(line, sizeof(line), "%.1f C", s_temp.object_temp_c);
-                oled_draw_string_centered(18, line, 3);
-            } else {
-                oled_draw_string_centered(23, "--.- C", 2);
-            }
-            break;
-
-        case LOCAL_SCREEN_COLOR:
-            oled_clear_area(0, 16, SSD1306_WIDTH, 24);
-            if (s_color.valid) {
-                snprintf(line, sizeof(line), "R:%u G:%u", s_color.red, s_color.green);
-                oled_draw_text(8, 17, line, 1);
-                snprintf(line, sizeof(line), "B:%u C:%u", s_color.blue, s_color.clear);
-                oled_draw_text(8, 29, line, 1);
-            } else {
-                oled_draw_string_centered(28, "SENSOR OFFLINE", 1);
-            }
-            break;
-
-        default:
-            return;
-    }
-
-    oled_flush_dirty();
-}
-
 static void local_ui_stop_measurement(void)
 {
     if (ecg_ad8232_is_running()) {

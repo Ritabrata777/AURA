@@ -157,7 +157,7 @@ function GlassNav() {
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_0_22px_rgba(139,92,246,0.55),inset_0_1px_1px_rgba(255,255,255,0.5)] ring-1 ring-white/25">
             <ShieldCheck size={17} className="text-white" />
           </span>
-          <span className="text-base font-bold tracking-[0.26em] text-white">AURA</span>
+          <span className="text-base font-bold tracking-[0.26em] text-white">PULSE LINK</span>
         </a>
 
         <div className="ml-auto hidden items-center gap-1 lg:flex">
@@ -175,13 +175,17 @@ function GlassNav() {
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}
-          className="pointer-events-auto relative z-10 flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 lg:hidden"
+          className="pointer-events-auto relative z-10 ml-auto flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 lg:hidden"
         >
+          {/* Open state: each bar rotates about its own centre and is then
+              translated TOWARD the button centre by half the bar gap, so both
+              diagonals cross exactly at the middle and form a true X. Tailwind
+              orders translate() before rotate(), i.e. rotate applies first. */}
           <span
-            className={`h-[2px] w-6 origin-center bg-white transition-all duration-300 ease-out ${menuOpen ? "-translate-y-[4px] -rotate-45" : ""}`}
+            className={`h-[2px] w-6 origin-center bg-white transition-transform duration-300 ease-out ${menuOpen ? "translate-y-[4px] -rotate-45" : ""}`}
           />
           <span
-            className={`h-[2px] w-6 origin-center bg-white transition-all duration-300 ease-out ${menuOpen ? "translate-y-[4px] rotate-45" : ""}`}
+            className={`h-[2px] w-6 origin-center bg-white transition-transform duration-300 ease-out ${menuOpen ? "-translate-y-[4px] rotate-45" : ""}`}
           />
         </button>
       </nav>
@@ -275,7 +279,7 @@ function Hero() {
         </h1>
 
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
-          AURA streams vitals and single-lead ECG from the bedside monitor to patients, clinicians
+          Pulse Link streams vitals and single-lead ECG from the bedside monitor to patients, clinicians
           and personal dashboards — live, low-latency, and private by design.
         </p>
 
